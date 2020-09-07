@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import Togglable from '../components/togglable'
 import '../App.css'
+import Calendar from '../globals/models/calendar_template'
 
 function Admin() {
     const [startDateI, setStartDateI] = useState('')
@@ -13,21 +13,11 @@ function Admin() {
     
     const createCalendar = () => {
 
-        let weeks = Math.round((endDate - startDate) / (7 * 24 * 60 * 60 * 1000))
-        console.log(weeks)
-        let week = []
-        let cal = []
-        for(let i = 0; i <= weeks; i++){
-            for(let day = 1; day <= 5; day++){
-                week.push(day)
-            }
-            cal.push(week)
-            week = []
-        }
-        setCalendar(cal)
+        let ok = new Calendar(startDate, endDate, [], 3)
+        console.log(ok)
     }
 
-    const dateMan = (start, end) => {
+    const dateMan = (start, end, dates) => {
         let endYear = end.substring(0, 4)
         let endMonth = end.substring(5, 7)
         let endDay = end.substring(8, 10)
@@ -38,23 +28,29 @@ function Admin() {
         let startDay = start.substring(8, 10)
         let dateStart = `${startMonth}/${startDay}/${startYear}`
 
+        let dateFormat = []
+        for(let i = 0; i < dates.length; i++){
+            let startDateY = dates[i].substring(0, 4)
+            let startDateM = dates[i].substring(5, 7)
+            let startDateD = dates[i].substring(8, 10)
+            let dateStart = `${startDateM}/${startDateD}/${startDateY}`
+            dateFormat[i] = new Date(dateStart)
+        }
+        
+
         setStartDate(new Date(dateStart))
         setendDate(new Date(dateEnd))
+        setDates(dateFormat)
     }
-
-
-
 
     const clickHandler = (event) => {
         event.preventDefault()
-        dateMan(startDateI, endDateI)
         let dates = newDates.filter(date => date.Date !== '')
-        setDates(dates)
+        dates = dates.map(date => date.Date)
+        dateMan(startDateI, endDateI, dates)
         setNewDate([{Date: ""}])
         setendDateI('')
         setStartDateI('')
-        
-        
     }
 
     const onChangeStart = (event) => {
