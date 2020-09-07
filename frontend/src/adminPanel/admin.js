@@ -10,10 +10,16 @@ function Admin() {
     const [calendar, setCalendar] = useState()
     const [Dates, setDates] = useState([])
     const [newDates, setNewDate] = useState([{Date: ""}])
+    const [newLabosAlt, setnewLabosAlt] = useState('')
+    const [labosAlt, setLabosAlt] = useState('')
+    const [newjoursAlt, setNewjoursAlt] = useState('')
+    const [joursAlt, setJoursAlt] = useState('')
+    const [newSemaineVac, setNewSemaineVac] = useState('')
+    const [semaineVac, setSemaineVac] = useState('')
     
     const createCalendar = () => {
 
-        let ok = new Calendar(startDate, endDate, [], 3)
+        let ok = new Calendar(startDate, endDate, Dates, semaineVac, labosAlt, joursAlt)
         console.log(ok)
     }
 
@@ -46,11 +52,16 @@ function Admin() {
     const clickHandler = (event) => {
         event.preventDefault()
         let dates = newDates.filter(date => date.Date !== '')
+        setLabosAlt(newLabosAlt)
+        setJoursAlt(newjoursAlt)
+        setSemaineVac(newSemaineVac)
         dates = dates.map(date => date.Date)
         dateMan(startDateI, endDateI, dates)
         setNewDate([{Date: ""}])
         setendDateI('')
         setStartDateI('')
+        setnewLabosAlt('')
+        setNewjoursAlt('')
     }
 
     const onChangeStart = (event) => {
@@ -79,6 +90,18 @@ function Admin() {
         setNewDate(list);
     }
 
+    const onChangeLabo = (event) => {
+        setnewLabosAlt(event.target.value)
+    }
+
+    const newjoursAltChange = (event) => {
+        setNewjoursAlt(event.target.value)
+    }
+
+    const newVacChange = (event) => {
+        setNewSemaineVac(event.target.value)
+    }
+
     return (
         <div>
             <h1>admin</h1>
@@ -88,7 +111,7 @@ function Admin() {
                 
                 <div>
                     <br/>
-                    Vacation is on week number: <input type='number'></input>
+                    Vacation is on week number: <input type='number' onChange={newVacChange} value={newSemaineVac}></input>
                     <br/>
                     Additional days off:
                     {
@@ -106,6 +129,20 @@ function Admin() {
                     
 
                     
+                </div>
+                <div>
+                    <h3>Alternances Laboratoires</h3>
+                    Semaine 1 (B1 ou B2):
+                    <input type='text' onChange={onChangeLabo} value={newLabosAlt}></input>
+                    alterne sur: <input type='list' list='days' onChange={newjoursAltChange} value={newjoursAlt}/>
+                    <datalist id='days'>
+                        <option value='monday'/>
+                        <option value='tuesday'/>
+                        <option value='wednesday'/>
+                        <option value='thursday'/>
+                        <option value='friday'/>
+                    </datalist>
+                   
                 </div>
                 <div>
                     <br/>
