@@ -1,11 +1,15 @@
 import React, {useState} from 'react'
+import Togglable from '../components/togglable'
+import '../App.css'
 
 function Admin() {
     const [startDateI, setStartDateI] = useState('')
     const [startDate, setStartDate] = useState()
     const [endDateI, setendDateI] = useState('')
     const [endDate, setendDate] = useState()
-    const [calendar, setCalendar] = useState([])
+    const [calendar, setCalendar] = useState()
+    const [Dates, setDates] = useState([])
+    const [newDates, setNewDate] = useState([{Date: ""}])
     
     const createCalendar = () => {
 
@@ -43,8 +47,10 @@ function Admin() {
 
     const clickHandler = (event) => {
         event.preventDefault()
-
         dateMan(startDateI, endDateI)
+        let dates = newDates.filter(date => date.Date !== '')
+        setDates(dates)
+        setNewDate([{Date: ""}])
         setendDateI('')
         setStartDateI('')
         
@@ -52,13 +58,29 @@ function Admin() {
     }
 
     const onChangeStart = (event) => {
-        console.log(event.target.value)
         setStartDateI(event.target.value)
     }
 
     const onChangeEnd = (event) => {
-        console.log(event.target.value)
         setendDateI(event.target.value)
+    }
+
+    const handleAddClick = () => {
+        setNewDate([...newDates, { Date: ""}]);
+      };
+
+    const handleRemoveClick = index => {
+        const list = [...newDates];
+        list.splice(index, 1);
+        setNewDate(list);
+    };
+
+    const onChangeDate = (event, index) => {
+        setNewDate[index] = event.target.value
+        const Date = event.target.value;
+        const list = [...newDates];
+        list[index].Date = Date
+        setNewDate(list);
     }
 
     return (
@@ -67,20 +89,44 @@ function Admin() {
             <form onSubmit={clickHandler}>
                 <input type='date' onChange={onChangeStart} value={startDateI}></input>
                 <input type='date' onChange={onChangeEnd} value={endDateI}></input>
+                
                 <div>
+                    <br/>
+                    Vacation is on week number: <input type='number'></input>
+                    <br/>
+                    Additional days off:
+                    {
+                        newDates.map((date, i)=> {
+                            return(
+                                <div key={i} id='additionDaysOff'>
+                                    <input type='date' onChange={event => onChangeDate(event, i)} value={newDates[i].Date}></input>
+                                    {newDates.length !== 1 && <button onClick={handleRemoveClick}>Remove</button>}
+                                    {newDates.length - 1 === i && <button onClick={handleAddClick}>Add</button>}
+                                </div>
+                                    
+                            )
+                        })
+                    }
+                    
+
+                    
+                </div>
+                <div>
+                    <br/>
                     <button type='submit'> submit</button>
+ 
                 </div>
             </form>
             {
                 endDate === undefined ? (
                     <div>
-                        <h3> Date not entered</h3>
+                        <h3> Dates not entered</h3>
                     </div>
                 ) : (
                 <div>
-                    <h3>{startDate.toDateString()} - {endDate.toDateString()}</h3>
+                    <h3>Semester Starts: {startDate.toDateString()} and Ends: {endDate.toDateString()}</h3>
                     <button type='submit' onClick={() => createCalendar()}> create calendar</button>
-                    {console.log(calendar)}
+                    {console.log(calendar, Dates)}
                 </div>
                 )
             }
