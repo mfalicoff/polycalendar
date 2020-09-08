@@ -35,8 +35,6 @@ export default class WeekTemplate{
 
     getAlternance(){
         this.vraiAlternance.splice(5,2)
-        console.log(this.vraiAlternance)
-
         return this.vraiAlternance
     }
     
