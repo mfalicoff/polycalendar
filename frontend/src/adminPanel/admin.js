@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import '../App.css';
 import Calendar from '../globals/models/calendar_template';
