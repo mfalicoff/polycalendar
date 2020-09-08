@@ -3,6 +3,11 @@ module.exports = {
 		'browser': true,
 		'es6': true
 	},
+	"settings": {
+		"react": {
+		  "version": "16.13.1"
+		}
+	  },
 	'extends': [
 		'eslint:recommended',
 		'plugin:react/recommended'
@@ -28,7 +33,7 @@ module.exports = {
 		],
 		'linebreak-style': [
 			'error',
-			'unix'
+			'windows'
 		],
 		'quotes': [
 			'error',
