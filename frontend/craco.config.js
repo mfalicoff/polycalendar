@@ -1,5 +1,3 @@
-module.exports = {
-	eslint: {
-		enable: false,
-	},
+export const eslint = {
+	enable: false,
 };
