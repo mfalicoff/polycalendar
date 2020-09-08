@@ -10,20 +10,27 @@ function Admin() {
     const [calendar, setCalendar] = useState()
     const [Dates, setDates] = useState([])
     const [newDates, setNewDate] = useState([{Date: ""}])
-    const [newLabosAlt, setnewLabosAlt] = useState('')
-    const [labosAlt, setLabosAlt] = useState('')
-    const [newjoursAlt, setNewjoursAlt] = useState('')
-    const [joursAlt, setJoursAlt] = useState('')
     const [newSemaineVac, setNewSemaineVac] = useState('')
     const [semaineVac, setSemaineVac] = useState('')
+    const [mondayNew, setMondayNew] = useState('')
+    const [tuesdayNew, setTuesdayNew] = useState('')
+    const [wednesdayNew, setWednesdayNew] = useState('')
+    const [thursdayNew, setThursdayNew] = useState('')
+    const [fridayNew, setFridayNew] = useState('')
+    const [monday, setMonday] = useState('')
+    const [tuesday, setTuesday] = useState('')
+    const [wednesday, setWednesday] = useState('')
+    const [thursday, setThursday] = useState('')
+    const [friday, setFriday] = useState('')
+    const [firstWeek, setFirstWeek] = useState([])
     
     const createCalendar = () => {
-
-        let ok = new Calendar(startDate, endDate, Dates, semaineVac, labosAlt, joursAlt)
+        console.log(firstWeek)
+        let ok = new Calendar(startDate, endDate, Dates, semaineVac, firstWeek)
         console.log(ok)
     }
 
-    const dateMan = (start, end, dates) => {
+    const dateMan = (start, end, dates, week1) => {
         let endYear = end.substring(0, 4)
         let endMonth = end.substring(5, 7)
         let endDay = end.substring(8, 10)
@@ -42,8 +49,8 @@ function Admin() {
             let dateStart = `${startDateM}/${startDateD}/${startDateY}`
             dateFormat[i] = new Date(dateStart)
         }
-        
 
+        setFirstWeek(week1)
         setStartDate(new Date(dateStart))
         setendDate(new Date(dateEnd))
         setDates(dateFormat)
@@ -51,17 +58,33 @@ function Admin() {
 
     const clickHandler = (event) => {
         event.preventDefault()
+
         let dates = newDates.filter(date => date.Date !== '')
-        setLabosAlt(newLabosAlt)
-        setJoursAlt(newjoursAlt)
         setSemaineVac(newSemaineVac)
+        setMonday(mondayNew)
+        setTuesday(tuesdayNew)
+        setWednesday(wednesdayNew)
+        setThursday(thursdayNew)
+        setFriday(fridayNew)
+
+        let week1 = []
+        week1[0] = mondayNew
+        week1[1] = tuesdayNew
+        week1[2] = wednesdayNew
+        week1[3] = thursdayNew
+        week1[4] = fridayNew
+
         dates = dates.map(date => date.Date)
-        dateMan(startDateI, endDateI, dates)
+        dateMan(startDateI, endDateI, dates, week1)
+
         setNewDate([{Date: ""}])
         setendDateI('')
         setStartDateI('')
-        setnewLabosAlt('')
-        setNewjoursAlt('')
+        setMonday('')
+        setTuesday('')
+        setWednesday('')
+        setThursday('')
+        setFriday('')
     }
 
     const onChangeStart = (event) => {
@@ -90,16 +113,28 @@ function Admin() {
         setNewDate(list);
     }
 
-    const onChangeLabo = (event) => {
-        setnewLabosAlt(event.target.value)
-    }
-
-    const newjoursAltChange = (event) => {
-        setNewjoursAlt(event.target.value)
-    }
-
     const newVacChange = (event) => {
         setNewSemaineVac(event.target.value)
+    }
+
+    const mondayChange = (event) => {
+        setMondayNew(event.target.value)
+    }
+
+    const TuesdayChange = (event) => {
+        setTuesdayNew(event.target.value)
+    }
+
+    const WednesdayChange = (event) => {
+        setWednesdayNew(event.target.value)
+    }
+
+    const ThursdayChange = (event) => {
+        setThursdayNew(event.target.value)
+    }
+
+    const FridayChange = (event) => {
+        setFridayNew(event.target.value)
     }
 
     return (
@@ -133,15 +168,21 @@ function Admin() {
                 <div>
                     <h3>Alternances Laboratoires</h3>
                     Semaine 1 (B1 ou B2):
-                    <input type='text' onChange={onChangeLabo} value={newLabosAlt}></input>
-                    alterne sur: <input type='list' list='days' onChange={newjoursAltChange} value={newjoursAlt}/>
-                    <datalist id='days'>
-                        <option value='monday'/>
-                        <option value='tuesday'/>
-                        <option value='wednesday'/>
-                        <option value='thursday'/>
-                        <option value='friday'/>
-                    </datalist>
+                    <div>
+                        Monday<input type="list" list='alt' onChange={mondayChange} value={mondayNew}></input>
+                        <br/>
+                        Tuesday<input type="list" list='alt' onChange={TuesdayChange} value={tuesdayNew}></input>
+                        <br/>
+                        Wednesday<input type="list" list='alt' onChange={WednesdayChange} value={wednesdayNew}></input>
+                        <br/>
+                        Thursday<input type="list" list='alt' onChange={ThursdayChange} value={thursdayNew}></input>
+                        <br/>
+                        Friday<input type="list" list='alt' onChange={FridayChange} value={fridayNew}></input>
+                        <datalist id='alt'>
+                            <option value='B1'/>
+                            <option value='B2'/>
+                        </datalist>
+                    </div>
                    
                 </div>
                 <div>
