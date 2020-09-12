@@ -24,6 +24,8 @@ function Admin() {
 	const [thursday, setThursday] = useState('');
 	const [friday, setFriday] = useState('');
 	const [firstWeek, setFirstWeek] = useState([]);
+	const [semesterName, setSemesterName] = useState('');
+	const [newSemesterName, setNewSemesterName] = useState('');
 
 	const createCalendar = () => {
 		let newCal = new Calendar(
@@ -81,9 +83,11 @@ function Admin() {
 		week1[3] = thursdayNew;
 		week1[4] = fridayNew;
 
+		setSemesterName(newSemesterName);
 		dates = dates.map((date) => date.Date);
 		dateMan(startDateI, endDateI, dates, week1);
 
+		setNewSemesterName('')
 		setNewDate([{ Date: '' }]);
 		setendDateI('');
 		setStartDateI('');
@@ -145,10 +149,23 @@ function Admin() {
 		setFridayNew(event.target.value);
 	};
 
+	const newSemester = (event) => {
+		setNewSemesterName(event.target.value);
+	};
+
 	return (
 		<div>
 			<h1>admin</h1>
 			<form onSubmit={clickHandler}>
+				<div>
+				Semester:
+					<input
+						type='text'
+						onChange={newSemester}
+						value={newSemesterName}
+					/>
+				</div>
+				
 				<input
 					type="date"
 					onChange={onChangeStart}
