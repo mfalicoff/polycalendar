@@ -87,7 +87,7 @@ function Admin() {
 		dates = dates.map((date) => date.Date);
 		dateMan(startDateI, endDateI, dates, week1);
 
-		setNewSemesterName('')
+		setNewSemesterName('');
 		setNewDate([{ Date: '' }]);
 		setendDateI('');
 		setStartDateI('');
@@ -158,14 +158,14 @@ function Admin() {
 			<h1>admin</h1>
 			<form onSubmit={clickHandler}>
 				<div>
-				Semester:
+					Semester:
 					<input
-						type='text'
+						type="text"
 						onChange={newSemester}
 						value={newSemesterName}
 					/>
 				</div>
-				
+
 				<input
 					type="date"
 					onChange={onChangeStart}

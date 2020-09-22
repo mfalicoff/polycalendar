@@ -1,9 +1,9 @@
 const express = require('express');
-const polycrawler = require('./services/polyCrawler')
+const polycrawler = require('./services/polyCrawler');
 const app = express();
 
 app.get('/', async (req, res) => {
-	let cours  = await polycrawler.polycrawler();
+	await polycrawler.polycrawler();
 	res.send('<h1>ok</h1>');
 });
 

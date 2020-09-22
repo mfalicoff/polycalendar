@@ -1,150 +1,148 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
-const writeFile = require('./writeFile')
+const writeFile = require('./writeFile');
 
 const polycrawler = async () => {
-    let pageToVisit =
-    'https://www.polymtl.ca/programmes/cours/horaire?cycle=BA';
-console.log(`Visiting page ${pageToVisit}`);
+	let pageToVisit =
+		'https://www.polymtl.ca/programmes/cours/horaire?cycle=BA';
+	console.log(`Visiting page ${pageToVisit}`);
 
-let response = await axios.get(pageToVisit);
-let $ = cheerio.load(response.data);
+	let response = await axios.get(pageToVisit);
+	let $ = cheerio.load(response.data);
 
-let cours = [];
+	let cours = [];
 
-$('.pane-content')
-    .find('h2')
-    .each((i, elem) => {
-        let nom = elem.children[0].children[0].data;
-        cours.push({
-            nom: nom,
-            horraire: [],
-        });
-    });
-console.log('siglet done');
+	$('.pane-content')
+		.find('h2')
+		.each((i, elem) => {
+			let nom = elem.children[0].children[0].data;
+			cours.push({
+				nom: nom,
+				horraire: [],
+			});
+		});
+	console.log('siglet done');
 
-$('.pane-content')
-    .find('.horaire')
-    .each((i, elem) => {
-        //let horraire = [];
+	$('.pane-content')
+		.find('.horaire')
+		.each((i, elem) => {
+			//let horraire = [];
 
-        //Pour les cours sans lab
-        if (elem.children.length !== 5) {
-            let sectionOnlyTH = [];
-            let CoursTableGroupeTH =
-                elem.children[1].children[1].children[3].children[3]
-                    .children[1].children[0].data; //ok
-            let CoursTableJourTH =
-                elem.children[1].children[1].children[3].children[3]
-                    .children[3].children[0].data; // ok
-            let CoursTableHeureTH =
-                elem.children[1].children[1].children[3].children[3]
-                    .children[5].children[0].data; //ok
-            let CoursTableLocalTH = '';
-            if (
-                elem.children[1].children[1].children[3].children[3]
-                    .children.length < 8
-            ) {
-                //console.log(elem.children[1].children[1].children[3].children[3].children[3].children)
-                CoursTableJour = '';
-                CoursTableHeure = 'Consultez Site web du Cours';
-                CoursTableLocal = '';
-            } else {
-                CoursTableLocalTH =
-                    elem.children[1].children[1].children[3].children[3]
-                        .children[7].children[0].data;
-            }
+			//Pour les cours sans lab
+			if (elem.children.length !== 5) {
+				let sectionOnlyTH = [];
+				let CoursTableGroupeTH =
+					elem.children[1].children[1].children[3].children[3]
+						.children[1].children[0].data; //ok
+				let CoursTableJourTH =
+					elem.children[1].children[1].children[3].children[3]
+						.children[3].children[0].data; // ok
+				let CoursTableHeureTH =
+					elem.children[1].children[1].children[3].children[3]
+						.children[5].children[0].data; //ok
+				let CoursTableLocalTH = '';
+				if (
+					elem.children[1].children[1].children[3].children[3]
+						.children.length < 8
+				) {
+					//console.log(elem.children[1].children[1].children[3].children[3].children[3].children)
+					CoursTableJourTH = '';
+					CoursTableHeureTH = 'Consultez Site web du Cours';
+					CoursTableLocalTH = '';
+				} else {
+					CoursTableLocalTH =
+						elem.children[1].children[1].children[3].children[3]
+							.children[7].children[0].data;
+				}
 
-            sectionOnlyTH.push({
-                coursSectionTH: CoursTableGroupeTH,
-                coursHeureTH: CoursTableHeureTH,
-                coursJoursTH: CoursTableJourTH,
-                coursLocalTH: CoursTableLocalTH,
-            });
-            cours[i].horraire.push(sectionOnlyTH);
-        } else {
-            let sectionTH = [];
-            let sectionTP = [];
+				sectionOnlyTH.push({
+					coursSectionTH: CoursTableGroupeTH,
+					coursHeureTH: CoursTableHeureTH,
+					coursJoursTH: CoursTableJourTH,
+					coursLocalTH: CoursTableLocalTH,
+				});
+				cours[i].horraire.push(sectionOnlyTH);
+			} else {
+				let sectionTH = [];
+				let sectionTP = [];
 
-            //pour les cours theoriques
-            let currentTableCoursTH =
-                elem.children[1].children[1].children[3];
+				//pour les cours theoriques
+				let currentTableCoursTH =
+					elem.children[1].children[1].children[3];
 
-            for (
-                let j = 3;
-                j < currentTableCoursTH.children.length;
-                j = j + 2
-            ) {
-                let CoursTableGroupeTH =
-                    currentTableCoursTH.children[j].children[1].children[0]
-                        .data; // nous donne groupe
-                if (CoursTableGroupeTH.length === 1) {
-                    CoursTableGroupeTH =
-                        currentTableCoursTH.children[j - 2].children[1]
-                            .children[0].data;
-                }
-                let CoursTableJourTH =
-                    currentTableCoursTH.children[j].children[3].children[0]
-                        .data; // nous donne le jours
-                let CoursTableHeureTH =
-                    currentTableCoursTH.children[j].children[5].children[0]
-                        .data; // nous donne l'heure
-                let CoursTableLocalTH =
-                    currentTableCoursTH.children[j].children[7].children[0]
-                        .data; //nous donne le local
+				for (
+					let j = 3;
+					j < currentTableCoursTH.children.length;
+					j = j + 2
+				) {
+					let CoursTableGroupeTH =
+						currentTableCoursTH.children[j].children[1].children[0]
+							.data; // nous donne groupe
+					if (CoursTableGroupeTH.length === 1) {
+						CoursTableGroupeTH =
+							currentTableCoursTH.children[j - 2].children[1]
+								.children[0].data;
+					}
+					let CoursTableJourTH =
+						currentTableCoursTH.children[j].children[3].children[0]
+							.data; // nous donne le jours
+					let CoursTableHeureTH =
+						currentTableCoursTH.children[j].children[5].children[0]
+							.data; // nous donne l'heure
+					let CoursTableLocalTH =
+						currentTableCoursTH.children[j].children[7].children[0]
+							.data; //nous donne le local
 
-                sectionTH.push({
-                    coursSectionTH: CoursTableGroupeTH,
-                    coursHeureTH: CoursTableHeureTH,
-                    coursJoursTH: CoursTableJourTH,
-                    coursLocalTH: CoursTableLocalTH,
-                });
-            }
+					sectionTH.push({
+						coursSectionTH: CoursTableGroupeTH,
+						coursHeureTH: CoursTableHeureTH,
+						coursJoursTH: CoursTableJourTH,
+						coursLocalTH: CoursTableLocalTH,
+					});
+				}
 
-            //traveaux pratiques
-            let currentTableCoursTP =
-                elem.children[3].children[1].children[3];
-            for (
-                let j = 3;
-                j < currentTableCoursTP.children.length;
-                j = j + 2
-            ) {
-                let CoursTableGroupeTP =
-                    currentTableCoursTP.children[j].children[1].children[0]
-                        .data; // nous donne groupe
-                if (CoursTableGroupeTP.length === 1) {
-                    CoursTableGroupeTP =
-                        currentTableCoursTP.children[j - 2].children[1]
-                            .children[0].data;
-                }
-                let CoursTableJourTP =
-                    currentTableCoursTP.children[j].children[3].children[0]
-                        .data; // nous donne le jours
-                let CoursTableHeureTP =
-                    currentTableCoursTP.children[j].children[5].children[0]
-                        .data; // nous donne l'heure
-                let CoursTableLocalTP =
-                    currentTableCoursTP.children[j].children[7].children[0]
-                        .data; //nous donne le local
+				//traveaux pratiques
+				let currentTableCoursTP =
+					elem.children[3].children[1].children[3];
+				for (
+					let j = 3;
+					j < currentTableCoursTP.children.length;
+					j = j + 2
+				) {
+					let CoursTableGroupeTP =
+						currentTableCoursTP.children[j].children[1].children[0]
+							.data; // nous donne groupe
+					if (CoursTableGroupeTP.length === 1) {
+						CoursTableGroupeTP =
+							currentTableCoursTP.children[j - 2].children[1]
+								.children[0].data;
+					}
+					let CoursTableJourTP =
+						currentTableCoursTP.children[j].children[3].children[0]
+							.data; // nous donne le jours
+					let CoursTableHeureTP =
+						currentTableCoursTP.children[j].children[5].children[0]
+							.data; // nous donne l'heure
+					let CoursTableLocalTP =
+						currentTableCoursTP.children[j].children[7].children[0]
+							.data; //nous donne le local
 
-                sectionTP.push({
-                    coursSectionTP: CoursTableGroupeTP,
-                    coursHeureTP: CoursTableHeureTP,
-                    coursJoursTP: CoursTableJourTP,
-                    coursLocalTP: CoursTableLocalTP,
-                });
-                
-            }
-            cours[i].horraire.push(sectionTH, sectionTP);
-        }
-    });
+					sectionTP.push({
+						coursSectionTP: CoursTableGroupeTP,
+						coursHeureTP: CoursTableHeureTP,
+						coursJoursTP: CoursTableJourTP,
+						coursLocalTP: CoursTableLocalTP,
+					});
+				}
+				cours[i].horraire.push(sectionTH, sectionTP);
+			}
+		});
 
-    writeFile.writeFile(cours[153])
+	writeFile.writeFile(cours[153]);
 
-    return cours;
-}
+	return cours;
+};
 
 module.exports = {
-    polycrawler
-}
-
+	polycrawler,
+};
