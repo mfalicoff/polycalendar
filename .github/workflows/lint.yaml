@@ -36,3 +36,16 @@ jobs:
         echo lint check front end
         cd frontend
         npm run lint
+    
+    # Runs a single command using the runners shell
+    - name: Npm dependancies
+      run: | 
+        cd backend
+        npm install
+
+    # Runs a set of commands using the runners shell
+    - name: Run lint
+      run: |
+        echo lint check back end
+        cd backend
+        npm run lint
