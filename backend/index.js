@@ -28,6 +28,7 @@ app.get('/', async (req, res) => {
 	$('.pane-content')
 		.find('.horaire')
 		.each((i, elem) => {
+			
 			//Pour les cours sans lab
 			if (elem.children.length !== 5) {
 				let CoursTableGroupe =
@@ -54,6 +55,7 @@ app.get('/', async (req, res) => {
 							.children[7].children[0].data;
 				}
 				console.log(
+					i, 'coursTH sans lab',
 					CoursTableGroupe,
 					CoursTableJour,
 					CoursTableHeure,
@@ -63,10 +65,15 @@ app.get('/', async (req, res) => {
 				//pour les cours theoriques
 				let currentTableCoursTH =
 					elem.children[1].children[1].children[3];
-				for (let j = 3; j < currentTableCoursTH.length; j = j + 2) {
+				
+				for (let j = 3; j < currentTableCoursTH.children.length; j = j + 2) {
 					let CoursTableGroupe =
 						currentTableCoursTH.children[j].children[1].children[0]
 							.data; // nous donne groupe
+							if(CoursTableGroupe.length === 1 ){
+								CoursTableGroupe = currentTableCoursTH.children[j-2].children[1].children[0]
+								.data
+							}
 					let CoursTableJour =
 						currentTableCoursTH.children[j].children[3].children[0]
 							.data; // nous donne le jours
@@ -77,7 +84,7 @@ app.get('/', async (req, res) => {
 						currentTableCoursTH.children[j].children[7].children[0]
 							.data; //nous donne le local
 					console.log(
-						i,
+						i, 'coursTH',
 						CoursTableGroupe,
 						CoursTableJour,
 						CoursTableHeure,
@@ -95,6 +102,10 @@ app.get('/', async (req, res) => {
 					let CoursTableGroupe =
 						currentTableCoursTP.children[j].children[1].children[0]
 							.data; // nous donne groupe
+							if(CoursTableGroupe.length === 1){
+								CoursTableGroupe = currentTableCoursTP.children[j-2].children[1].children[0]
+								.data
+							}
 					let CoursTableJour =
 						currentTableCoursTP.children[j].children[3].children[0]
 							.data; // nous donne le jours
@@ -105,7 +116,7 @@ app.get('/', async (req, res) => {
 						currentTableCoursTP.children[j].children[7].children[0]
 							.data; //nous donne le local
 					console.log(
-						i,
+						i, "Cours TP",
 						CoursTableGroupe,
 						CoursTableJour,
 						CoursTableHeure,
