@@ -11,21 +11,20 @@ app.get('/', async (req, res) => {
 
 	let response = await axios.get(pageToVisit);
 	let $ = cheerio.load(response.data);
-	console.log('ok');
 
 	let cours = [];
-	let repertoireDeCours = {};
-	let ok = []
+
 	$('.pane-content')
 		.find('h2')
 		.each((i, elem) => {
+			let nom = elem.children[0].children[0].data;
 			cours.push({
-				siglet: elem.children[0].children[0].data,
+				nom: nom,
 				horraire: [],
 			});
 		});
 	console.log('siglet done');
-	
+
 	$('.pane-content')
 		.find('.horaire')
 		.each((i, elem) => {
@@ -58,41 +57,34 @@ app.get('/', async (req, res) => {
 							.children[7].children[0].data;
 				}
 
-				// console.log(
-				// 	i, 'coursTH sans lab',
-				// 	CoursTableGroupe,
-				// 	CoursTableJour,
-				// 	CoursTableHeure,
-				// 	CoursTableLocal
-				// );
-
 				sectionOnlyTH.push({
 					coursSectionTH: CoursTableGroupeTH,
 					coursHeureTH: CoursTableHeureTH,
 					coursJoursTH: CoursTableJourTH,
-					coursLocal: CoursTableLocalTH,
-				})
+					coursLocalTH: CoursTableLocalTH,
+				});
 				cours[i].horraire.push(sectionOnlyTH);
-				//ok.push(horraire)
-				
-
 			} else {
 				let sectionTH = [];
 				let sectionTP = [];
 
-
 				//pour les cours theoriques
 				let currentTableCoursTH =
 					elem.children[1].children[1].children[3];
-					
-				for (let j = 3; j < currentTableCoursTH.children.length; j = j + 2) {
+
+				for (
+					let j = 3;
+					j < currentTableCoursTH.children.length;
+					j = j + 2
+				) {
 					let CoursTableGroupeTH =
 						currentTableCoursTH.children[j].children[1].children[0]
 							.data; // nous donne groupe
-							if(CoursTableGroupeTH.length === 1 ){
-								CoursTableGroupeTH = currentTableCoursTH.children[j-2].children[1].children[0]
-								.data
-							}
+					if (CoursTableGroupeTH.length === 1) {
+						CoursTableGroupeTH =
+							currentTableCoursTH.children[j - 2].children[1]
+								.children[0].data;
+					}
 					let CoursTableJourTH =
 						currentTableCoursTH.children[j].children[3].children[0]
 							.data; // nous donne le jours
@@ -102,21 +94,15 @@ app.get('/', async (req, res) => {
 					let CoursTableLocalTH =
 						currentTableCoursTH.children[j].children[7].children[0]
 							.data; //nous donne le local
-					// console.log(
-					// 	i, 'coursTH',
-					// 	CoursTableGroupe,
-					// 	CoursTableJour,
-					// 	CoursTableHeure,
-					// 	CoursTableLocal
-					// );
-					
-					sectionTH.push({coursSectionTH: CoursTableGroupeTH,
+
+					sectionTH.push({
+						coursSectionTH: CoursTableGroupeTH,
 						coursHeureTH: CoursTableHeureTH,
 						coursJoursTH: CoursTableJourTH,
-						coursLocal: CoursTableLocalTH,
-					})
-					
+						coursLocalTH: CoursTableLocalTH,
+					});
 				}
+
 				//traveaux pratiques
 				let currentTableCoursTP =
 					elem.children[3].children[1].children[3];
@@ -128,10 +114,11 @@ app.get('/', async (req, res) => {
 					let CoursTableGroupeTP =
 						currentTableCoursTP.children[j].children[1].children[0]
 							.data; // nous donne groupe
-							if(CoursTableGroupeTP.length === 1){
-								CoursTableGroupeTP = currentTableCoursTP.children[j-2].children[1].children[0]
-								.data
-							}
+					if (CoursTableGroupeTP.length === 1) {
+						CoursTableGroupeTP =
+							currentTableCoursTP.children[j - 2].children[1]
+								.children[0].data;
+					}
 					let CoursTableJourTP =
 						currentTableCoursTP.children[j].children[3].children[0]
 							.data; // nous donne le jours
@@ -141,49 +128,39 @@ app.get('/', async (req, res) => {
 					let CoursTableLocalTP =
 						currentTableCoursTP.children[j].children[7].children[0]
 							.data; //nous donne le local
-					// console.log(
-					// 	i, "Cours TP",
-					// 	CoursTableGroupe,
-					// 	CoursTableJour,
-					// 	CoursTableHeure,
-					// 	CoursTableLocal
-					// );
 
 					sectionTP.push({
-						coursSectionTH: CoursTableGroupeTP,
-						coursHeureTH: CoursTableHeureTP,
-						coursJoursTH: CoursTableJourTP,
-						coursLocal: CoursTableLocalTP,
-					})
-					cours[i].horraire.push(sectionTH, sectionTP)
-					//ok.push(horraire);
+						coursSectionTP: CoursTableGroupeTP,
+						coursHeureTP: CoursTableHeureTP,
+						coursJoursTP: CoursTableJourTP,
+						coursLocalTP: CoursTableLocalTP,
+					});
+					cours[i].horraire.push(sectionTH, sectionTP);
 				}
 			}
 		});
-		// fs.writeFile("cours.json", JSON.stringify(ok), 'utf8', function (err) {
-		// 	if (err) {
-		// 		console.log("An error occured while writing JSON Object to File.");
-		// 		return console.log(err);
-		// 	}
-		 
-		// 	console.log("JSON file has been saved.");
-		// });
-		await writeFile(cours);
+
+	//await writeFile(cours);
 	res.send('<h1>ok</h1>');
-	
-	//res.json(JSON.stringify(ok[ok.length-1]));
 });
 
 const writeFile = (jsonFile) => {
-		fs.writeFile("cours.json", JSON.stringify(jsonFile[jsonFile.length-1]), 'utf8', function (err) {
+	fs.writeFile(
+		'cours.json',
+		JSON.stringify(jsonFile[jsonFile.length - 1]),
+		'utf8',
+		function (err) {
 			if (err) {
-				console.log("An error occured while writing JSON Object to File.");
+				console.log(
+					'An error occured while writing JSON Object to File.'
+				);
 				return console.log(err);
 			}
-		 
-			return console.log("JSON file has been saved.");
-		});
-}
+
+			return console.log('JSON file has been saved.');
+		}
+	);
+};
 
 const PORT = 3001;
 app.listen(PORT, () => {
