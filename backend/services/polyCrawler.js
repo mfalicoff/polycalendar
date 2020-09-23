@@ -10,13 +10,13 @@ const polycrawler = async () => {
 	let response = await axios.get(pageToVisit);
 	let $ = cheerio.load(response.data);
 
-	let cours = [];
+	let repertoireCours = [];
 
 	$('.pane-content')
 		.find('h2')
 		.each((i, elem) => {
 			let nom = elem.children[0].children[0].data;
-			cours.push({
+			repertoireCours.push({
 				nom: nom,
 				horraire: [],
 			});
@@ -61,7 +61,7 @@ const polycrawler = async () => {
 					coursJoursTH: CoursTableJourTH,
 					coursLocalTH: CoursTableLocalTH,
 				});
-				cours[i].horraire.push(sectionOnlyTH);
+				repertoireCours[i].horraire.push(sectionOnlyTH);
 			} else {
 				let sectionTH = [];
 				let sectionTP = [];
@@ -134,7 +134,7 @@ const polycrawler = async () => {
 						coursLocalTP: CoursTableLocalTP,
 					});
 				}
-				cours[i].horraire.push(sectionTH, sectionTP);
+				repertoireCours[i].horraire.push(sectionTH, sectionTP);
 			}
 		});
 
