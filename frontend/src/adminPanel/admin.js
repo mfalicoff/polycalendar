@@ -35,8 +35,9 @@ function Admin() {
 			semaineVac,
 			firstWeek
 		);
-		console.log(newCal);
+		console.log(newCal.toJson());
 		setCalendar(newCal);
+		
 	};
 
 	const dateMan = (start, end, dates, week1) => {
@@ -292,6 +293,7 @@ function Admin() {
 						create calendar
 					</button>
 					{console.log(calendar)}
+					{calendar === undefined ? console.log('ok') : console.log(calendar.toJson())}
 				</div>
 			)}
 		</div>
