@@ -8,6 +8,9 @@ export default class CalendarTemplate {
 		this.configAlt = [];
 		this.vac = false;
 		this.currentWeek = firstweek;
+		this.jsonCalendar = {
+			weeks: [],
+		};
 
 		let weeks = Math.round(
 			(endDate - startDate) / (7 * 24 * 60 * 60 * 1000)
@@ -58,5 +61,24 @@ export default class CalendarTemplate {
 			}
 			this.configAlt[i] = week.getAlternance();
 		}
+	}
+
+	toJson() {
+		this.jsonCalendar.weeks = [];
+
+		for (let week of this.calendar) {
+			let weekJson = [];
+
+			for (let day of week.week) {
+				let dayJson = {
+					alternance: day.alternance,
+					date: day.date.getTime(),
+					value: day.value,
+				};
+				weekJson.push(dayJson);
+			}
+			this.jsonCalendar.weeks.push(weekJson);
+		}
+		return this.jsonCalendar;
 	}
 }
