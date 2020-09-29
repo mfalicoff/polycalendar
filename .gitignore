@@ -25,3 +25,5 @@ yarn-error.log*
 backend/package-lock.json
 
 backend/cours.json
+
+backend/.env
