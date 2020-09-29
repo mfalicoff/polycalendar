@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 import Calendar from '../globals/models/calendar_template';
+import Services from './services/calendar';
 
 function Admin() {
 	const [startDateI, setStartDateI] = useState('');
@@ -37,7 +38,6 @@ function Admin() {
 		);
 		console.log(newCal.toJson());
 		setCalendar(newCal);
-		
 	};
 
 	const dateMan = (start, end, dates, week1) => {
@@ -293,7 +293,19 @@ function Admin() {
 						create calendar
 					</button>
 					{console.log(calendar)}
-					{calendar === undefined ? console.log('ok') : console.log(calendar.toJson())}
+					{calendar === undefined
+						? console.log('ok')
+						: console.log(calendar.toJson())}
+					<div>
+						<button
+							type="submit"
+							onClick={() => {
+								Services.create(calendar.toJson());
+							}}
+						>
+							Send Calendar
+						</button>
+					</div>
 				</div>
 			)}
 		</div>

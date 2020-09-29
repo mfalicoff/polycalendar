@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
-const writeFile = require('./writeFile');
+//const writeFile = require('./writeFile');
 
 const polycrawler = async () => {
 	let pageToVisit =
@@ -138,9 +138,7 @@ const polycrawler = async () => {
 			}
 		});
 
-	writeFile.writeFile(cours[153]);
-
-	return cours;
+	return repertoireCours;
 };
 
 module.exports = {

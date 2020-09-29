@@ -63,8 +63,7 @@ export default class CalendarTemplate {
 		}
 	}
 
-	toJson = () => {
-
+	toJson() {
 		this.jsonCalendar.weeks = [];
 
 		for (let week of this.calendar) {
@@ -81,5 +80,5 @@ export default class CalendarTemplate {
 			this.jsonCalendar.weeks.push(weekJson);
 		}
 		return this.jsonCalendar;
-	};
+	}
 }
