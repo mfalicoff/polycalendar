@@ -2,7 +2,7 @@
 
 ## Endpoints
 
-- /TBD
+- /api/Admin/createSemester
     - crawls polytehniques webiste to get all classes and their respective schedules
     - Get all classes, with all section, hours, days and class location for TH and TP/TD
 
@@ -21,3 +21,4 @@
   - *axios*: for HTTP requests
   - *cheerio*: Core Jquery features for backend
   - *fs*: writing json to disk
+  - *cors* Enables Cros-Origin Policy
