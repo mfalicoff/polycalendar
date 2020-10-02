@@ -1,9 +1,13 @@
 import axios from 'axios';
 const baseURL = 'http://localhost:3001/api/Admin/createSemester';
 
-const create = async (newCalendar) => {
+const create = async (newCalendar, semesterName) => {
 	console.log(newCalendar);
-	const request = await axios.post(baseURL, newCalendar);
+	let data = {
+		calendar: newCalendar,
+		name: semesterName
+	}
+	const request = await axios.post(baseURL, data);
 	return request.data;
 };
 

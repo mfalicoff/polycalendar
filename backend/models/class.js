@@ -5,6 +5,6 @@ const classSchema = new mongoose.Schema({
 	horraire: [],
 });
 
-const Class = mongoose.model('Class', classSchema);
+const Class = mongoose.model('Class', classSchema, "Class");
 
 module.exports = Class;

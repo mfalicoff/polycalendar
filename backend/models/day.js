@@ -6,6 +6,6 @@ const daySchema = new mongoose.Schema({
 	alternance: String,
 });
 
-const Day = mongoose.model('Day', daySchema);
+const Day = mongoose.model('Day', daySchema, "Day");
 
 module.exports = Day;

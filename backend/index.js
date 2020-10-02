@@ -8,6 +8,7 @@ const Class= require('./models/class')
 const CalendarDB = require('./models/calendar')
 const WeekDB = require('./models/week')
 const DayDB = require('./models/day')
+const SemesterDB = require('./models/semester')
 
 app.use(cors());
 app.use(express.json());
@@ -29,13 +30,15 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 
 	await resetDB();
 
-	let calendar = req.body;
-	console.log(calendar);
+	let calendar = req.body.calendar;
+	let semesterName = req.body.name
+	//console.log(calendar);
 	let weekNumber = 0;
 
 	
 	let weeks = []
-	calendar.weeks.map(async (weekJson) => {
+	let calendarId = ''
+	await calendar.weeks.map(async (weekJson) => {
 		let weekDays = []
 		weekJson.map(async(dayJson) => {
 			let day = new DayDB({
@@ -46,7 +49,7 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 			let savedDay = await day.save()
 			weekDays.push(savedDay._id)
 			if(weekDays.length === 7){
-				console.log(weekDays)
+				//console.log(weekDays)
 				let week = new WeekDB({
 					weekNumber: weekNumber,
 					weekDays: weekDays
@@ -55,11 +58,13 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 				weekNumber++;
 				weeks.push(savedWeek._id)
 				if(weeks.length === 17){
-					console.log(weeks, 'ok')
+					//console.log(weeks, 'ok')
 					let calendartoSave = new CalendarDB({
 						weeks: weeks
 					})
 					let ok = await calendartoSave.save();
+					console.log(ok)
+					calendarId = ok._id;
 				}
 				
 			}
@@ -68,19 +73,33 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 		})
 	})
 
+	let savedclassesId = []
+	let repertoireCours = await polycrawler.polycrawler();
+	repertoireCours.map(async (cours) => {
+		let coursDB = new Class({
+			name: cours.nom,
+			horraire: cours.horraire
+		})
+		let ok = await coursDB.save()
+		savedclassesId.push(ok._id)
+	})
 
-	// let ok = await calendarD.save()
-	// console.log(ok)
+	let interval = setInterval(async() => {
+		if((calendarId == ''))return;
+		clearInterval(interval)
 
-	// let repertoireCours = await polycrawler.polycrawler();
-	// repertoireCours.map(async (cours) => {
-	// 	let coursDB = new Class({
-	// 		name: cours.nom,
-	// 		horraire: cours.horraire
-	// 	})
-	// 	let ok = await coursDB.save()
-	// 	console.log(ok);
-	// })
+		console.log(calendarId, 'calendarId', savedclassesId)
+		let newSemester = new SemesterDB({
+			name: semesterName,
+			calendar: calendarId,
+			classes: savedclassesId
+		})
+		let ok = await newSemester.save();
+		console.log(ok);
+		clearInterval(interval)
+	},10)
+
+
 	 
 	res.status(200).json({ status: 'semester created' });
 });
