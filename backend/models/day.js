@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const daySchema = new mongoose.Schema({
 	date: Date,
-	value: Boolean,
+	value: Number,
 	alternance: String,
 });
 
-const Day = mongoose.model('Day', daySchema);
+const Day = mongoose.model('Day', daySchema, 'Day');
 
 module.exports = Day;

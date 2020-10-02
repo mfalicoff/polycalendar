@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 
 const semesterSchema = new mongoose.Schema({
 	name: String,
-	startDate: Date,
-	enddate: Date,
-	calendar: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Calendar',
-		},
-	],
+	calendar: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Calendar',
+	},
 
 	classes: [
 		{
@@ -19,6 +15,6 @@ const semesterSchema = new mongoose.Schema({
 	],
 });
 
-const Semester = mongoose.model('Semester', semesterSchema);
+const Semester = mongoose.model('Semester', semesterSchema, 'Semester');
 
 module.exports = Semester;

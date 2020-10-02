@@ -300,7 +300,7 @@ function Admin() {
 						<button
 							type="submit"
 							onClick={() => {
-								Services.create(calendar.toJson());
+								Services.create(calendar.toJson(), semesterName);
 							}}
 						>
 							Send Calendar

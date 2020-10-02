@@ -22,3 +22,4 @@
   - *cheerio*: Core Jquery features for backend
   - *fs*: writing json to disk
   - *cors* Enables Cros-Origin Policy
+  - *dotenv* Permits .env file use
