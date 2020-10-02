@@ -1,3 +1,5 @@
+/* eslint react/prop-types: 0 */
+
 import React from 'react';
 
 const SingleClassForm = ({classNumber, formFields, createChangeHandler}) => {

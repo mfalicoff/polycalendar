@@ -1,13 +1,7 @@
+/* eslint react/prop-types: 0 */
+
 import React, { useState } from 'react';
 import SingleClassForm from './SingleClassForm';
-
-const initialValue = {
-	class1: '',
-	class2: '',
-	class3: '',
-	class4: '',
-	class5: '',
-};
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -17,55 +11,53 @@ function useFormFields(initialValues) {
 		setFormFields((prev) => ({ ...prev, [key]: value }));
 	};
 
-	const resetForm = () => {
-		setFormFields(initialValue);
+	const resetForm = (initalJson) => {
+		setFormFields(initalJson);
 	};
 	return { formFields, createChangeHandler, resetForm };
 }
 
-export default function ClassForm() {
+export default function ClassForm({ numberClasses }) {
+	let initialValueJson = {};
+	let initialValueArray = [];
+
+	for (let i = 1; i <= numberClasses; i++) {
+		initialValueJson[`class${i}`] = '';
+		initialValueArray.push({ class: `class${i}` });
+	}
+
 	const [classes, setClasses] = useState({});
 	const { formFields, createChangeHandler, resetForm } = useFormFields(
-		initialValue
+		initialValueJson
 	);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setClasses(formFields);
-		resetForm(initialValue);
+		resetForm(initialValueJson);
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<SingleClassForm
-				classNumber="1"
-				formFields={formFields}
-				createChangeHandler={createChangeHandler}
-			/>
-			<SingleClassForm
-				classNumber="2"
-				formFields={formFields}
-				createChangeHandler={createChangeHandler}
-			/>
+		<div>
+			{
+				<form onSubmit={handleSubmit}>
+					{initialValueArray.map((value, index) => (
+						<SingleClassForm
+							key={index}
+							classNumber={index + 1}
+							formFields={formFields}
+							createChangeHandler={createChangeHandler}
+						/>
+					))}
+					<button type="submit">submit</button>
+				</form>
+			}
 
-			<SingleClassForm
-				classNumber="3"
-				formFields={formFields}
-				createChangeHandler={createChangeHandler}
-			/>
-
-			<SingleClassForm
-				classNumber="4"
-				formFields={formFields}
-				createChangeHandler={createChangeHandler}
-			/>
-
-			<SingleClassForm
-				classNumber="5"
-				formFields={formFields}
-				createChangeHandler={createChangeHandler}
-			/>
-			<button type="submit">submit</button>
-		</form>
+			<div>
+				{classes.class1 === undefined
+					? console.log('classes')
+					: console.log(classes)}
+			</div>
+		</div>
 	);
 }
