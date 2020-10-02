@@ -5,8 +5,8 @@ const create = async (newCalendar, semesterName) => {
 	console.log(newCalendar);
 	let data = {
 		calendar: newCalendar,
-		name: semesterName
-	}
+		name: semesterName,
+	};
 	const request = await axios.post(baseURL, data);
 	return request.data;
 };

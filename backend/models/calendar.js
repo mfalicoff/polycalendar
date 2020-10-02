@@ -9,6 +9,6 @@ const calendarSchema = new mongoose.Schema({
 	],
 });
 
-const Calendar = mongoose.model('Calendar', calendarSchema, "Calendar");
+const Calendar = mongoose.model('Calendar', calendarSchema, 'Calendar');
 
 module.exports = Calendar;
