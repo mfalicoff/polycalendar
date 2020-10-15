@@ -34,11 +34,12 @@ module.exports = {
 		'linebreak-style': 0,
 		'quotes': [
 			'error',
-			'single'
+			'single',
 		],
 		'semi': [
 			'error',
 			'always'
-		]
+		],
+		
 	}
 };

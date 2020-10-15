@@ -112,6 +112,63 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 	res.status(200).json({ status: 'semester created' });
 });
 
+app.get('/api/getClasses', async (req, res) => {
+	let classesToQuery = [];
+	classesToQuery = req.query.classes;
+	classesToQuery = Object.values(JSON.parse(classesToQuery));
+	let returnJson = [];
+
+	await Promise.all(
+		classesToQuery.map(async (classes) => {
+			let name = classes.name.toUpperCase();
+
+			let sectionTH = classes.sectionTH;
+			let sectionTP = classes.sectionTP;
+			if (sectionTH.length == 1) {
+				sectionTH = '0' + sectionTH;
+			}
+			if (sectionTP.length == 1) {
+				sectionTP = '0' + sectionTP;
+			}
+
+			let classesReturned = await Class.find({
+				name: { $regex: `${name}` },
+			});
+
+			let allHorraireTH = classesReturned[0].horraire[0];
+			let selectedThUnfiltered = allHorraireTH.map((singleClass) => {
+				if (singleClass.coursSectionTH == sectionTH) {
+					return singleClass;
+				}
+			});
+			let selectedTH = selectedThUnfiltered.filter(
+				(clas) => clas !== undefined
+			);
+
+			let allHorraireTP = classesReturned[0].horraire[1];
+			let selectedTpUnfiltered = allHorraireTP.map((singleClass) => {
+				if (singleClass.coursSectionTP == sectionTP) {
+					return singleClass;
+				}
+			});
+			let selectedTP = selectedTpUnfiltered.filter(
+				(clas) => clas !== undefined
+			);
+
+			let returnClass = {
+				name: classesReturned[0].name,
+				id: classesReturned[0]._id,
+				horraire: {
+					TH: selectedTH,
+					TP: selectedTP,
+				},
+			};
+			returnJson.push(returnClass);
+		})
+	);
+	res.send(returnJson);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);

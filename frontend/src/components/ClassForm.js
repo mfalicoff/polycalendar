@@ -2,13 +2,34 @@
 
 import React, { useState } from 'react';
 import SingleClassForm from './SingleClassForm';
+import sendClasses from '../services/sendClasses';
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
 
-	const createChangeHandler = (key) => (e) => {
+	const createChangeHandler = (key, type) => (e) => {
 		const value = e.target.value;
-		setFormFields((prev) => ({ ...prev, [key]: value }));
+		let test = {};
+		if (type == 'name') {
+			test = {
+				name: value,
+				sectionTH: formFields[key].sectionTH,
+				sectionTP: formFields[key].sectionTP,
+			};
+		} else if (type == 'sectionTH') {
+			test = {
+				name: formFields[key].name,
+				sectionTH: value,
+				sectionTP: formFields[key].sectionTP,
+			};
+		} else if (type == 'sectionTP') {
+			test = {
+				name: formFields[key].name,
+				sectionTH: formFields[key].sectionTH,
+				sectionTP: value,
+			};
+		}
+		setFormFields((prev) => ({ ...prev, [key]: test }));
 	};
 
 	const resetForm = (initalJson) => {
@@ -22,19 +43,24 @@ export default function ClassForm({ numberClasses }) {
 	let initialValueArray = [];
 
 	for (let i = 1; i <= numberClasses; i++) {
-		initialValueJson[`class${i}`] = '';
+		initialValueJson[`class${i}`] = {
+			name: '',
+			sectionTH: '',
+			sectionTP: '',
+		};
 		initialValueArray.push({ class: `class${i}` });
 	}
 
-	const [classes, setClasses] = useState({});
+	const [classes, setClasses] = useState([]);
 	const { formFields, createChangeHandler, resetForm } = useFormFields(
 		initialValueJson
 	);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		setClasses(formFields);
+		let ok = await sendClasses(formFields);
 		resetForm(initialValueJson);
+		setClasses(ok);
 	};
 
 	return (
@@ -54,9 +80,11 @@ export default function ClassForm({ numberClasses }) {
 			}
 
 			<div>
-				{classes.class1 === undefined
-					? console.log('classes')
-					: console.log(classes)}
+				{classes[0] === undefined
+					? console.log('undefined')
+					: classes.map((cla) => {
+						return <p key={cla.id}>{cla.name}</p>;
+					})}
 			</div>
 		</div>
 	);
