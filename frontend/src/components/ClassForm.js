@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import SingleClassForm from './SingleClassForm';
 import sendClasses from '../services/sendClasses';
+import getCalendar from '../services/getCalendar'
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -58,10 +59,21 @@ export default function ClassForm({ numberClasses }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		let ok = await sendClasses(formFields);
+		let returnedClasses = await sendClasses(formFields);
 		resetForm(initialValueJson);
-		setClasses(ok);
+		setClasses(returnedClasses);
 	};
+
+	const clickHandler = async(event) => {
+		event.preventDefault();
+		let buttonType = (event.target.value)
+
+		if(buttonType === "getCalendar"){
+			console.log("getting calendar")
+			let calendar = await getCalendar();
+			console.log(calendar)
+		};
+	}
 
 	return (
 		<div>
@@ -80,11 +92,20 @@ export default function ClassForm({ numberClasses }) {
 			}
 
 			<div>
+			<button onClick={() => clickHandler(event)} value="getCalendar">Generate Calendar</button>
 				{classes[0] === undefined
 					? console.log('undefined')
-					: classes.map((cla) => {
-						return <p key={cla.id}>{cla.name}</p>;
-					})}
+					: (
+						<div>
+							{classes.map((cla) => {
+								return <p key={cla.id}>{cla.name}</p>;
+							})}
+							<button onClick={() => clickHandler(event)} value="getCalendar">Generate Calendar</button>
+						</div>
+						
+						
+					)
+				}
 			</div>
 		</div>
 	);

@@ -9,6 +9,14 @@ const weekSchema = new mongoose.Schema({
 	],
 });
 
+weekSchema.set('toJSON', {
+	transform: (document, returnedObject) => {
+		returnedObject.id = returnedObject._id.toString();
+		delete returnedObject._id;
+		delete returnedObject.__v;
+	},
+});
+
 const Week = mongoose.model('Week', weekSchema, 'Week');
 
 module.exports = Week;
