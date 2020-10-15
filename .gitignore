@@ -29,3 +29,5 @@ backend/cours.json
 backend/.env
 
 backend/requests/
+
+frontend/apiGoogleconfig.json
