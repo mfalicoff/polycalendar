@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ClassForm from './components/ClassForm';
-import ApiCalendar from 'react-google-calendar-api';
-import create from './services/googleCalendar'
+import ApiCalendar from './services/googleCalendar'
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -53,16 +52,16 @@ function Home() {
 	const createEvent = (ok, ok1) => {};
 
 	const test = (event) => {
-		ApiCalendar.setCalendar("thks51mldef4rp7b7mt1icpvgo@group.calendar.google.com");
-		console.log(ApiCalendar.calendar)
-		ApiCalendar.createEvent(eventF, ApiCalendar.calendar)
-			.then((result) => {
-			console.log(result);
-				})
-			.catch((error) => {
-			console.log(error);
-				});
-
+		// ApiCalendar.setCalendar("thks51mldef4rp7b7mt1icpvgo@group.calendar.google.com");
+		// console.log(ApiCalendar.calendar)
+		// ApiCalendar.createEvent(eventF, ApiCalendar.calendar)
+		// 	.then((result) => {
+		// 	console.log(result);
+		// 		})
+		// 	.catch((error) => {
+		// 	console.log(error);
+		// 		});
+		// console.log(ApiCalendar.createCalendar("okokok"))
 		//create();
 	}
 
