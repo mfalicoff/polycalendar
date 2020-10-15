@@ -113,7 +113,6 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 });
 
 app.get('/api/getClasses', async (req, res) => {
-
 	let classesToQuery = [];
 	classesToQuery = req.query.classes;
 	classesToQuery = Object.values(JSON.parse(classesToQuery));
@@ -121,12 +120,20 @@ app.get('/api/getClasses', async (req, res) => {
 
 	await Promise.all(
 		classesToQuery.map(async (classes) => {
-
 			let name = classes.name.toUpperCase();
-			let sectionTH = '0' + classes.sectionTH;
-			let sectionTP = '0' + classes.sectionTP;
 
-			let classesReturned = await Class.find({ name: { $regex: `${name}` } });
+			let sectionTH = classes.sectionTH;
+			let sectionTP = classes.sectionTP;
+			if (sectionTH.length == 1) {
+				sectionTH = '0' + sectionTH;
+			}
+			if (sectionTP.length == 1) {
+				sectionTP = '0' + sectionTP;
+			}
+
+			let classesReturned = await Class.find({
+				name: { $regex: `${name}` },
+			});
 
 			let allHorraireTH = classesReturned[0].horraire[0];
 			let selectedThUnfiltered = allHorraireTH.map((singleClass) => {
@@ -140,7 +147,6 @@ app.get('/api/getClasses', async (req, res) => {
 
 			let allHorraireTP = classesReturned[0].horraire[1];
 			let selectedTpUnfiltered = allHorraireTP.map((singleClass) => {
-				console.log(singleClass.coursSectionTP, sectionTP);
 				if (singleClass.coursSectionTP == sectionTP) {
 					return singleClass;
 				}

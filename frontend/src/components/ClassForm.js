@@ -10,7 +10,6 @@ function useFormFields(initialValues) {
 	const createChangeHandler = (key, type) => (e) => {
 		const value = e.target.value;
 		let test = {};
-		console.log(key, type);
 		if (type == 'name') {
 			test = {
 				name: value,
@@ -18,21 +17,18 @@ function useFormFields(initialValues) {
 				sectionTP: formFields[key].sectionTP,
 			};
 		} else if (type == 'sectionTH') {
-			console.log(formFields[key].name);
 			test = {
 				name: formFields[key].name,
 				sectionTH: value,
 				sectionTP: formFields[key].sectionTP,
 			};
 		} else if (type == 'sectionTP') {
-			console.log(formFields[key].name);
 			test = {
 				name: formFields[key].name,
 				sectionTH: formFields[key].sectionTH,
 				sectionTP: value,
 			};
 		}
-		console.log(test);
 		setFormFields((prev) => ({ ...prev, [key]: test }));
 	};
 
@@ -52,21 +48,19 @@ export default function ClassForm({ numberClasses }) {
 			sectionTH: '',
 			sectionTP: '',
 		};
-		console.log(initialValueJson);
 		initialValueArray.push({ class: `class${i}` });
-		console.log(initialValueArray);
 	}
 
-	const [classes, setClasses] = useState({});
+	const [classes, setClasses] = useState([]);
 	const { formFields, createChangeHandler, resetForm } = useFormFields(
 		initialValueJson
 	);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		setClasses(formFields);
-		sendClasses(formFields);
+		let ok = await sendClasses(formFields);
 		resetForm(initialValueJson);
+		setClasses(ok);
 	};
 
 	return (
@@ -86,9 +80,11 @@ export default function ClassForm({ numberClasses }) {
 			}
 
 			<div>
-				{classes.class1 === undefined
-					? console.log('classes')
-					: console.log(classes)}
+				{classes[0] === undefined
+					? console.log('undefined')
+					: classes.map((cla) => {
+						return <p key={cla.id}>{cla.name}</p>;
+					})}
 			</div>
 		</div>
 	);

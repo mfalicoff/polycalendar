@@ -8,6 +8,7 @@ const getClasses = async (classes) => {
 		},
 	});
 	console.log(result);
+	return result.data;
 };
 
 export default getClasses;
