@@ -5,16 +5,17 @@ function Home() {
 	const [nClasses, setNClasses] = useState();
 	const [calendar, setCalendar] = useState([]);
 	const [classes, setClasses] = useState([]);
+	console.log(calendar);
 
 	const setCal = (cal) => {
-		console.log(cal)
+		console.log(cal);
 		setCalendar(cal);
-	}
+	};
 
 	const setCla = (cla) => {
 		console.log(cla);
 		setClasses(cla);
-	}
+	};
 
 	return (
 		<div>
@@ -25,7 +26,12 @@ function Home() {
 					onChange={(event) => setNClasses(event.target.value)}
 				></input>
 			) : (
-				<ClassForm numberClasses={nClasses} setCal={setCal} setCla={setCla} classes={classes} />
+				<ClassForm
+					numberClasses={nClasses}
+					setCal={setCal}
+					setCla={setCla}
+					classes={classes}
+				/>
 			)}
 		</div>
 	);

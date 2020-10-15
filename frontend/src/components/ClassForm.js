@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import SingleClassForm from './SingleClassForm';
 import sendClasses from '../services/sendClasses';
-import getCalendar from '../services/getCalendar'
+import getCalendar from '../services/getCalendar';
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -39,7 +39,7 @@ function useFormFields(initialValues) {
 	return { formFields, createChangeHandler, resetForm };
 }
 
-export default function ClassForm({ numberClasses , setCal, setCla, classes}) {
+export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 	let initialValueJson = {};
 	let initialValueArray = [];
 
@@ -63,16 +63,16 @@ export default function ClassForm({ numberClasses , setCal, setCla, classes}) {
 		setCla(returnedClasses);
 	};
 
-	const clickHandler = async(event) => {
+	const clickHandler = async (event) => {
 		event.preventDefault();
-		let buttonType = (event.target.value)
+		let buttonType = event.target.value;
 
-		if(buttonType === "getCalendar"){
-			console.log("getting calendar")
+		if (buttonType === 'getCalendar') {
+			console.log('getting calendar');
 			let calendar = await getCalendar();
-			setCal(calendar)
-		};
-	}
+			setCal(calendar);
+		}
+	};
 
 	return (
 		<div>
@@ -91,19 +91,21 @@ export default function ClassForm({ numberClasses , setCal, setCla, classes}) {
 			}
 
 			<div>
-				{classes[0] === undefined
-					? console.log('undefined')
-					: (
-						<div>
-							{classes.map((cla) => {
-								return <p key={cla.id}>{cla.name}</p>;
-							})}
-							<button onClick={() => clickHandler(event)} value="getCalendar">Generate Calendar</button>
-						</div>
-						
-						
-					)
-				}
+				{classes[0] === undefined ? (
+					console.log('undefined')
+				) : (
+					<div>
+						{classes.map((cla) => {
+							return <p key={cla.id}>{cla.name}</p>;
+						})}
+						<button
+							onClick={() => clickHandler(event)}
+							value="getCalendar"
+						>
+							Generate Calendar
+						</button>
+					</div>
+				)}
 			</div>
 		</div>
 	);

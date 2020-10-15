@@ -168,16 +168,16 @@ app.get('/api/getClasses', async (req, res) => {
 	);
 	res.send(returnJson);
 });
-app.get('/api/getCalendar', async(req, res) => {
+app.get('/api/getCalendar', async (req, res) => {
 	let calendarResults = await CalendarDB.find({}).populate({
-		path: "weeks",
+		path: 'weeks',
 		populate: {
-			path: "weekDays"
-		}
+			path: 'weekDays',
+		},
 	});
-	console.log(calendarResults)
-	res.json(calendarResults)
-})
+	console.log(calendarResults);
+	res.json(calendarResults);
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
