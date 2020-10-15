@@ -39,7 +39,7 @@ function useFormFields(initialValues) {
 	return { formFields, createChangeHandler, resetForm };
 }
 
-export default function ClassForm({ numberClasses }) {
+export default function ClassForm({ numberClasses , setCal, setCla, classes}) {
 	let initialValueJson = {};
 	let initialValueArray = [];
 
@@ -52,7 +52,6 @@ export default function ClassForm({ numberClasses }) {
 		initialValueArray.push({ class: `class${i}` });
 	}
 
-	const [classes, setClasses] = useState([]);
 	const { formFields, createChangeHandler, resetForm } = useFormFields(
 		initialValueJson
 	);
@@ -61,7 +60,7 @@ export default function ClassForm({ numberClasses }) {
 		event.preventDefault();
 		let returnedClasses = await sendClasses(formFields);
 		resetForm(initialValueJson);
-		setClasses(returnedClasses);
+		setCla(returnedClasses);
 	};
 
 	const clickHandler = async(event) => {
@@ -71,7 +70,7 @@ export default function ClassForm({ numberClasses }) {
 		if(buttonType === "getCalendar"){
 			console.log("getting calendar")
 			let calendar = await getCalendar();
-			console.log(calendar)
+			setCal(calendar)
 		};
 	}
 
@@ -92,7 +91,6 @@ export default function ClassForm({ numberClasses }) {
 			}
 
 			<div>
-			<button onClick={() => clickHandler(event)} value="getCalendar">Generate Calendar</button>
 				{classes[0] === undefined
 					? console.log('undefined')
 					: (
