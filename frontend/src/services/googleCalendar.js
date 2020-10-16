@@ -17,6 +17,7 @@ class ApiCalendar {
             this.onLoad = this.onLoad.bind(this);
             this.setCalendar = this.setCalendar.bind(this);
             this.createCalendar = this.createCalendar.bind(this)
+            this.sendEvent = this.sendEvent.bind(this)
             this.handleClientLoad();
         }
         catch (e) {
@@ -189,6 +190,13 @@ class ApiCalendar {
         })
         return (returnedCalendar.result.id)
     }
+
+    async sendEvent(event) {
+		return this.createEvent(
+			event,
+			this.calendar
+		);
+	};
 
 }
 let apiCalendar;

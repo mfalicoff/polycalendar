@@ -78,6 +78,7 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		<div>
 			{
 				<form onSubmit={handleSubmit}>
+					<p>Enter class information, meaning Siglet and Sections</p>
 					{initialValueArray.map((value, index) => (
 						<SingleClassForm
 							key={index}
@@ -86,13 +87,13 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 							createChangeHandler={createChangeHandler}
 						/>
 					))}
-					<button type="submit">submit</button>
+					<button type="submit">Get Classes</button>
 				</form>
 			}
 
 			<div>
 				{classes[0] === undefined ? (
-					console.log('undefined')
+					<div></div>
 				) : (
 					<div>
 						{classes.map((cla) => {
