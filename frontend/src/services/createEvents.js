@@ -2,37 +2,34 @@ import ApiCalendar from './googleCalendar';
 import { backOff } from 'exponential-backoff';
 
 const createEventsService = async (calendar, classes) => {
-    await ApiCalendar.setCalendar( await ApiCalendar.createCalendar("Automne 2020 PolyCalendar"))
+	await ApiCalendar.setCalendar(
+		await ApiCalendar.createCalendar('Automne 2020 PolyCalendar')
+	);
 	let events = [];
-	for (let indec = 0; indec < calendar[0].weeks.length; indec++) {
-		let week = calendar[0].weeks[indec].weekDays;
-		for (let inde = 0; inde < week.length; inde++) {
-			let day = week[inde];
-			//console.log(day)
-			//console.log(classes)
+	for (let weekIndex = 0; weekIndex < calendar[0].weeks.length; weekIndex++) {
+		let week = calendar[0].weeks[weekIndex].weekDays;
+
+		for (let dayIndex = 0; dayIndex < week.length; dayIndex++) {
+			let day = week[dayIndex];
+
 			if (day.value !== 0) {
 				for (let i = 0; i < classes.length; i++) {
 					let horrTH = classes[i].horraire.TH;
 					let horrTP = classes[i].horraire.TP;
 
-					//console.log(horrTH)
 					for (let j = 0; j < horrTH.length; j++) {
-						let ok = horrTH[j];
-						//console.log(ok)
+						let coursTH = horrTH[j];
 						let dayInInt = new Date(day.date).getDay();
-						if (dateMapper(ok.coursJoursTH) === dayInInt) {
-							let ok1 = new Date(day.date);
+						if (dateMapper(coursTH.coursJoursTH) === dayInInt) {
+							let traversingDay = new Date(day.date);
 
-							let startTime = ok.coursHeureTH.substr(
+							let startTime = coursTH.coursHeureTH.substr(
 								0,
-								ok.coursHeureTH.indexOf(',')
+								coursTH.coursHeureTH.indexOf(',')
 							);
-							//console.log(startTime)
 							let indexHourStart = startTime.indexOf('h');
-							//console.log(indexHourStart, )
 							let hoursStart = '';
 							for (let o = 0; o < indexHourStart; o++) {
-								//console.log(startTime[o])
 								hoursStart = hoursStart + startTime[o];
 							}
 							let minuteStart = '';
@@ -41,25 +38,21 @@ const createEventsService = async (calendar, classes) => {
 								o < startTime.length;
 								o++
 							) {
-								//console.log(startTime[o])
 								minuteStart = minuteStart + startTime[o];
 							}
-							//console.log(hoursStart, minuteStart)
 
 							let dateStart = new Date(
-								ok1.getFullYear(),
-								ok1.getMonth(),
-								ok1.getDate(),
+								traversingDay.getFullYear(),
+								traversingDay.getMonth(),
+								traversingDay.getDate(),
 								hoursStart,
 								minuteStart
 							);
-							//console.log(dateStart)
 
-							let endTime = ok.coursHeureTH.substr(
-								ok.coursHeureTH.lastIndexOf(',') + 2,
-								ok.coursHeureTH.length
+							let endTime = coursTH.coursHeureTH.substr(
+								coursTH.coursHeureTH.lastIndexOf(',') + 2,
+								coursTH.coursHeureTH.length
 							);
-							//console.log(endTime)
 							let indexHourEnd = endTime.indexOf('h');
 							let hoursEnd = '';
 							for (let o = 0; o < indexHourEnd; o++) {
@@ -76,17 +69,16 @@ const createEventsService = async (calendar, classes) => {
 							hoursEnd = parseInt(hoursEnd) + 1;
 							minutesEnd = parseInt(minutesEnd) - 10;
 							let dateEnd = new Date(
-								ok1.getFullYear(),
-								ok1.getMonth(),
-								ok1.getDate(),
+								traversingDay.getFullYear(),
+								traversingDay.getMonth(),
+								traversingDay.getDate(),
 								hoursEnd,
 								minutesEnd
 							);
-							//console.log(dateEnd)
 
 							let eve = {
 								summary: classes[i].name + ' ' + 'TH',
-								description: ok.coursLocalTH,
+								description: coursTH.coursLocalTH,
 								start: {
 									dateTime: dateStart,
 									timeZone: 'America/Toronto',
@@ -96,31 +88,23 @@ const createEventsService = async (calendar, classes) => {
 									timeZone: 'America/Toronto',
 								},
 							};
-							console.log(eve);
 							events.push(eve);
-							//ApiCalendar.createEvent(eve, "thks51mldef4rp7b7mt1icpvgo@group.calendar.google.com")
 						}
 					}
 
 					for (let j = 0; j < horrTP.length; j++) {
-						let ok = horrTP[j];
-						//console.log(ok)
+						let coursTP = horrTP[j];
 						let dayInInt = new Date(day.date).getDay();
-						//console.log(dateMapper(ok.coursJoursTP), dayInInt, ok.coursHeureTP.indexOf("("))
-						if (dateMapper(ok.coursJoursTP) === dayInInt) {
-							let ok1 = new Date(day.date);
-							if (ok.coursHeureTP.indexOf('(') === -1) {
-								let startTime = ok.coursHeureTP.substr(
+						if (dateMapper(coursTP.coursJoursTP) === dayInInt) {
+							let traversingDay = new Date(day.date);
+							if (coursTP.coursHeureTP.indexOf('(') === -1) {
+								let startTime = coursTP.coursHeureTP.substr(
 									0,
-									ok.coursHeureTP.indexOf(',')
+									coursTP.coursHeureTP.indexOf(',')
 								);
-								//console.log(startTime)
-								//console.log(startTime)
 								let indexHourStart = startTime.indexOf('h');
-								//console.log(indexHourStart, )
 								let hoursStart = '';
 								for (let o = 0; o < indexHourStart; o++) {
-									//console.log(startTime[o])
 									hoursStart = hoursStart + startTime[o];
 								}
 								let minuteStart = '';
@@ -129,25 +113,21 @@ const createEventsService = async (calendar, classes) => {
 									o < startTime.length;
 									o++
 								) {
-									//console.log(startTime[o])
 									minuteStart = minuteStart + startTime[o];
 								}
-								//console.log(hoursStart, minuteStart)
 
 								let dateStart = new Date(
-									ok1.getFullYear(),
-									ok1.getMonth(),
-									ok1.getDate(),
+									traversingDay.getFullYear(),
+									traversingDay.getMonth(),
+									traversingDay.getDate(),
 									hoursStart,
 									minuteStart
 								);
-								//console.log(dateStart)
 
-								let endTime = ok.coursHeureTP.substr(
-									ok.coursHeureTP.lastIndexOf(',') + 2,
-									ok.coursHeureTP.length
+								let endTime = coursTP.coursHeureTP.substr(
+									coursTP.coursHeureTP.lastIndexOf(',') + 2,
+									coursTP.coursHeureTP.length
 								);
-								//console.log(endTime)
 								let indexHourEnd = endTime.indexOf('h');
 								let hoursEnd = '';
 								for (let o = 0; o < indexHourEnd; o++) {
@@ -164,17 +144,17 @@ const createEventsService = async (calendar, classes) => {
 								hoursEnd = parseInt(hoursEnd) + 1;
 								minutesEnd = parseInt(minutesEnd) - 10;
 								let dateEnd = new Date(
-									ok1.getFullYear(),
-									ok1.getMonth(),
-									ok1.getDate(),
+									traversingDay.getFullYear(),
+									traversingDay.getMonth(),
+									traversingDay.getDate(),
 									hoursEnd,
 									minutesEnd
 								);
-								//console.log(dateEnd)
 
 								let eve = {
 									summary: classes[i].name + ' ' + 'TP',
-									description: 'Local: ' + ok.coursLocalTP,
+									description:
+										'Local: ' + coursTP.coursLocalTP,
 									start: {
 										dateTime: dateStart,
 										timeZone: 'America/Toronto',
@@ -184,27 +164,21 @@ const createEventsService = async (calendar, classes) => {
 										timeZone: 'America/Toronto',
 									},
 								};
-								console.log(eve);
 								events.push(eve);
-								//ApiCalendar.createEvent(eve, "thks51mldef4rp7b7mt1icpvgo@group.calendar.google.com")
 							} else {
-								let alt = ok.coursHeureTP.substring(
-									ok.coursHeureTP.indexOf('(') + 1,
-									ok.coursHeureTP.length - 1
+								let alt = coursTP.coursHeureTP.substring(
+									coursTP.coursHeureTP.indexOf('(') + 1,
+									coursTP.coursHeureTP.length - 1
 								);
-								//console.log(alt)
 								if (alt === day.alternance) {
 									console.log('alternance');
-									let startTime = ok.coursHeureTP.substr(
+									let startTime = coursTP.coursHeureTP.substr(
 										0,
-										ok.coursHeureTP.indexOf(',')
+										coursTP.coursHeureTP.indexOf(',')
 									);
-									//console.log(startTime)
 									let indexHourStart = startTime.indexOf('h');
-									//console.log(indexHourStart, )
 									let hoursStart = '';
 									for (let o = 0; o < indexHourStart; o++) {
-										//console.log(startTime[o])
 										hoursStart = hoursStart + startTime[o];
 									}
 									let minuteStart = '';
@@ -213,26 +187,23 @@ const createEventsService = async (calendar, classes) => {
 										o < startTime.length;
 										o++
 									) {
-										//console.log(startTime[o])
 										minuteStart =
 											minuteStart + startTime[o];
 									}
-									//console.log(hoursStart, minuteStart)
 
 									let dateStart = new Date(
-										ok1.getFullYear(),
-										ok1.getMonth(),
-										ok1.getDate(),
+										traversingDay.getFullYear(),
+										traversingDay.getMonth(),
+										traversingDay.getDate(),
 										hoursStart,
 										minuteStart
 									);
-									//console.log(dateStart)
 
-									let endTime = ok.coursHeureTP.substr(
-										ok.coursHeureTP.lastIndexOf(',') + 2,
+									let endTime = coursTP.coursHeureTP.substr(
+										coursTP.coursHeureTP.lastIndexOf(',') +
+											2,
 										5
 									);
-									//console.log(endTime)
 									let indexHourEnd = endTime.indexOf('h');
 									let hoursEnd = '';
 									for (let o = 0; o < indexHourEnd; o++) {
@@ -249,19 +220,18 @@ const createEventsService = async (calendar, classes) => {
 									hoursEnd = parseInt(hoursEnd) + 1;
 									minutesEnd = parseInt(minutesEnd) - 10;
 									let dateEnd = new Date(
-										ok1.getFullYear(),
-										ok1.getMonth(),
-										ok1.getDate(),
+										traversingDay.getFullYear(),
+										traversingDay.getMonth(),
+										traversingDay.getDate(),
 										hoursEnd,
 										minutesEnd
 									);
-									//console.log(dateEnd)
 
 									let eve = {
 										summary: classes[i].name + ' ' + 'TP',
 										description:
 											'Local: ' +
-											ok.coursLocalTP +
+											coursTP.coursLocalTP +
 											' Semaine: ' +
 											alt,
 										start: {
@@ -273,9 +243,7 @@ const createEventsService = async (calendar, classes) => {
 											timeZone: 'America/Toronto',
 										},
 									};
-									console.log(eve);
 									events.push(eve);
-									//ApiCalendar.createEvent(eve, "thks51mldef4rp7b7mt1icpvgo@group.calendar.google.com")
 								}
 							}
 						}
@@ -283,44 +251,43 @@ const createEventsService = async (calendar, classes) => {
 				}
 			}
 		}
-    }
-    
+	}
+
 	return await sendEvents(events);
 };
 
 const dateMapper = (dateInFrench) => {
-    if (dateInFrench === 'Dimanche') {
-        return 0;
-    }
-    if (dateInFrench === 'Lundi') {
-        return 1;
-    }
-    if (dateInFrench === 'Mardi') {
-        return 2;
-    }
-    if (dateInFrench === 'Mercredi') {
-        return 3;
-    }
-    if (dateInFrench === 'Jeudi') {
-        return 4;
-    }
-    if (dateInFrench === 'Vendredi') {
-        return 5;
-    }
-    if (dateInFrench === 'Samedi') {
-        return 6;
-    }
+	if (dateInFrench === 'Dimanche') {
+		return 0;
+	}
+	if (dateInFrench === 'Lundi') {
+		return 1;
+	}
+	if (dateInFrench === 'Mardi') {
+		return 2;
+	}
+	if (dateInFrench === 'Mercredi') {
+		return 3;
+	}
+	if (dateInFrench === 'Jeudi') {
+		return 4;
+	}
+	if (dateInFrench === 'Vendredi') {
+		return 5;
+	}
+	if (dateInFrench === 'Samedi') {
+		return 6;
+	}
 };
 
-
 const sendEvents = async (events) => {
+	console.log(events);
 	for (let index = 0; index < events.length; index++) {
 		const element = events[index];
 		try {
 			const response = await backOff(() =>
 				ApiCalendar.sendEvent(element)
 			);
-			return response;
 		} catch (error) {
 			console.log(error.message);
 		}
