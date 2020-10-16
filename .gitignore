@@ -21,3 +21,14 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+backend/package-lock.json
+
+backend/cours.json
+
+backend/.env
+
+backend/requests/
+
+
+frontend/src/apiGoogleconfig.json

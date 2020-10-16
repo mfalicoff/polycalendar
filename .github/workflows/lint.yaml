@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - master
-      - dev
+      - development
   pull_request:
     branches: [ master ]
 
@@ -25,12 +25,27 @@ jobs:
     - uses: actions/checkout@v2
 
     # Runs a single command using the runners shell
-    - name: Npm dependacies
-      run: npm install
+    - name: Npm dependancies
+      run: | 
+        cd frontend
+        npm install
 
     # Runs a set of commands using the runners shell
     - name: Run lint
       run: |
         echo lint check front end
         cd frontend
+        npm run lint
+    
+    # Runs a single command using the runners shell
+    - name: Npm dependancies
+      run: | 
+        cd backend
+        npm install
+
+    # Runs a set of commands using the runners shell
+    - name: Run lint
+      run: |
+        echo lint check back end
+        cd backend
         npm run lint
