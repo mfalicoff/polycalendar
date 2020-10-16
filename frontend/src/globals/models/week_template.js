@@ -14,7 +14,7 @@ export default class WeekTemplate {
 			let test = daysOff.map((day) => day.getTime());
 			let alt = '';
 			if (i < 5) {
-				val = i;
+				val = i+1;
 				alt = alternance[i];
 			}
 			if (test.includes(currentDay.getTime()) || vacationWeek) {

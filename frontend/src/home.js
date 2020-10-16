@@ -1,38 +1,69 @@
 import React, { useState } from 'react';
 import ClassForm from './components/ClassForm';
+import ApiCalendar from './services/googleCalendar';
+import createEventsService from './services/createEvents';
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
-	const [calendar, setCalendar] = useState([]);
+	const [calendar, setLocalCalendar] = useState();
 	const [classes, setClasses] = useState([]);
 	console.log(calendar);
 
 	const setCal = (cal) => {
-		console.log(cal);
-		setCalendar(cal);
+		setLocalCalendar(cal);
 	};
 
 	const setCla = (cla) => {
-		console.log(cla);
 		setClasses(cla);
+	};
+
+	const handleClick = (event) => {
+		if (event.target.value === 'signIn') {
+			ApiCalendar.handleAuthClick();
+		}
+	};
+
+	const createEvents = async (event) => {
+		event.preventDefault();
+		await createEventsService(calendar, classes);
 	};
 
 	return (
 		<div>
-			<h1>Home</h1>
+			<h1>PolyCalendar</h1>
 			{nClasses === undefined ? (
-				<input
-					type="number"
-					onChange={(event) => setNClasses(event.target.value)}
-				></input>
+				<div>
+					Please enter Number of Classes
+					<input
+						type="number"
+						onChange={(event) => setNClasses(event.target.value)}
+					></input>
+				</div>
 			) : (
-				<ClassForm
-					numberClasses={nClasses}
-					setCal={setCal}
-					setCla={setCla}
-					classes={classes}
-				/>
+				<div>
+					<ClassForm
+						numberClasses={nClasses}
+						setCal={setCal}
+						setCla={setCla}
+						classes={classes}
+					/>
+				</div>
 			)}
+			<div>
+				{classes[0] === undefined ? (
+					<div></div>
+				) : (
+					<div>
+						<button value="signIn" onClick={handleClick}>
+							{' '}
+							sign-in
+						</button>
+						<button onClick={createEvents}>
+							Send to Google Calendar
+						</button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
