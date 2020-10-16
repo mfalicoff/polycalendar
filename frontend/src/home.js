@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ClassForm from './components/ClassForm';
 import ApiCalendar from './services/googleCalendar';
-import { backOff } from 'exponential-backoff';
 import createEventsService from './services/createEvents';
 
 function Home() {
@@ -25,6 +24,7 @@ function Home() {
 	};
 
 	const createEvents = async (event) => {
+		event.preventDefault();
 		await createEventsService(calendar, classes);
 	};
 

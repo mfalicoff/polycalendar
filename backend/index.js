@@ -39,7 +39,7 @@ let resetDB = async () => {
 	await CalendarDB.deleteMany({});
 	await WeekDB.deleteMany({});
 	await DayDB.deleteMany({});
-	await SemesterDB.deleteMany({})
+	await SemesterDB.deleteMany({});
 };
 
 app.post('/api/Admin/createSemester', async (req, res) => {

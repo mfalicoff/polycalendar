@@ -285,9 +285,11 @@ const sendEvents = async (events) => {
 	for (let index = 0; index < events.length; index++) {
 		const element = events[index];
 		try {
+			//eslint-disable-next-line
 			const response = await backOff(() =>
 				ApiCalendar.sendEvent(element)
 			);
+			
 		} catch (error) {
 			console.log(error.message);
 		}
