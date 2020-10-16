@@ -169,11 +169,13 @@ class ApiCalendar {
      * @param {object} event with start and end dateTime
      * @returns {any}
      */
-    createEvent(event, calendarId = this.calendar) {
-        return this.gapi.client.calendar.events.insert({
+    async createEvent (event, calendarId = this.calendar) {
+        let ok = await this.gapi.client.calendar.events.insert({
             'calendarId': calendarId,
             'resource': event,
-        });
+        })
+        console.log(ok)
+        return ok;
     }
 
     /**
