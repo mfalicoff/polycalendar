@@ -1,6 +1,5 @@
-if(process.env.NODE_ENV === "dev"){
+if (process.env.NODE_ENV === 'dev') {
 	require('dotenv').config();
-
 }
 /* eslint-disable no-unused-vars */
 
@@ -182,7 +181,7 @@ app.get('/api/getCalendar', async (req, res) => {
 	res.json(calendarResults);
 });
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
