@@ -12,7 +12,10 @@ const Class = require('./models/class');
 const CalendarDB = require('./models/calendar');
 const WeekDB = require('./models/week');
 const DayDB = require('./models/day');
+const UserDB = require('./models/users');
 const SemesterDB = require('./models/semester');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +23,14 @@ app.use(express.json());
 const url = process.env.MONGODB_URI;
 console.log('connecting to', url);
 const NumberofWeeks = 17;
+
+const getTokenFrom = (request) => {
+	const authorization = request.get('authorization');
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+		return authorization.substring(7);
+	}
+	return null;
+};
 
 mongoose
 	.connect(url, {
@@ -43,7 +54,65 @@ let resetDB = async () => {
 	await SemesterDB.deleteMany({});
 };
 
+app.post('/api/login', async (request, response) => {
+	const body = request.body;
+
+	const user = await UserDB.findOne({ username: body.username });
+	const passwordCorrect =
+		user === null
+			? false
+			: await bcrypt.compare(body.password, user.passwordHash);
+
+	if (!(user && passwordCorrect)) {
+		return response.status(401).json({
+			error: 'invalid username or password',
+		});
+	}
+
+	const userForToken = {
+		username: user.username,
+		id: user._id,
+	};
+
+	const token = jwt.sign(userForToken, process.env.SECRET);
+
+	response
+		.status(200)
+		.send({ token, username: user.username, name: user.name });
+});
+
+app.post('/api/users', async (request, response) => {
+	const body = request.body;
+
+	const saltRounds = 10;
+	const passwordHash = await bcrypt.hash(body.password, saltRounds);
+
+	const newUser = new UserDB({
+		username: body.username,
+		name: body.name,
+		passwordHash,
+	});
+
+	const savedUser = await newUser.save();
+
+	response.json(savedUser);
+});
+
+app.get('/api/users', async (request, response) => {
+	const users = await UserDB.find({});
+	response.json(users);
+});
+
 app.post('/api/Admin/createSemester', async (req, res) => {
+	const token = getTokenFrom(req);
+	console.log(token)
+	const decodedToken = jwt.verify(token, process.env.SECRET);
+	if (!token || !decodedToken.id) {
+		return response.status(401).json({ error: 'token missing or invalid' });
+	}
+	const user = await UserDB.findById(decodedToken.id);
+	console.log('token valid')
+
 	await resetDB();
 
 	let calendar = req.body.calendar;
