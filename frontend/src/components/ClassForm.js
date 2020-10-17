@@ -68,7 +68,6 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		let buttonType = event.target.value;
 
 		if (buttonType === 'getCalendar') {
-			console.log('getting calendar');
 			let calendar = await getCalendar();
 			setCal(calendar);
 		}

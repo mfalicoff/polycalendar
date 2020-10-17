@@ -20,12 +20,9 @@ export default class CalendarTemplate {
 		for (let i = 0; i <= weeks; i++) {
 			if (i !== 0) {
 				let update = [];
-				console.log(this.configAlt[i - 1][0]);
 				for (let j = 0; j < 5; j++) {
 					update[j] = this.currentWeek[j];
 					if (this.configAlt[i - 1][j] == '') {
-						console.log('vac');
-						console.log(this.configAlt[i - 2][j]);
 						this.configAlt[i - 2][j] === 'B1'
 							? (update[j] = 'B2')
 							: (update[j] = 'B1');
