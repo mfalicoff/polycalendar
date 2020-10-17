@@ -1,5 +1,10 @@
-//eslint-disable-next-line
-const Config = require('../apiGoogleconfig.json');
+/* eslint-disable */
+const Config = {
+	clientId: process.env.REACT_APP_CLIENTID,
+	apiKey: process.env.REACT_APP_APIKEY,
+	scope: process.env.REACT_APP_SCOPE,
+	discoveryDocs: [process.env.REACT_APP_DISCOVERYDOCS],
+};
 
 class ApiCalendar {
 	constructor() {

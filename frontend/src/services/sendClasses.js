@@ -1,5 +1,6 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3001/api/getClasses';
+//eslint-disable-next-line
+const baseUrl = process.env.REACT_APP_BASE_URL+'/api/getClasses';
 
 const getClasses = async (classes) => {
 	let result = await axios.get(baseUrl, {
