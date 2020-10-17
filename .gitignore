@@ -32,3 +32,5 @@ backend/requests/
 
 
 frontend/src/apiGoogleconfig.json
+
+frontend/.env

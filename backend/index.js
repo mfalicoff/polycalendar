@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV === 'dev') {
+	require('dotenv').config();
+}
 /* eslint-disable no-unused-vars */
 
 const express = require('express');
@@ -15,8 +17,7 @@ const SemesterDB = require('./models/semester');
 app.use(cors());
 app.use(express.json());
 
-const password = process.env.DBpass;
-const url = `mongodb+srv://mazil007:${password}@cluster0.3xdqk.mongodb.net/PolyCalendarTest?retryWrites=true&w=majority`;
+const url = process.env.MONGODB_URI;
 console.log('connecting to', url);
 const NumberofWeeks = 17;
 
@@ -180,7 +181,7 @@ app.get('/api/getCalendar', async (req, res) => {
 	res.json(calendarResults);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });

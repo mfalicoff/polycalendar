@@ -1,5 +1,6 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3001/api/getCalendar';
+//eslint-disable-next-line
+const baseUrl = process.env.REACT_APP_BASE_URL+'/api/getCalendar';
 
 const getCalendar = async () => {
 	let result = await axios.get(baseUrl);

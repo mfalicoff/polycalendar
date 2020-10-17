@@ -1,5 +1,6 @@
 import axios from 'axios';
-const baseURL = 'http://localhost:3001/api/Admin/createSemester';
+//eslint-disable-next-line
+const baseURL = process.env.REACT_APP_BASE_URL+'/api/Admin/createSemester';
 
 const create = async (newCalendar, semesterName) => {
 	console.log(newCalendar);
