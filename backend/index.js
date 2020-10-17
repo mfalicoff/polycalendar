@@ -12,7 +12,10 @@ const Class = require('./models/class');
 const CalendarDB = require('./models/calendar');
 const WeekDB = require('./models/week');
 const DayDB = require('./models/day');
+const UserDB = require('./models/users');
 const SemesterDB = require('./models/semester');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +23,14 @@ app.use(express.json());
 const url = process.env.MONGODB_URI;
 console.log('connecting to', url);
 const NumberofWeeks = 17;
+
+const getTokenFrom = (request) => {
+	const authorization = request.get('authorization');
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+		return authorization.substring(7);
+	}
+	return null;
+};
 
 mongoose
 	.connect(url, {
@@ -43,75 +54,132 @@ let resetDB = async () => {
 	await SemesterDB.deleteMany({});
 };
 
-app.post('/api/Admin/createSemester', async (req, res) => {
-	await resetDB();
+app.post('/api/login', async (request, response) => {
+	const body = request.body;
 
-	let calendar = req.body.calendar;
-	let semesterName = req.body.name;
+	const user = await UserDB.findOne({ username: body.username });
+	const passwordCorrect =
+		user === null
+			? false
+			: await bcrypt.compare(body.password, user.passwordHash);
 
-	let weeks = [];
-	let calendarId = '';
+	if (!(user && passwordCorrect)) {
+		return response.status(401).json({
+			error: 'invalid username or password',
+		});
+	}
 
-	await calendar.weeks.map(async (weekJson) => {
-		let weekDays = [];
-		weekJson.map(async (dayJson) => {
-			let day = new DayDB({
-				date: dayJson.date,
-				value: dayJson.value,
-				alternance: dayJson.alternance,
-			});
+	const userForToken = {
+		username: user.username,
+		id: user._id,
+	};
 
-			let savedDay = await day.save();
-			weekDays.push(savedDay._id);
+	const token = jwt.sign(userForToken, process.env.SECRET);
 
-			if (weekDays.length === 7) {
-				let week = new WeekDB({
-					weekDays: weekDays,
+	response
+		.status(200)
+		.send({ token, username: user.username, name: user.name });
+});
+
+app.post('/api/users', async (request, response) => {
+	const body = request.body;
+
+	const saltRounds = 10;
+	const passwordHash = await bcrypt.hash(body.password, saltRounds);
+
+	const newUser = new UserDB({
+		username: body.username,
+		name: body.name,
+		passwordHash,
+	});
+
+	const savedUser = await newUser.save();
+
+	response.json(savedUser);
+});
+
+app.get('/api/users', async (request, response) => {
+	const users = await UserDB.find({});
+	response.json(users);
+});
+
+app.post('/api/Admin/createSemester', async (request, response) => {
+	const token = getTokenFrom(request);
+	console.log(token);
+	const decodedToken = jwt.verify(token, process.env.SECRET);
+	if (!token || !decodedToken.id) {
+		return response.status(401).json({ error: 'token missing or invalid' });
+	}
+	if (decodedToken.id === process.env.ADMIN_ID) {
+		await resetDB();
+
+		let calendar = request.body.calendar;
+		let semesterName = request.body.name;
+
+		let weeks = [];
+		let calendarId = '';
+
+		await calendar.weeks.map(async (weekJson) => {
+			let weekDays = [];
+			weekJson.map(async (dayJson) => {
+				let day = new DayDB({
+					date: dayJson.date,
+					value: dayJson.value,
+					alternance: dayJson.alternance,
 				});
 
-				let savedWeek = await week.save();
-				weeks.push(savedWeek._id);
+				let savedDay = await day.save();
+				weekDays.push(savedDay._id);
 
-				if (weeks.length === NumberofWeeks) {
-					let calendartoSave = new CalendarDB({
-						weeks: weeks,
+				if (weekDays.length === 7) {
+					let week = new WeekDB({
+						weekDays: weekDays,
 					});
-					let savedCalendar = await calendartoSave.save();
-					calendarId = savedCalendar._id;
+
+					let savedWeek = await week.save();
+					weeks.push(savedWeek._id);
+
+					if (weeks.length === NumberofWeeks) {
+						let calendartoSave = new CalendarDB({
+							weeks: weeks,
+						});
+						let savedCalendar = await calendartoSave.save();
+						calendarId = savedCalendar._id;
+					}
 				}
-			}
-		});
-	});
-
-	let savedclassesId = [];
-	let repertoireCours = await polycrawler.polycrawler();
-
-	repertoireCours.map(async (cours) => {
-		let coursDB = new Class({
-			name: cours.nom,
-			horraire: cours.horraire,
+			});
 		});
 
-		let savedClasses = await coursDB.save();
-		savedclassesId.push(savedClasses._id);
-	});
+		let savedclassesId = [];
+		let repertoireCours = await polycrawler.polycrawler();
 
-	//wait for semester attriubutes to have content
-	let interval = setInterval(async () => {
-		if (calendarId == '') return;
-		clearInterval(interval);
+		repertoireCours.map(async (cours) => {
+			let coursDB = new Class({
+				name: cours.nom,
+				horraire: cours.horraire,
+			});
 
-		let newSemester = new SemesterDB({
-			name: semesterName,
-			calendar: calendarId,
-			classes: savedclassesId,
+			let savedClasses = await coursDB.save();
+			savedclassesId.push(savedClasses._id);
 		});
 
-		await newSemester.save();
-		clearInterval(interval);
-	}, 10);
+		//wait for semester attriubutes to have content
+		let interval = setInterval(async () => {
+			if (calendarId == '') return;
+			clearInterval(interval);
 
-	res.status(200).json({ status: 'semester created' });
+			let newSemester = new SemesterDB({
+				name: semesterName,
+				calendar: calendarId,
+				classes: savedclassesId,
+			});
+
+			await newSemester.save();
+			clearInterval(interval);
+		}, 10);
+
+		response.status(200).json({ status: 'semester created' });
+	}
 });
 
 app.get('/api/getClasses', async (req, res) => {

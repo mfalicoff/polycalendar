@@ -7,7 +7,6 @@ function Home() {
 	const [nClasses, setNClasses] = useState();
 	const [calendar, setLocalCalendar] = useState();
 	const [classes, setClasses] = useState([]);
-	console.log(calendar);
 
 	const setCal = (cal) => {
 		setLocalCalendar(cal);
