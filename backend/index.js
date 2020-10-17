@@ -103,8 +103,8 @@ app.get('/api/users', async (request, response) => {
 	response.json(users);
 });
 
-app.post('/api/Admin/createSemester', async (req, res) => {
-	const token = getTokenFrom(req);
+app.post('/api/Admin/createSemester', async (request, response) => {
+	const token = getTokenFrom(request);
 	console.log(token);
 	const decodedToken = jwt.verify(token, process.env.SECRET);
 	if (!token || !decodedToken.id) {
@@ -113,8 +113,8 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 	if (decodedToken.id === process.env.ADMIN_ID) {
 		await resetDB();
 
-		let calendar = req.body.calendar;
-		let semesterName = req.body.name;
+		let calendar = request.body.calendar;
+		let semesterName = request.body.name;
 
 		let weeks = [];
 		let calendarId = '';
@@ -178,7 +178,7 @@ app.post('/api/Admin/createSemester', async (req, res) => {
 			clearInterval(interval);
 		}, 10);
 
-		res.status(200).json({ status: 'semester created' });
+		response.status(200).json({ status: 'semester created' });
 	}
 });
 

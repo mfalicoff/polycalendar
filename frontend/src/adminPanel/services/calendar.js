@@ -1,12 +1,12 @@
 import axios from 'axios';
 //eslint-disable-next-line
-const baseURL = process.env.REACT_APP_BASE_URL+'/api/Admin/createSemester';
+const baseURL = process.env.REACT_APP_BASE_URL + '/api/Admin/createSemester';
 
-let token = null
+let token = null;
 
-const setToken = newToken => {
-	token =  `bearer ${newToken}`
-}
+const setToken = (newToken) => {
+	token = `bearer ${newToken}`;
+};
 
 const create = async (newCalendar, semesterName) => {
 	console.log(newCalendar);
@@ -16,14 +16,14 @@ const create = async (newCalendar, semesterName) => {
 	};
 	const config = {
 		headers: {
-			Authorization: token	
-		}
-	}
+			Authorization: token,
+		},
+	};
 	const request = await axios.post(baseURL, data, config);
 	return request.data;
 };
 
 export default {
 	create: create,
-	setToken: setToken
+	setToken: setToken,
 };

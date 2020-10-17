@@ -7,7 +7,7 @@ import Home from './home';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import setToken from './adminPanel/services/calendar'
+import setToken from './adminPanel/services/calendar';
 
 function App() {
 	useEffect(() => {
@@ -15,7 +15,7 @@ function App() {
 		if (loggedUserJSON !== null) {
 			const user = JSON.parse(loggedUserJSON);
 			//setUser(user);
-			setToken.setToken(user.token)
+			setToken.setToken(user.token);
 		}
 	}, []);
 
