@@ -171,7 +171,6 @@ const createEventsService = async (calendar, classes) => {
 									coursTP.coursHeureTP.length - 1
 								);
 								if (alt === day.alternance) {
-									console.log('alternance');
 									let startTime = coursTP.coursHeureTP.substr(
 										0,
 										coursTP.coursHeureTP.indexOf(',')
@@ -281,7 +280,6 @@ const dateMapper = (dateInFrench) => {
 };
 
 const sendEvents = async (events) => {
-	console.log(events);
 	for (let index = 0; index < events.length; index++) {
 		const element = events[index];
 		try {

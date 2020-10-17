@@ -9,7 +9,6 @@ const setToken = (newToken) => {
 };
 
 const create = async (newCalendar, semesterName) => {
-	console.log(newCalendar);
 	let data = {
 		calendar: newCalendar,
 		name: semesterName,

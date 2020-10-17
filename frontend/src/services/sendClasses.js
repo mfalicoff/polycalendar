@@ -8,7 +8,6 @@ const getClasses = async (classes) => {
 			classes: classes,
 		},
 	});
-	console.log(result);
 	return result.data;
 };
 

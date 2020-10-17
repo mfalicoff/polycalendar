@@ -36,7 +36,6 @@ function Admin() {
 			semaineVac,
 			firstWeek
 		);
-		console.log(newCal.toJson());
 		setCalendar(newCal);
 	};
 
@@ -292,10 +291,6 @@ function Admin() {
 						{' '}
 						create calendar
 					</button>
-					{console.log(calendar)}
-					{calendar === undefined
-						? console.log('ok')
-						: console.log(calendar.toJson())}
 					<div>
 						<button
 							type="submit"
