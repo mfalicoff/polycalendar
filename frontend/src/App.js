@@ -20,7 +20,7 @@ function App() {
 	}, []);
 
 	return (
-		<div>
+		<div className="container">
 			<Router history={history}>
 				<Switch>
 					<Route exact path="/">

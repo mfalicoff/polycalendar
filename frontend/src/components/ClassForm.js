@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import SingleClassForm from './SingleClassForm';
 import sendClasses from '../services/sendClasses';
 import getCalendar from '../services/getCalendar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form, Button, Table } from 'react-bootstrap';
+import './classForm.css';
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -61,33 +64,36 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		let returnedClasses = await sendClasses(formFields);
 		resetForm(initialValueJson);
 		setCla(returnedClasses);
-	};
 
-	const clickHandler = async (event) => {
-		event.preventDefault();
-		let buttonType = event.target.value;
-
-		if (buttonType === 'getCalendar') {
-			let calendar = await getCalendar();
-			setCal(calendar);
-		}
+		let calendar = await getCalendar();
+		setCal(calendar);
 	};
 
 	return (
 		<div>
 			{
-				<form onSubmit={handleSubmit}>
+				<Form onSubmit={handleSubmit}>
 					<p>Enter class information, meaning Siglet and Sections</p>
+
 					{initialValueArray.map((value, index) => (
-						<SingleClassForm
-							key={index}
-							classNumber={index + 1}
-							formFields={formFields}
-							createChangeHandler={createChangeHandler}
-						/>
+						<Form.Row key={index}>
+							<SingleClassForm
+								key={index}
+								classNumber={index + 1}
+								formFields={formFields}
+								createChangeHandler={createChangeHandler}
+							/>
+						</Form.Row>
 					))}
-					<button type="submit">Get Classes</button>
-				</form>
+
+					<Button
+						type="submit"
+						varaint="primary"
+						className="getClassesButton"
+					>
+						Get Classes
+					</Button>
+				</Form>
 			}
 
 			<div>
@@ -95,15 +101,15 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 					<div></div>
 				) : (
 					<div>
-						{classes.map((cla) => {
-							return <p key={cla.id}>{cla.name}</p>;
-						})}
-						<button
-							onClick={() => clickHandler(event)}
-							value="getCalendar"
-						>
-							Generate Calendar
-						</button>
+						<Table striped className="tableClasses">
+							<tbody>
+								{classes.map((cla) => (
+									<tr key={cla.id}>
+										<td>{cla.name}</td>
+									</tr>
+								))}
+							</tbody>
+						</Table>
 					</div>
 				)}
 			</div>
