@@ -98,11 +98,6 @@ app.post('/api/users', async (request, response) => {
 	response.json(savedUser);
 });
 
-app.get('/api/users', async (request, response) => {
-	const users = await UserDB.find({});
-	response.json(users);
-});
-
 app.post('/api/Admin/createSemester', async (request, response) => {
 	const token = getTokenFrom(request);
 	console.log(token);
@@ -214,7 +209,7 @@ app.get('/api/getClasses', async (req, res) => {
 				(clas) => clas !== undefined
 			);
 
-			let selectedTP = []
+			let selectedTP = [];
 			if (classesReturned[0].horraire[1]) {
 				let allHorraireTP = classesReturned[0].horraire[1];
 				let selectedTpUnfiltered = allHorraireTP.map((singleClass) => {
