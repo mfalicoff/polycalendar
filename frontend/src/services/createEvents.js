@@ -1,10 +1,4 @@
-import ApiCalendar from './googleCalendar';
-import { backOff } from 'exponential-backoff';
-
-const createEventsService = async (calendar, classes) => {
-	await ApiCalendar.setCalendar(
-		await ApiCalendar.createCalendar('Automne 2020 PolyCalendar')
-	);
+const createEventsService = (calendar, classes) => {
 	let events = [];
 	for (let weekIndex = 0; weekIndex < calendar[0].weeks.length; weekIndex++) {
 		let week = calendar[0].weeks[weekIndex].weekDays;
@@ -275,7 +269,7 @@ const createEventsService = async (calendar, classes) => {
 			}
 		}
 	}
-	return await sendEvents(events);
+	return events;
 };
 
 const dateMapper = (dateInFrench) => {
@@ -299,20 +293,6 @@ const dateMapper = (dateInFrench) => {
 	}
 	if (dateInFrench === 'Samedi') {
 		return 6;
-	}
-};
-
-const sendEvents = async (events) => {
-	for (let index = 0; index < events.length; index++) {
-		const element = events[index];
-		try {
-			//eslint-disable-next-line
-			const response = await backOff(() =>
-				ApiCalendar.sendEvent(element)
-			);
-		} catch (error) {
-			console.log(error.message);
-		}
 	}
 };
 
