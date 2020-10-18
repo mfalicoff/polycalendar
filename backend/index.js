@@ -204,7 +204,6 @@ app.get('/api/getClasses', async (req, res) => {
 			let classesReturned = await Class.find({
 				name: { $regex: `${name}` },
 			});
-
 			let allHorraireTH = classesReturned[0].horraire[0];
 			let selectedThUnfiltered = allHorraireTH.map((singleClass) => {
 				if (singleClass.coursSectionTH == sectionTH) {
@@ -215,15 +214,18 @@ app.get('/api/getClasses', async (req, res) => {
 				(clas) => clas !== undefined
 			);
 
-			let allHorraireTP = classesReturned[0].horraire[1];
-			let selectedTpUnfiltered = allHorraireTP.map((singleClass) => {
-				if (singleClass.coursSectionTP == sectionTP) {
-					return singleClass;
-				}
-			});
-			let selectedTP = selectedTpUnfiltered.filter(
-				(clas) => clas !== undefined
-			);
+			let selectedTP = []
+			if (classesReturned[0].horraire[1]) {
+				let allHorraireTP = classesReturned[0].horraire[1];
+				let selectedTpUnfiltered = allHorraireTP.map((singleClass) => {
+					if (singleClass.coursSectionTP == sectionTP) {
+						return singleClass;
+					}
+				});
+				selectedTP = selectedTpUnfiltered.filter(
+					(clas) => clas !== undefined
+				);
+			}
 
 			let returnClass = {
 				name: classesReturned[0].name,
