@@ -27,6 +27,10 @@ const createEventsService = async (calendar, classes) => {
 								0,
 								coursTH.coursHeureTH.indexOf(',')
 							);
+							if (coursTH.coursHeureTH.length === 5) {
+								startTime = coursTH.coursHeureTH;
+							}
+
 							let indexHourStart = startTime.indexOf('h');
 							let hoursStart = '';
 							for (let o = 0; o < indexHourStart; o++) {
@@ -49,25 +53,30 @@ const createEventsService = async (calendar, classes) => {
 								minuteStart
 							);
 
-							let endTime = coursTH.coursHeureTH.substr(
-								coursTH.coursHeureTH.lastIndexOf(',') + 2,
-								coursTH.coursHeureTH.length
-							);
-							let indexHourEnd = endTime.indexOf('h');
 							let hoursEnd = '';
-							for (let o = 0; o < indexHourEnd; o++) {
-								hoursEnd = hoursEnd + endTime[o];
-							}
 							let minutesEnd = '';
-							for (
-								let o = indexHourEnd + 1;
-								o < endTime.length;
-								o++
-							) {
-								minutesEnd = minutesEnd + endTime[o];
+							if (coursTH.coursHeureTH.length !== 5) {
+								let endTime = coursTH.coursHeureTH.substr(
+									coursTH.coursHeureTH.lastIndexOf(',') + 2,
+									coursTH.coursHeureTH.length
+								);
+								let indexHourEnd = endTime.indexOf('h');
+								for (let o = 0; o < indexHourEnd; o++) {
+									hoursEnd = hoursEnd + endTime[o];
+								}
+								for (
+									let o = indexHourEnd + 1;
+									o < endTime.length;
+									o++
+								) {
+									minutesEnd = minutesEnd + endTime[o];
+								}
+								hoursEnd = parseInt(hoursEnd) + 1;
+								minutesEnd = parseInt(minutesEnd) - 10;
+							} else {
+								hoursEnd = parseInt(hoursStart) + 1;
+								minutesEnd = parseInt(minuteStart);
 							}
-							hoursEnd = parseInt(hoursEnd) + 1;
-							minutesEnd = parseInt(minutesEnd) - 10;
 							let dateEnd = new Date(
 								traversingDay.getFullYear(),
 								traversingDay.getMonth(),
@@ -102,6 +111,9 @@ const createEventsService = async (calendar, classes) => {
 									0,
 									coursTP.coursHeureTP.indexOf(',')
 								);
+								if (coursTP.coursHeureTP.length === 5) {
+									startTime = coursTP.coursHeureTP;
+								}
 								let indexHourStart = startTime.indexOf('h');
 								let hoursStart = '';
 								for (let o = 0; o < indexHourStart; o++) {
@@ -124,25 +136,32 @@ const createEventsService = async (calendar, classes) => {
 									minuteStart
 								);
 
-								let endTime = coursTP.coursHeureTP.substr(
-									coursTP.coursHeureTP.lastIndexOf(',') + 2,
-									coursTP.coursHeureTP.length
-								);
-								let indexHourEnd = endTime.indexOf('h');
 								let hoursEnd = '';
-								for (let o = 0; o < indexHourEnd; o++) {
-									hoursEnd = hoursEnd + endTime[o];
-								}
 								let minutesEnd = '';
-								for (
-									let o = indexHourEnd + 1;
-									o < endTime.length;
-									o++
-								) {
-									minutesEnd = minutesEnd + endTime[o];
+								if (coursTP.coursHeureTP.length !== 5) {
+									let endTime = coursTP.coursHeureTP.substr(
+										coursTP.coursHeureTP.lastIndexOf(',') +
+											2,
+										coursTP.coursHeureTP.length
+									);
+									let indexHourEnd = endTime.indexOf('h');
+									for (let o = 0; o < indexHourEnd; o++) {
+										hoursEnd = hoursEnd + endTime[o];
+									}
+									for (
+										let o = indexHourEnd + 1;
+										o < endTime.length;
+										o++
+									) {
+										minutesEnd = minutesEnd + endTime[o];
+									}
+									hoursEnd = parseInt(hoursEnd) + 1;
+									minutesEnd = parseInt(minutesEnd) - 10;
+								} else {
+									hoursEnd = parseInt(hoursStart) + 1;
+									minutesEnd = parseInt(minuteStart);
 								}
-								hoursEnd = parseInt(hoursEnd) + 1;
-								minutesEnd = parseInt(minutesEnd) - 10;
+
 								let dateEnd = new Date(
 									traversingDay.getFullYear(),
 									traversingDay.getMonth(),
@@ -175,6 +194,11 @@ const createEventsService = async (calendar, classes) => {
 										0,
 										coursTP.coursHeureTP.indexOf(',')
 									);
+
+									if (coursTP.coursHeureTP.length === 5) {
+										startTime = coursTP.coursHeureTP;
+									}
+
 									let indexHourStart = startTime.indexOf('h');
 									let hoursStart = '';
 									for (let o = 0; o < indexHourStart; o++) {
@@ -251,7 +275,6 @@ const createEventsService = async (calendar, classes) => {
 			}
 		}
 	}
-
 	return await sendEvents(events);
 };
 
@@ -287,7 +310,6 @@ const sendEvents = async (events) => {
 			const response = await backOff(() =>
 				ApiCalendar.sendEvent(element)
 			);
-			
 		} catch (error) {
 			console.log(error.message);
 		}
