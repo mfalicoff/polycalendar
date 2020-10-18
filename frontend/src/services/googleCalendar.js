@@ -184,7 +184,7 @@ class ApiCalendar {
 			calendarId: calendarId,
 			resource: event,
 		});
-		console.log(ok);
+		//console.log(ok);
 		return ok;
 	}
 
