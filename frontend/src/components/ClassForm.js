@@ -61,12 +61,17 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		let returnedClasses = await sendClasses(formFields);
-		resetForm(initialValueJson);
-		setCla(returnedClasses);
+		try {
+			let returnedClasses = await sendClasses(formFields);
+			console.log(returnedClasses);
+			resetForm(initialValueJson);
+			setCla(returnedClasses);
 
-		let calendar = await getCalendar();
-		setCal(calendar);
+			let calendar = await getCalendar();
+			setCal(calendar);
+		} catch (error) {
+			console.log(error.response.data.error);
+		}
 	};
 
 	return (
