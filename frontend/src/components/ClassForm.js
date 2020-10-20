@@ -7,6 +7,7 @@ import getCalendar from '../services/getCalendar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Table } from 'react-bootstrap';
 import './classForm.css';
+import Footer from './Footer';
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -63,7 +64,6 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		event.preventDefault();
 		try {
 			let returnedClasses = await sendClasses(formFields);
-			console.log(returnedClasses);
 			resetForm(initialValueJson);
 			setCla(returnedClasses);
 
@@ -117,6 +117,11 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 						</Table>
 					</div>
 				)}
+			</div>
+			<div>
+				<Footer>
+					<span>Brought to you by <a href="https://github.com/mfalicoff" target="_blank">Mazilious</a></span>
+				</Footer>
 			</div>
 		</div>
 	);

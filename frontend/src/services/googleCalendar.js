@@ -193,7 +193,6 @@ class ApiCalendar {
 	 * @param {*} calendarName
 	 */
 	async createCalendar(calendarName) {
-		console.log(this.gapi.client.calendar);
 		let returnedCalendar = await this.gapi.client.calendar.calendars.insert(
 			{
 				summary: calendarName,
