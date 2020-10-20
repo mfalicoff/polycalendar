@@ -4,7 +4,7 @@ import ApiCalendar from './services/googleCalendar';
 import createEventsService from './services/createEvents';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 //import SendEvents from './services/sendEvents'
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
@@ -53,7 +53,7 @@ function Home() {
 			const element = eventsCompiled[index];
 			try {
 				//eslint-disable-next-line
-				const response = await backOff(async() => {
+				const response = await backOff(async () => {
 					await ApiCalendar.sendEvent(element);
 				});
 				let percentage = ((index + 1) * 100) / eventsCompiled.length;
@@ -71,12 +71,14 @@ function Home() {
 		<div className="container">
 			<h1>PolyCalendar</h1>
 			{nClasses === undefined ? (
-				<div>
-					Please enter Number of Classes
-					<input
+				<div className="col-sm-4">
+					<label>Please enter Number of Classes</label>
+					<Form.Control
+						placeholder="Number of classes"
 						type="number"
 						onChange={(event) => setNClasses(event.target.value)}
-					></input>
+					/>
+					
 				</div>
 			) : (
 				<div>
@@ -124,9 +126,7 @@ function Home() {
 					<div></div>
 				) : (
 					<div className="percentageBar">
-						<ProgressBarCom	
-							percentage={percentage}
-						/>
+						<ProgressBarCom percentage={percentage} />
 						{percentage === 100 ? <div>Done</div> : <div></div>}
 					</div>
 				)}
