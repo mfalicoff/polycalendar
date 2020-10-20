@@ -120,7 +120,12 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 			</div>
 			<div>
 				<Footer>
-					<span>Brought to you by <a href="https://github.com/mfalicoff" target="_blank">Mazilious</a></span>
+					<span>
+						Brought to you by{' '}
+						<a href="https://github.com/mfalicoff"  target="_blank" rel="noreferrer noopener">
+							Mazilious
+						</a>
+					</span>
 				</Footer>
 			</div>
 		</div>
