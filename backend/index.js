@@ -54,32 +54,32 @@ let resetDB = async () => {
 	await SemesterDB.deleteMany({});
 };
 
-app.post('/api/login', async (request, response) => {
-	const body = request.body;
+// app.post('/api/login', async (request, response) => {
+// 	const body = request.body;
 
-	const user = await UserDB.findOne({ username: body.username });
-	const passwordCorrect =
-		user === null
-			? false
-			: await bcrypt.compare(body.password, user.passwordHash);
+// 	const user = await UserDB.findOne({ username: body.username });
+// 	const passwordCorrect =
+// 		user === null
+// 			? false
+// 			: await bcrypt.compare(body.password, user.passwordHash);
 
-	if (!(user && passwordCorrect)) {
-		return response.status(401).json({
-			error: 'invalid username or password',
-		});
-	}
+// 	if (!(user && passwordCorrect)) {
+// 		return response.status(401).json({
+// 			error: 'invalid username or password',
+// 		});
+// 	}
 
-	const userForToken = {
-		username: user.username,
-		id: user._id,
-	};
+// 	const userForToken = {
+// 		username: user.username,
+// 		id: user._id,
+// 	};
 
-	const token = jwt.sign(userForToken, process.env.SECRET);
+// 	const token = jwt.sign(userForToken, process.env.SECRET);
 
-	response
-		.status(200)
-		.send({ token, username: user.username, name: user.name });
-});
+// 	response
+// 		.status(200)
+// 		.send({ token, username: user.username, name: user.name });
+// });
 
 // app.post('/api/users', async (request, response) => {
 // 	const body = request.body;
@@ -98,84 +98,84 @@ app.post('/api/login', async (request, response) => {
 // 	response.json(savedUser);
 // });
 
-app.post('/api/Admin/createSemester', async (request, response) => {
-	const token = getTokenFrom(request);
-	console.log(token);
-	const decodedToken = jwt.verify(token, process.env.SECRET);
-	if (!token || !decodedToken.id) {
-		return response.status(401).json({ error: 'token missing or invalid' });
-	}
-	if (decodedToken.id === process.env.ADMIN_ID) {
-		await resetDB();
+// app.post('/api/Admin/createSemester', async (request, response) => {
+// 	const token = getTokenFrom(request);
+// 	console.log(token);
+// 	const decodedToken = jwt.verify(token, process.env.SECRET);
+// 	if (!token || !decodedToken.id) {
+// 		return response.status(401).json({ error: 'token missing or invalid' });
+// 	}
+// 	if (decodedToken.id === process.env.ADMIN_ID) {
+// 		await resetDB();
 
-		let calendar = request.body.calendar;
-		let semesterName = request.body.name;
+// 		let calendar = request.body.calendar;
+// 		let semesterName = request.body.name;
 
-		let weeks = [];
-		let calendarId = '';
+// 		let weeks = [];
+// 		let calendarId = '';
 
-		await calendar.weeks.map(async (weekJson) => {
-			let weekDays = [];
-			weekJson.map(async (dayJson) => {
-				let day = new DayDB({
-					date: dayJson.date,
-					value: dayJson.value,
-					alternance: dayJson.alternance,
-				});
+// 		await calendar.weeks.map(async (weekJson) => {
+// 			let weekDays = [];
+// 			weekJson.map(async (dayJson) => {
+// 				let day = new DayDB({
+// 					date: dayJson.date,
+// 					value: dayJson.value,
+// 					alternance: dayJson.alternance,
+// 				});
 
-				let savedDay = await day.save();
-				weekDays.push(savedDay._id);
+// 				let savedDay = await day.save();
+// 				weekDays.push(savedDay._id);
 
-				if (weekDays.length === 7) {
-					let week = new WeekDB({
-						weekDays: weekDays,
-					});
+// 				if (weekDays.length === 7) {
+// 					let week = new WeekDB({
+// 						weekDays: weekDays,
+// 					});
 
-					let savedWeek = await week.save();
-					weeks.push(savedWeek._id);
+// 					let savedWeek = await week.save();
+// 					weeks.push(savedWeek._id);
 
-					if (weeks.length === NumberofWeeks) {
-						let calendartoSave = new CalendarDB({
-							weeks: weeks,
-						});
-						let savedCalendar = await calendartoSave.save();
-						calendarId = savedCalendar._id;
-					}
-				}
-			});
-		});
+// 					if (weeks.length === NumberofWeeks) {
+// 						let calendartoSave = new CalendarDB({
+// 							weeks: weeks,
+// 						});
+// 						let savedCalendar = await calendartoSave.save();
+// 						calendarId = savedCalendar._id;
+// 					}
+// 				}
+// 			});
+// 		});
 
-		let savedclassesId = [];
-		let repertoireCours = [];//await polycrawler.polycrawler();
+// 		let savedclassesId = [];
+// 		let repertoireCours = [];//await polycrawler.polycrawler();
 
-		repertoireCours.map(async (cours) => {
-			let coursDB = new Class({
-				name: cours.nom,
-				horraire: cours.horraire,
-			});
+// 		repertoireCours.map(async (cours) => {
+// 			let coursDB = new Class({
+// 				name: cours.nom,
+// 				horraire: cours.horraire,
+// 			});
 
-			let savedClasses = []; //await coursDB.save();
-			savedclassesId.push(savedClasses._id);
-		});
+// 			let savedClasses = []; //await coursDB.save();
+// 			savedclassesId.push(savedClasses._id);
+// 		});
 
-		//wait for semester attriubutes to have content
-		let interval = setInterval(async () => {
-			if (calendarId == '') return;
-			clearInterval(interval);
+// 		//wait for semester attriubutes to have content
+// 		let interval = setInterval(async () => {
+// 			if (calendarId == '') return;
+// 			clearInterval(interval);
 
-			let newSemester = new SemesterDB({
-				name: semesterName,
-				calendar: calendarId,
-				classes: savedclassesId,
-			});
+// 			let newSemester = new SemesterDB({
+// 				name: semesterName,
+// 				calendar: calendarId,
+// 				classes: savedclassesId,
+// 			});
 
-			//await newSemester.save();
-			clearInterval(interval);
-		}, 10);
+// 			//await newSemester.save();
+// 			clearInterval(interval);
+// 		}, 10);
 
-		response.status(200).json({ status: 'semester created' });
-	}
-});
+// 		response.status(200).json({ status: 'semester created' });
+// 	}
+// });
 
 app.get('/api/getClasses', async (req, res) => {
 	let classesToQuery = [];
