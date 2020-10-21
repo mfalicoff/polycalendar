@@ -146,7 +146,7 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 		});
 
 		let savedclassesId = [];
-		let repertoireCours = await polycrawler.polycrawler();
+		let repertoireCours = [];//await polycrawler.polycrawler();
 
 		repertoireCours.map(async (cours) => {
 			let coursDB = new Class({
@@ -154,7 +154,7 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 				horraire: cours.horraire,
 			});
 
-			let savedClasses = await coursDB.save();
+			let savedClasses = []; //await coursDB.save();
 			savedclassesId.push(savedClasses._id);
 		});
 
@@ -169,7 +169,7 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 				classes: savedclassesId,
 			});
 
-			await newSemester.save();
+			//await newSemester.save();
 			clearInterval(interval);
 		}, 10);
 
