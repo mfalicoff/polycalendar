@@ -81,22 +81,22 @@ app.post('/api/login', async (request, response) => {
 		.send({ token, username: user.username, name: user.name });
 });
 
-app.post('/api/users', async (request, response) => {
-	const body = request.body;
+// app.post('/api/users', async (request, response) => {
+// 	const body = request.body;
 
-	const saltRounds = 10;
-	const passwordHash = await bcrypt.hash(body.password, saltRounds);
+// 	const saltRounds = 10;
+// 	const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
-	const newUser = new UserDB({
-		username: body.username,
-		name: body.name,
-		passwordHash,
-	});
+// 	const newUser = new UserDB({
+// 		username: body.username,
+// 		name: body.name,
+// 		passwordHash,
+// 	});
 
-	const savedUser = await newUser.save();
+// 	const savedUser = await newUser.save();
 
-	response.json(savedUser);
-});
+// 	response.json(savedUser);
+// });
 
 app.post('/api/Admin/createSemester', async (request, response) => {
 	const token = getTokenFrom(request);
