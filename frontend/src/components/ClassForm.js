@@ -78,7 +78,14 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		<div>
 			{
 				<Form onSubmit={handleSubmit}>
-					<p>Enter class information, meaning Siglet and Sections</p>
+					<ol>
+						<li>
+							Enter class information, meaning Siglet and
+							Sections, click get Classes
+						</li>
+						<li>Login with your google Account</li>
+						<li>Send the clendar to your Google Calendar</li>
+					</ol>
 
 					{initialValueArray.map((value, index) => (
 						<Form.Row key={index}>
@@ -122,7 +129,11 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 				<Footer>
 					<span>
 						Brought to you by{' '}
-						<a href="https://github.com/mfalicoff"  target="_blank" rel="noreferrer noopener">
+						<a
+							href="https://github.com/mfalicoff"
+							target="_blank"
+							rel="noreferrer noopener"
+						>
 							Mazilious
 						</a>
 					</span>
