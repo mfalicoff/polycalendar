@@ -80,7 +80,7 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 				<Form onSubmit={handleSubmit}>
 					<ol>
 						<li>
-							Enter class information, meaning Siglet and
+							Enter class information, meaning Sigle and
 							Sections, click get Classes
 						</li>
 						<li>Login with your google Account</li>
