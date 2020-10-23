@@ -5,6 +5,7 @@ if (process.env.NODE_ENV === 'dev') {
 
 const express = require('express');
 const polycrawler = require('./services/polyCrawler');
+const polycrawlerMA = require('./services/polyCrawlerMA');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -54,32 +55,32 @@ let resetDB = async () => {
 	await SemesterDB.deleteMany({});
 };
 
-// app.post('/api/login', async (request, response) => {
-// 	const body = request.body;
+app.post('/api/login', async (request, response) => {
+	const body = request.body;
 
-// 	const user = await UserDB.findOne({ username: body.username });
-// 	const passwordCorrect =
-// 		user === null
-// 			? false
-// 			: await bcrypt.compare(body.password, user.passwordHash);
+	const user = await UserDB.findOne({ username: body.username });
+	const passwordCorrect =
+		user === null
+			? false
+			: await bcrypt.compare(body.password, user.passwordHash);
 
-// 	if (!(user && passwordCorrect)) {
-// 		return response.status(401).json({
-// 			error: 'invalid username or password',
-// 		});
-// 	}
+	if (!(user && passwordCorrect)) {
+		return response.status(401).json({
+			error: 'invalid username or password',
+		});
+	}
 
-// 	const userForToken = {
-// 		username: user.username,
-// 		id: user._id,
-// 	};
+	const userForToken = {
+		username: user.username,
+		id: user._id,
+	};
 
-// 	const token = jwt.sign(userForToken, process.env.SECRET);
+	const token = jwt.sign(userForToken, process.env.SECRET);
 
-// 	response
-// 		.status(200)
-// 		.send({ token, username: user.username, name: user.name });
-// });
+	response
+		.status(200)
+		.send({ token, username: user.username, name: user.name });
+});
 
 // app.post('/api/users', async (request, response) => {
 // 	const body = request.body;
@@ -101,7 +102,7 @@ let resetDB = async () => {
 app.post('/api/Admin/createSemester', async (request, response) => {
 	const token = getTokenFrom(request);
 	console.log(token);
-	if(token === null){
+	if (token === null) {
 		return response.status(401).json({ error: 'token missing or invalid' });
 	}
 	const decodedToken = jwt.verify(token, process.env.SECRET);
@@ -149,15 +150,17 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 		});
 
 		let savedclassesId = [];
-		let repertoireCours = [];//await polycrawler.polycrawler();
+		let repertoireCoursBA = await polycrawler.polycrawler();
+		let repertoireCoursMA = await polycrawlerMA.polycrawler();
 
+		let repertoireCours = repertoireCoursBA.concat(repertoireCoursMA);
 		repertoireCours.map(async (cours) => {
 			let coursDB = new Class({
 				name: cours.nom,
 				horraire: cours.horraire,
 			});
 
-			let savedClasses = []; //await coursDB.save();
+			let savedClasses = await coursDB.save();
 			savedclassesId.push(savedClasses._id);
 		});
 
@@ -177,7 +180,7 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 		}, 10);
 
 		response.status(200).json({ status: 'semester created' });
-	}else{
+	} else {
 		return response.status(403).json({ error: 'Forbidden' });
 	}
 });
