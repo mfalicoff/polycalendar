@@ -13,8 +13,7 @@ const Login = () => {
 			username: username,
 			password: password,
 		});
-		console.log(user);
-		window.localStorage.setItem('loggedInUser', JSON.stringify(user));
+		window.localStorage.setItem(process.env.REACT_APP_SECRET, JSON.stringify(user));
 		setToken.setToken(user.token);
 	};
 

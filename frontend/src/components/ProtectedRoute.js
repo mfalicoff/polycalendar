@@ -7,7 +7,7 @@ class ProtectedRoute extends React.Component {
 		//eslint-disable-next-line
 		const Component = this.props.component;
 		const isAuthenticated =
-			window.localStorage.getItem('loggedInUser') !== null;
+			window.localStorage.getItem(process.env.REACT_APP_SECRET) !== null;
 		return isAuthenticated ? (
 			<Component />
 		) : (
