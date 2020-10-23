@@ -7,7 +7,7 @@ import getCalendar from '../services/getCalendar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Table } from 'react-bootstrap';
 import './classForm.css';
-import Footer from './Footer';
+//import Footer from './Footer';
 
 function useFormFields(initialValues) {
 	const [formFields, setFormFields] = useState(initialValues);
@@ -78,7 +78,14 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		<div>
 			{
 				<Form onSubmit={handleSubmit}>
-					<p>Enter class information, meaning Siglet and Sections</p>
+					<ol>
+						<li>
+							Enter class information, meaning Sigle and
+							Sections, click get Classes
+						</li>
+						<li>Login with your google Account</li>
+						<li>Send the clendar to your Google Calendar</li>
+					</ol>
 
 					{initialValueArray.map((value, index) => (
 						<Form.Row key={index}>
@@ -117,11 +124,6 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 						</Table>
 					</div>
 				)}
-			</div>
-			<div>
-				<Footer>
-					<span>Brought to you by <a href="https://github.com/mfalicoff" target="_blank">Mazilious</a></span>
-				</Footer>
 			</div>
 		</div>
 	);
