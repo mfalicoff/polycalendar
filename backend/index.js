@@ -175,7 +175,7 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 				classes: savedclassesId,
 			});
 
-			//await newSemester.save();
+			await newSemester.save();
 			clearInterval(interval);
 		}, 10);
 
@@ -183,6 +183,12 @@ app.post('/api/Admin/createSemester', async (request, response) => {
 	} else {
 		return response.status(403).json({ error: 'Forbidden' });
 	}
+});
+
+app.get('/api/getCurrentSemester', async(request, response) => {
+	let currentSemester = await SemesterDB.find({});
+	let semesterName = currentSemester[0].name;
+	response.status(200).json({semester: semesterName});
 });
 
 app.get('/api/getClasses', async (req, res) => {

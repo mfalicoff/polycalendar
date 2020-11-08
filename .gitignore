@@ -34,3 +34,7 @@ backend/requests/
 frontend/src/apiGoogleconfig.json
 
 frontend/.env
+
+frontend/.idea/
+
+backend/.idea/

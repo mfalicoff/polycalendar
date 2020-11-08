@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClassForm from './components/ClassForm';
 import ApiCalendar from './services/googleCalendar';
 import createEventsService from './services/createEvents';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import { Button, Form } from 'react-bootstrap';
-//import SendEvents from './services/sendEvents'
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
+import axios from 'axios'
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -16,6 +16,15 @@ function Home() {
 	const [loggedIn, setLoggedIn] = useState(ApiCalendar.sign);
 	const [events, setEvents] = useState([]);
 	const [percentage, setPercent] = useState(0);
+	const [semester, setSemester] = useState('');
+
+	useEffect(() => {
+		async function getSemester(){
+			let sem = await axios.get('http://localhost:3001/api/getCurrentSemester');
+			setSemester(sem.data.semester)
+		}
+		getSemester();
+	}, [])
 
 	const setCal = (cal) => {
 		setLocalCalendar(cal);
@@ -69,7 +78,7 @@ function Home() {
 
 	return (
 		<div className="container">
-			<h1>PolyCalendar</h1>
+			<h1>PolyCalendar {semester}</h1>
 			{nClasses === undefined ? (
 				<div className="col-sm-4">
 					<label>Please enter Number of Classes</label>
