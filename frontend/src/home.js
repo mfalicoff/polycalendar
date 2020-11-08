@@ -118,7 +118,7 @@ function Home() {
 							className="SendCalendar"
 							onClick={createEvents}
 						>
-							Send to Google Calendar
+							Send Schedule
 						</Button>
 					</div>
 				)}
