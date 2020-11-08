@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -30,17 +29,17 @@ function App() {
 						path="/home"
 						exact
 						component={() => <Home />}
-					></Route>
+					/>
 					<Route
 						path="/login"
 						exact
 						component={() => <Login />}
-					></Route>
+					/>
 					<ProtectedRoute
 						path="/admin"
 						exact
 						component={() => <Admin />}
-					></ProtectedRoute>
+					/>
 				</Switch>
 			</Router>
 		</div>
