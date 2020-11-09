@@ -7,7 +7,7 @@ import './index.css';
 import { Button, Form } from 'react-bootstrap';
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
-import axios from 'axios'
+import axios from 'axios';
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -20,11 +20,12 @@ function Home() {
 
 	useEffect(() => {
 		async function getSemester(){
-			let sem = await axios.get('http://localhost:3001/api/getCurrentSemester');
-			setSemester(sem.data.semester)
+			// eslint-disable-next-line no-undef
+			let sem = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/Semester/getCurrentSemester`);
+			setSemester(sem.data.semester);
 		}
 		getSemester();
-	}, [])
+	}, []);
 
 	const setCal = (cal) => {
 		setLocalCalendar(cal);
