@@ -78,7 +78,7 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 				isError: false,
 				message: null
 			});
-			} catch (error) {
+		} catch (error) {
 			console.log(error.response.data.error);
 			setErrorMessage({
 				isError: true,
