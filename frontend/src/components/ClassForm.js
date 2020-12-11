@@ -60,6 +60,7 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 		initialValueArray.push({ class: `class${i}` });
 	}
 
+	// eslint-disable-next-line no-unused-vars
 	const { formFields, createChangeHandler, resetForm } = useFormFields(
 		initialValueJson
 	);
@@ -79,7 +80,6 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 				message: null
 			});
 		} catch (error) {
-			console.log(error.response.data.error);
 			setErrorMessage({
 				isError: true,
 				message: error.response.data.error

@@ -81,7 +81,6 @@ function Home() {
 					message: null
 				});
 			} catch (error) {
-				console.log(error.message);
 				setErrorMessage({
 					isError: true,
 					message: error.message
