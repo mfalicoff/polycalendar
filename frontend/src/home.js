@@ -8,6 +8,7 @@ import { Button, Form } from 'react-bootstrap';
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
 import axios from 'axios';
+import Notification from './components/Notification';
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -17,6 +18,10 @@ function Home() {
 	const [events, setEvents] = useState([]);
 	const [percentage, setPercent] = useState(0);
 	const [semester, setSemester] = useState('');
+	const [errorMessage, setErrorMessage] = useState({
+		isError: false,
+		message: null
+	});
 
 	useEffect(() => {
 		async function getSemester(){
@@ -71,8 +76,17 @@ function Home() {
 					percentage = 100;
 				}
 				setPercent(percentage);
+				setErrorMessage({
+					isError: false,
+					message: null
+				});
 			} catch (error) {
-				console.log(error.message);
+				setErrorMessage({
+					isError: true,
+					message: error.message
+				});
+
+
 			}
 		}
 	};
@@ -88,7 +102,7 @@ function Home() {
 						type="number"
 						onChange={(event) => setNClasses(event.target.value)}
 					/>
-					
+
 				</div>
 			) : (
 				<div>
@@ -131,13 +145,24 @@ function Home() {
 							Send Schedule
 						</Button>
 					</div>
+
 				)}
 				{events[0] === undefined ? (
 					<div></div>
 				) : (
-					<div className="percentageBar">
-						<ProgressBarCom percentage={percentage} />
-						{percentage === 100 ? <div>Done</div> : <div></div>}
+					<div>
+						<div className="percentageBar">
+							<ProgressBarCom percentage={percentage} />
+							{percentage === 100 ?
+								<div>
+									<Notification isError={false} message="Done, check your google Calendar!"/>
+								</div>
+								:
+								<div></div>}
+						</div>
+						<div>
+							<Notification isError={errorMessage.isError} message={errorMessage.message}/>
+						</div>
 					</div>
 				)}
 			</div>
