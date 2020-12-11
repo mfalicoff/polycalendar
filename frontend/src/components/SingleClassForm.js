@@ -12,6 +12,7 @@ const SingleClassForm = ({ classNumber, formFields, createChangeHandler }) => {
 				type="text"
 				value={formFields[`class${classNumber}`][`name`]}
 				onChange={createChangeHandler(`class${classNumber}`, 'name')}
+				required="required"
 			/>
 			<Form.Control
 				placeholder="Section TH"
@@ -21,6 +22,7 @@ const SingleClassForm = ({ classNumber, formFields, createChangeHandler }) => {
 					`class${classNumber}`,
 					'sectionTH'
 				)}
+				required="required"
 			/>
 			<Form.Control
 				placeholder="Section TP"

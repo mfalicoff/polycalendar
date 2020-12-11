@@ -8,6 +8,7 @@ import { Button, Form } from 'react-bootstrap';
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
 import axios from 'axios';
+import Notification from './components/Notification';
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -73,6 +74,7 @@ function Home() {
 				setPercent(percentage);
 			} catch (error) {
 				console.log(error.message);
+
 			}
 		}
 	};
@@ -88,7 +90,7 @@ function Home() {
 						type="number"
 						onChange={(event) => setNClasses(event.target.value)}
 					/>
-					
+
 				</div>
 			) : (
 				<div>
@@ -131,6 +133,7 @@ function Home() {
 							Send Schedule
 						</Button>
 					</div>
+
 				)}
 				{events[0] === undefined ? (
 					<div></div>
