@@ -7,8 +7,8 @@ const WeekDB = require('../models/week');
 const DayDB = require('../models/day');
 const SemesterDB = require('../models/semester');
 const jwt = require('jsonwebtoken');
-const getTokenFrom = require( '../utils/getToken');
-const NumberWeeks = 17;
+const tokenService = require( '../utils/getToken');
+const NumberWeeks = 16;
 
 let resetDB = async () => {
 	await ClassDB.deleteMany({});
@@ -19,7 +19,7 @@ let resetDB = async () => {
 };
 
 semesterRouter.post('/', async (request, response) => {
-	const token = getTokenFrom(request);
+	const token = tokenService.getTokenFrom(request);
 	console.log(token);
 	if (token === null) {
 		return response.status(401).json({ error: 'token missing or invalid' });

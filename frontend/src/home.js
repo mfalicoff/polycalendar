@@ -62,7 +62,7 @@ function Home() {
 
 	const sendEvents = async (eventsCompiled) => {
 		await ApiCalendar.setCalendar(
-			await ApiCalendar.createCalendar('Automne 2020 PolyCalendar')
+			await ApiCalendar.createCalendar(`${semester} PolyCalendar`)
 		);
 		for (let index = 0; index < eventsCompiled.length; index++) {
 			const element = eventsCompiled[index];
