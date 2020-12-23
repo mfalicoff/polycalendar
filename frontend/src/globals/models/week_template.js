@@ -1,6 +1,6 @@
 import Day from './day_template';
 import addDay from '../dateHelpers';
-import dayValues from "./dayValues";
+import dayValues from './dayValues';
 
 export default class WeekTemplate {
 	constructor(weekNumber, alternance, weekStart, vacationWeek, daysOff) {
@@ -11,13 +11,9 @@ export default class WeekTemplate {
 		this.vraiAlternance = [];
 
 		for (let i = 0; i < 7; i++) {
-			console.log(dayValues, currentDay, currentDay.getDay());
 			let val = dayValues[currentDay.getDay()];
-			//let val = 0;
-			let test = daysOff.map((day) => day.getTime());
 			let alt = '';
 			if (i < 5) {
-				//val = i+1;
 				alt = alternance[i];
 			}
 			daysOff.forEach((day) => {

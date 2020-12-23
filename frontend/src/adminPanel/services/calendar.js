@@ -18,7 +18,6 @@ const create = async (newCalendar, semesterName) => {
 			Authorization: token,
 		},
 	};
-	console.log(newCalendar);
 	const request = await axios.post(baseURL, data, config);
 	return request.data;
 };

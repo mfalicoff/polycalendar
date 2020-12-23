@@ -14,27 +14,27 @@ function useFormFields(initialValues) {
 
 	const createChangeHandler = (key, type) => (e) => {
 		const value = e.target.value;
-		let test = {};
+		let classFormType = {};
 		if (type == 'name') {
-			test = {
+			classFormType = {
 				name: value,
 				sectionTH: formFields[key].sectionTH,
 				sectionTP: formFields[key].sectionTP,
 			};
 		} else if (type == 'sectionTH') {
-			test = {
+			classFormType = {
 				name: formFields[key].name,
 				sectionTH: value,
 				sectionTP: formFields[key].sectionTP,
 			};
 		} else if (type == 'sectionTP') {
-			test = {
+			classFormType = {
 				name: formFields[key].name,
 				sectionTH: formFields[key].sectionTH,
 				sectionTP: value,
 			};
 		}
-		setFormFields((prev) => ({ ...prev, [key]: test }));
+		setFormFields((prev) => ({ ...prev, [key]: classFormType }));
 	};
 
 	const resetForm = (initalJson) => {
@@ -70,7 +70,6 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 
 		try {
 			let returnedClasses = await sendClasses(formFields);
-			//resetForm(initialValueJson);
 			setCla(returnedClasses);
 
 			let calendar = await getCalendar();
@@ -95,7 +94,7 @@ export default function ClassForm({ numberClasses, setCal, setCla, classes }) {
 						<ol>
 							<li>
 								Enter class information, meaning Sigle and
-								Sections, click get Classes
+								Sections, then click get Classes
 							</li>
 							<li>Login with your google Account</li>
 							<li>Send the calendar to your Google Calendar</li>

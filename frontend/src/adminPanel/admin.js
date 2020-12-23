@@ -295,7 +295,6 @@ function Admin() {
 						<button
 							type="submit"
 							onClick={() => {
-								console.log(calendar)
 								Services.create(calendar.toJson(), semesterName);
 							}}
 						>

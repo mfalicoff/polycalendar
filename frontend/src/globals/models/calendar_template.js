@@ -11,7 +11,6 @@ export default class CalendarTemplate {
 		this.jsonCalendar = {
 			weeks: [],
 		};
-		console.log(daysOff);
 
 		let weeks = Math.round(
 			(endDate - startDate) / (7 * 24 * 60 * 60 * 1000)
