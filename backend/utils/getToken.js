@@ -6,6 +6,4 @@ const getTokenFrom = (request) => {
 	return null;
 };
 
-module.exports = {
-	getTokenFrom
-};
+exports.getTokenFrom = getTokenFrom;
