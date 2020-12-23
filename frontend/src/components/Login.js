@@ -13,6 +13,7 @@ const Login = () => {
 			username: username,
 			password: password,
 		});
+		// eslint-disable-next-line no-undef
 		window.localStorage.setItem(process.env.REACT_APP_SECRET, JSON.stringify(user));
 		setToken.setToken(user.token);
 	};
@@ -25,13 +26,13 @@ const Login = () => {
 					<input
 						type="text"
 						value={username}
-						onChange={({ target }) => setUsername(target.value)}
-					></input>
+						onChange={({target}) => setUsername(target.value)}
+					/>
 					<input
 						type="password"
 						value={password}
-						onChange={({ target }) => setPassword(target.value)}
-					></input>
+						onChange={({target}) => setPassword(target.value)}
+					/>
 					<button type="submit">login</button>
 				</form>
 			</div>

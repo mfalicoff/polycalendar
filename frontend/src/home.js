@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClassForm from './components/ClassForm';
 import ApiCalendar from './services/googleCalendar';
 import createEventsService from './services/createEvents';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import { Button, Form } from 'react-bootstrap';
-//import SendEvents from './services/sendEvents'
 import ProgressBarCom from './components/ProgressBarCom';
 import { backOff } from 'exponential-backoff';
+import axios from 'axios';
+import Notification from './components/Notification';
 
 function Home() {
 	const [nClasses, setNClasses] = useState();
@@ -16,6 +17,20 @@ function Home() {
 	const [loggedIn, setLoggedIn] = useState(ApiCalendar.sign);
 	const [events, setEvents] = useState([]);
 	const [percentage, setPercent] = useState(0);
+	const [semester, setSemester] = useState('');
+	const [errorMessage, setErrorMessage] = useState({
+		isError: false,
+		message: null
+	});
+
+	useEffect(() => {
+		async function getSemester(){
+			// eslint-disable-next-line no-undef
+			let sem = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/Semester/getCurrentSemester`);
+			setSemester(sem.data.semester);
+		}
+		getSemester();
+	}, []);
 
 	const setCal = (cal) => {
 		setLocalCalendar(cal);
@@ -47,7 +62,7 @@ function Home() {
 
 	const sendEvents = async (eventsCompiled) => {
 		await ApiCalendar.setCalendar(
-			await ApiCalendar.createCalendar('Automne 2020 PolyCalendar')
+			await ApiCalendar.createCalendar(`${semester} PolyCalendar`)
 		);
 		for (let index = 0; index < eventsCompiled.length; index++) {
 			const element = eventsCompiled[index];
@@ -61,15 +76,24 @@ function Home() {
 					percentage = 100;
 				}
 				setPercent(percentage);
+				setErrorMessage({
+					isError: false,
+					message: null
+				});
 			} catch (error) {
-				console.log(error.message);
+				setErrorMessage({
+					isError: true,
+					message: error.message
+				});
+
+
 			}
 		}
 	};
 
 	return (
 		<div className="container">
-			<h1>PolyCalendar</h1>
+			<h1>PolyCalendar {semester}</h1>
 			{nClasses === undefined ? (
 				<div className="col-sm-4">
 					<label>Please enter Number of Classes</label>
@@ -78,7 +102,7 @@ function Home() {
 						type="number"
 						onChange={(event) => setNClasses(event.target.value)}
 					/>
-					
+
 				</div>
 			) : (
 				<div>
@@ -121,13 +145,24 @@ function Home() {
 							Send Schedule
 						</Button>
 					</div>
+
 				)}
 				{events[0] === undefined ? (
 					<div></div>
 				) : (
-					<div className="percentageBar">
-						<ProgressBarCom percentage={percentage} />
-						{percentage === 100 ? <div>Done</div> : <div></div>}
+					<div>
+						<div className="percentageBar">
+							<ProgressBarCom percentage={percentage} />
+							{percentage === 100 ?
+								<div>
+									<Notification isError={false} message="Done, check your google Calendar!"/>
+								</div>
+								:
+								<div></div>}
+						</div>
+						<div>
+							<Notification isError={errorMessage.isError} message={errorMessage.message}/>
+						</div>
 					</div>
 				)}
 			</div>
