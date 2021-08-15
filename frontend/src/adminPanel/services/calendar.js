@@ -19,7 +19,9 @@ const create = async (newCalendar, semesterName) => {
 		},
 	};
 	const request = await axios.post(baseURL, data, config);
-	return request.data;
+	console.log(request)
+	// return request.data;
+	return null
 };
 
 export default {
