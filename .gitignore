@@ -36,3 +36,5 @@ frontend/src/apiGoogleconfig.json
 frontend/.env
 
 .idea/
+
+frontend/build/
