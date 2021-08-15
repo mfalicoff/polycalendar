@@ -6,7 +6,7 @@ const cors = require('cors');
 const logger = require('./utils/logger');
 const middleware = require('./utils/middleware');
 const mongoose = require('mongoose');
-const semesterRouter = require('./controllers/semester');
+const semesterConfig = require('./controllers/semester');
 const classRouter = require('./controllers/classes');
 const userRouter = require('./controllers/users');
 const semesterCalendar = require('./controllers/calendarSemester');
@@ -32,7 +32,7 @@ mongoose
 
 
 app.use(middleware.requestLogger);
-app.use('/api/Admin/createSemester', semesterRouter);
+app.use('/api/Admin/createSemester', semesterConfig);
 app.use('/api/Classes/', classRouter);
 app.use('/api/login', userRouter);
 app.use('/api/Semester', semesterCalendar);

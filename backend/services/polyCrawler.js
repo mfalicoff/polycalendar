@@ -2,9 +2,9 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 //const writeFile = require('./writeFile');
 
-const polycrawler = async () => {
+const polycrawler = async (studyLevel) => {
 	let pageToVisit =
-		'https://www.polymtl.ca/programmes/cours/horaire?cycle=BA';
+		`https://www.polymtl.ca/programmes/cours/horaire?cycle=${studyLevel}`;
 	console.log(`Visiting page ${pageToVisit}`);
 
 	let response = await axios.get(pageToVisit);

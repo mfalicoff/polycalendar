@@ -1,14 +1,13 @@
-const semesterRouter = require('express').Router();
+const semesterConfig = require('express').Router();
 const polycrawler = require('../services/polyCrawler');
-const polycrawlerMA = require('../services/polyCrawlerMA');
 const ClassDB = require('../models/class');
-const CalendarDB = require('../models/calendar');
-const WeekDB = require('../models/week');
-const DayDB = require('../models/day');
+const CalendarDB = require('../models/calendar/calendar');
+const WeekDB = require('../models/calendar/week');
+const DayDB = require('../models/calendar/day');
 const SemesterDB = require('../models/semester');
 const jwt = require('jsonwebtoken');
 const tokenService = require( '../utils/getToken');
-const NumberWeeks = 16;
+const NumberWeeks = 14;
 
 let resetDB = async () => {
 	await ClassDB.deleteMany({});
@@ -18,17 +17,17 @@ let resetDB = async () => {
 	await SemesterDB.deleteMany({});
 };
 
-semesterRouter.post('/', async (request, response) => {
-	const token = tokenService.getTokenFrom(request);
-	console.log(token);
-	if (token === null) {
-		return response.status(401).json({ error: 'token missing or invalid' });
-	}
-	const decodedToken = jwt.verify(token, process.env.SECRET);
-	if (!token || !decodedToken.id) {
-		return response.status(401).json({ error: 'token missing or invalid' });
-	}
-	if (decodedToken.id === process.env.ADMIN_ID) {
+semesterConfig.post('/', async (request, response) => {
+	// const token = tokenService.getTokenFrom(request);
+	// console.log(token);
+	// if (token === null) {
+	// 	return response.status(401).json({ error: 'token missing or invalid' });
+	// }
+	// const decodedToken = jwt.verify(token, process.env.SECRET);
+	// if (!token || !decodedToken.id) {
+	// 	return response.status(401).json({ error: 'token missing or invalid' });
+	// }
+	// if (decodedToken.id === process.env.ADMIN_ID) {
 		await resetDB();
 
 		let calendar = request.body.calendar;
@@ -69,8 +68,8 @@ semesterRouter.post('/', async (request, response) => {
 		});
 
 		let savedclassesId = [];
-		let repertoireCoursBA = await polycrawler.polycrawler();
-		let repertoireCoursMA = await polycrawlerMA.polycrawler();
+		let repertoireCoursBA = await polycrawler.polycrawler('BA');
+		let repertoireCoursMA = await polycrawler.polycrawler('ES');
 
 		let repertoireCours = repertoireCoursBA.concat(repertoireCoursMA);
 		repertoireCours.map(async (cours) => {
@@ -99,13 +98,13 @@ semesterRouter.post('/', async (request, response) => {
 		}, 10);
 
 		response.status(200).json({ status: 'semester created' });
-	} else {
-		throw new Error('action forbidden');
-	}
+	// } else {
+	// 	throw new Error('action forbidden');
+	// }
 });
 
 
 
-module.exports = semesterRouter;
+module.exports = semesterConfig;
 
 
