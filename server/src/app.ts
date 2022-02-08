@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT } from '@config';
 import { dbConnection } from '@databases';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
@@ -46,7 +46,9 @@ class App {
       set('debug', true);
     }
 
-    connect(dbConnection.url, dbConnection.options).then(res => logger.info(`Connected to: ${dbConnection.url}, with response: ${res.connection.id}`));
+    connect(dbConnection.url, dbConnection.options).then(res =>
+      logger.info(`Connected to: ${dbConnection.url}, with response: ${res.connection.id}`),
+    );
   }
 
   private initializeMiddlewares() {

@@ -3,6 +3,8 @@ import { Class } from '@interfaces/class.interface';
 import classModel from '@models/class.model';
 import { isEmpty } from '@utils/util';
 import { CreateClassDto } from '@dtos/class.dto';
+import crawler from '@services/scraper.service';
+import { logger } from '@utils/logger';
 
 class ClassService {
   public classes = classModel;
@@ -19,6 +21,36 @@ class ClassService {
     if (!findClass) throw new HttpException(409, "You're not class");
 
     return findClass;
+  }
+
+  public async findSingleClassByName(className: string): Promise<Class> {
+    if (isEmpty(className)) throw new HttpException(400, "You're not className");
+
+    const findClass: Class = await this.classes.findOne({ name: { $regex: `${className.toUpperCase()}` } });
+    if (!findClass) throw new HttpException(409, "You're not class");
+
+    return findClass;
+  }
+
+  public async findManyClassByName(classesName: string[]): Promise<Class[]> {
+    const allClasses: Class[] = [];
+
+    await Promise.all(
+      classesName.map(async (singleClassName: string) => {
+        allClasses.push(await this.findSingleClassByName(singleClassName));
+        logger.info(allClasses);
+      }),
+    );
+    return allClasses;
+  }
+
+  public async findManyClass(classesName: string): Promise<Class[]> {
+    if (isEmpty(classesName)) throw new HttpException(400, "You're not className");
+
+    const findClasses: Class[] = await this.classes.find({ name: { $regex: `${classesName.toUpperCase()}` } });
+    if (!findClasses) throw new HttpException(409, "You're not class");
+
+    return findClasses;
   }
 
   public async createClass(classData: CreateClassDto): Promise<Class> {
@@ -51,6 +83,10 @@ class ClassService {
     if (!deleteClassById) throw new HttpException(409, "You're not class");
 
     return deleteClassById;
+  }
+
+  public async scrapeClasses(studyLevel: string, saveToDisk: boolean): Promise<Class[]> {
+    return await crawler(studyLevel, saveToDisk);
   }
 }
 
