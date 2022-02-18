@@ -9,8 +9,7 @@ class UserService {
   public users = userModel;
 
   public async findAllUser(): Promise<User[]> {
-    const users: User[] = await this.users.find();
-    return users;
+    return this.users.find();
   }
 
   public async findUserById(userId: string): Promise<User> {
@@ -29,9 +28,7 @@ class UserService {
     if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
-
-    return createUserData;
+    return await this.users.create({ ...userData, password: hashedPassword });
   }
 
   public async updateUser(userId: string, userData: CreateUserDto): Promise<User> {

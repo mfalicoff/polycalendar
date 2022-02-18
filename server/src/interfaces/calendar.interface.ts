@@ -1,3 +1,5 @@
+import {Schema} from "mongoose";
+
 export interface Day {
   _id?: string;
   date: Date;
@@ -7,14 +9,14 @@ export interface Day {
 
 export interface Week {
   _id?: string;
-  weekdays: Day[];
+  weekdays: Schema.Types.ObjectId;
   weekNumber: Number;
 }
 
 export interface Calendar {
   _id?: string;
-  weeks: Week[];
+  weeks: Schema.Types.ObjectId;
   startDate: Date;
   endDate: Date;
-  vacationWeek: Week;
+  vacationWeek: Schema.Types.ObjectId;
 }
