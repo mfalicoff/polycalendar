@@ -38,10 +38,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          - cd client
-          - npm ci
+          cd client
+          npm ci
 
       - name: Run lint
         run: |
-          - cd client
-          - npm run lint
+          cd client
+          npm run lint
