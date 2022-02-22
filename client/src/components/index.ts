@@ -2,6 +2,6 @@ export { Header } from "./header";
 export { Logo } from "./logo";
 export { Main } from "./main";
 export { Button } from "./button";
-export { Cards } from "./cards";
+export { MainContent } from "./mainContent";
 export { Footer } from "./footer";
 export { Container } from "./container";
