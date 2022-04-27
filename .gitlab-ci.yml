@@ -20,7 +20,7 @@ buildServer:
   stage: build
   script:
     - cd server
-    - npm i
+    - npm i --legacy-peer-deps
 
 lintServer:
   stage: lint
