@@ -1,10 +1,10 @@
 image: node
 
-stage:
+stages:
   - lint
 
 # Lets name our Job eslint, because that's what it's doing.
-eslint:
+lint:
   # tell eslint what stage it is. (This could also be build or test for example)
   stage: lint
   # What scripts do we want to run?
