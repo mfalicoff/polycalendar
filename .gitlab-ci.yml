@@ -19,14 +19,14 @@ Server Lint:
     - nm run lint
 
 Client Build:
-  stage: lint
+  stage: build
   script:
     - cd client
     - npm i
     - npm run build
 
 Server Build:
-  stage: lint
+  stage: build
   script:
     - cd server
     - npm i --legacy-peer-deps
