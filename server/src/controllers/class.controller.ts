@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Class } from '@interfaces/class.interface';
 import ClassService from '@services/class.service';
 import { CreateClassDto } from '@dtos/class.dto';
+import { logger } from '@utils/logger';
 
 class ClassController {
   public classService = new ClassService();
@@ -40,7 +41,8 @@ class ClassController {
 
   public getManyClassByName = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const classesName: string[] = req.body;
+      logger.info(req.body.classes);
+      const classesName: string[] = req.body.classes;
       const allClassesData: Class[] = await this.classService.findManyClassByName(classesName);
 
       res.status(200).json({ data: allClassesData, message: 'findOne by Name' });

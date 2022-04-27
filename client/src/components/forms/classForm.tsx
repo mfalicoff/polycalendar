@@ -1,5 +1,6 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Button, Logo } from "@components";
+import { test } from "../../services/class";
 
 interface classForm extends Record<string, any> {
     classAcr: string;
@@ -41,10 +42,12 @@ export const ClassForm: React.FC = () => {
         setClassFields(data);
     };
 
-    const submit = (event: SyntheticEvent) => {
+    const submit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        console.log("ok");
-        console.log(classFields);
+        const classesAcr = classFields.map((clas) => {
+            return clas.classAcr;
+        });
+        await test(classesAcr);
     };
 
     return (
