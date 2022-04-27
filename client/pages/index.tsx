@@ -1,13 +1,22 @@
 import React from "react";
 
-import { Container, Footer, Header, Main, MainContent } from "@components";
+import {
+    ClassForm,
+    Container,
+    Footer,
+    Header,
+    Main,
+    MainContent,
+} from "@components";
 
 const Home: React.FC = () => {
     return (
         <Container>
             <Header />
             <Main />
-            <MainContent>main</MainContent>
+            <MainContent>
+                <ClassForm />
+            </MainContent>
             <Footer />
         </Container>
     );

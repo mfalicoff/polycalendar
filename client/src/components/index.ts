@@ -5,3 +5,4 @@ export { Button } from "./button";
 export { MainContent } from "./mainContent";
 export { Footer } from "./footer";
 export { Container } from "./container";
+export { ClassForm } from "./forms/classForm";
