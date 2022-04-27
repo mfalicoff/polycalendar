@@ -16,7 +16,7 @@ Server Lint:
   script:
     - cd server
     - npm i --legacy-peer-deps
-    - nm run lint
+    - npm run lint
 
 Client Build:
   stage: build
@@ -30,5 +30,5 @@ Server Build:
   script:
     - cd server
     - npm i --legacy-peer-deps
-    - nm run build:swc
+    - npm run build:swc
 
