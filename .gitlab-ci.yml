@@ -1,29 +1,34 @@
 image: node
 
 stages:
-  - build
   - lint
+  - build
 
-buildClient:
-  stage: build
+Client Lint:
+  stage: lint
   script:
     - cd client
     - npm i
-
-lintClient:
-  stage: lint
-  script:
-    - cd client
     - npm run lint
 
-buildServer:
-  stage: build
+Server Lint:
+  stage: lint
   script:
     - cd server
     - npm i --legacy-peer-deps
+    - nm run lint
 
-lintServer:
+Client Build:
+  stage: lint
+  script:
+    - cd client
+    - npm i
+    - npm run build
+
+Server Build:
   stage: lint
   script:
     - cd server
-    - npm run lint
+    - npm i --legacy-peer-deps
+    - nm run build:swc
+
