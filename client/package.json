@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint --max-warnings=0 '**/*.{js,jsx,ts,tsx}'",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "tauri": "tauri"
   },

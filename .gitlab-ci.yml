@@ -1,15 +1,29 @@
 image: node
 
 stages:
+  - build
   - lint
 
-# Lets name our Job eslint, because that's what it's doing.
-lint:
-  # tell eslint what stage it is. (This could also be build or test for example)
-  stage: lint
-  # What scripts do we want to run?
+buildClient:
+  stage: build
   script:
-    # install eslint
     - cd client
     - npm i
+
+lintClient:
+  stage: lint
+  script:
+    - cd client
+    - npm run lint
+
+buildServer:
+  stage: build
+  script:
+    - cd server
+    - npm i
+
+lintServer:
+  stage: lint
+  script:
+    - cd server
     - npm run lint
