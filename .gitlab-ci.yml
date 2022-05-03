@@ -1,34 +1,99 @@
 image: node
 
+cache:
+    key: '${CI_COMMIT_REF_SLUG}-client'
+    paths:
+        - client/node_modules/
+        - server/node_modules/
+    policy: pull
+
+.only-client: &only-client
+    only:
+        refs:
+            - master
+            - merge_requests
+        changes:
+            - client/**/*
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-client'
+        paths:
+            - client/node_modules/
+        policy: pull
+
+.only-server: &only-server
+    only:
+        refs:
+            - master
+            - merge_requests
+        changes:
+            - server/**/*
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-server'
+        paths:
+            - server/node_modules/
+        policy: pull
+
 stages:
-  - lint
-  - build
+    - install
+    - lint
+    - build
 
-Client Lint:
-  stage: lint
-  script:
-    - cd client
-    - npm i
-    - npm run lint
+install:client:
+    stage: install
+    <<: *only-client
+    script:
+        - cd client
+        - npm ci --cache .npm --prefer-offline
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-client'
+        paths:
+            - client/node_modules/
+            - client/.npm/
+        policy: pull-push
 
-Server Lint:
-  stage: lint
-  script:
-    - cd server
-    - npm i --legacy-peer-deps
-    - npm run lint
+install:server:
+    stage: install
+    <<: *only-server
+    script:
+        - cd server
+        - npm ci --cache .npm --prefer-offline
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-server'
+        paths:
+            - server/node_modules/
+            - server/.npm/
+        policy: pull-push
 
-Client Build:
-  stage: build
-  script:
-    - cd client
-    - npm i
-    - npm run build
+lint:client:
+    stage: lint
+    <<: *only-client
+    script:
+        - cd client
+        - npm run lint
 
-Server Build:
-  stage: build
-  script:
-    - cd server
-    - npm i --legacy-peer-deps
-    - npm run build:swc
+lint:server:
+    stage: lint
+    <<: *only-server
+    script:
+        - cd server
+        - npm run lint
 
+build:client:
+    stage: build
+    <<: *only-client
+    script:
+        - cd client
+        - npm run build
+    artifacts:
+        paths:
+            - client/.next/
+
+build:server:
+    stage: build
+    <<: *only-server
+    script:
+        - cd server
+        - npm run build:swc
+    artifacts:
+        paths:
+            - server/dist/
