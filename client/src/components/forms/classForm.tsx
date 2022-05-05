@@ -1,12 +1,14 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from "react";
-import { Button, Logo } from "@components";
-import { test } from "../../services/class";
+import { Button } from "@components";
+import { fetchFormClasses } from "../../services/class.service";
 
+/*eslint-disable */ // use for any in interface
 interface classForm extends Record<string, any> {
     classAcr: string;
     theoryGroup: number;
     labGroup?: number;
 }
+/*eslint-enable */
 
 export const ClassForm: React.FC = () => {
     const [classFields, setClassFields] = useState<classForm[]>([
@@ -47,7 +49,7 @@ export const ClassForm: React.FC = () => {
         const classesAcr = classFields.map((clas) => {
             return clas.classAcr;
         });
-        await test(classesAcr);
+        await fetchFormClasses(classesAcr);
     };
 
     return (
@@ -61,45 +63,39 @@ export const ClassForm: React.FC = () => {
                     />
                     <input
                         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Theory Group"
+                        placeholder="Groupe Theorique"
                         readOnly
                     />
                     <input
                         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         name="labGroup"
-                        placeholder="Lab Group"
+                        placeholder="Groupe de Lab"
                         readOnly
                     />
                 </div>
                 {classFields.map((input, index) => {
                     return (
                         <div key={index} className="py-3">
-                            <input
-                                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            <ClassFormInput
                                 name="classAcr"
-                                placeholder="Sigle du cours"
+                                placeholder="Sigle du Cours"
                                 value={input.classAcr}
-                                onChange={(event) =>
-                                    handleFormChange(index, event)
-                                }
+                                onChange={handleFormChange}
+                                index={index}
                             />
-                            <input
-                                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            <ClassFormInput
                                 name="theoryGroup"
-                                placeholder="Theory Group"
+                                placeholder="Groupe Theorique"
                                 value={input.theoryGroup}
-                                onChange={(event) =>
-                                    handleFormChange(index, event)
-                                }
+                                onChange={handleFormChange}
+                                index={index}
                             />
-                            <input
-                                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            <ClassFormInput
                                 name="labGroup"
-                                placeholder="Lab Group"
+                                placeholder="Groupe de Lab"
                                 value={input.labGroup}
-                                onChange={(event) =>
-                                    handleFormChange(index, event)
-                                }
+                                onChange={handleFormChange}
+                                index={index}
                             />
                             <Button
                                 onClick={(event) => removeFields(index, event)}
@@ -120,5 +116,32 @@ export const ClassForm: React.FC = () => {
                 </Button>
             </form>
         </div>
+    );
+};
+/*eslint-disable */ //for any for function
+interface InputProps {
+    name: string;
+    placeholder: string;
+    value: string | number | undefined;
+    onChange: any;
+    index: number;
+}
+/*eslint-enable */
+
+const ClassFormInput: React.FC<InputProps> = ({
+    name,
+    placeholder,
+    value,
+    onChange,
+    index,
+}) => {
+    return (
+        <input
+            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            name={name}
+            placeholder={placeholder}
+            value={value}
+            onChange={(event) => onChange(index, event)}
+        />
     );
 };

@@ -1,14 +1,8 @@
 import axios from "axios";
+import store from "../redux/store";
+import { classesPushClass } from "@redux/actions";
 
-interface classForm extends Record<string, any> {
-    classAcr: string;
-    theoryGroup: number;
-    labGroup?: number;
-}
-
-export const test = async (classesAcr: string[]): Promise<void> => {
-    console.log(classesAcr);
-
+export const fetchFormClasses = async (classesAcr: string[]): Promise<void> => {
     try {
         const result = await axios.post(
             "http://localhost:3001/class/manyName",
@@ -16,7 +10,7 @@ export const test = async (classesAcr: string[]): Promise<void> => {
                 classes: classesAcr,
             },
         );
-        console.log(result);
+        store.dispatch(classesPushClass(result.data.data));
     } catch (e) {
         console.log(e);
     }

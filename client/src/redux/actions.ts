@@ -1,1 +1,1 @@
-export { increase, decrease } from "@redux/slices/counter";
+export { classesPushClass } from "@redux/slices/classes";
