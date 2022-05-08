@@ -23,12 +23,9 @@ export const fetchFormClasses = async (
         const classesAcr = classesFromForm.map(
             (classForm) => classForm.classAcr,
         );
-        const result = await axios.post(
-            "http://localhost:3001/class/manyName",
-            {
-                classes: classesAcr,
-            },
-        );
+        const result = await axios.post(`${process.env.ROUTE}/class/manyName`, {
+            classes: classesAcr,
+        });
         result.data.data.map((singleClass: Class, index: number) => {
             const schedulesT: TheorySection[] = [];
             const schedulesL: LabSection[] = [];
