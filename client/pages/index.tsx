@@ -9,17 +9,18 @@ import {
     MainContent,
 } from "@components";
 import { useSelector } from "react-redux";
+import { RootState } from "@redux/reducers";
 
 const Home: React.FC = () => {
-    const classes = useSelector((state) => state.classesForm);
+    const classes = useSelector((state: RootState) => state.classesForm);
 
     const showClasses = () => {
         if (classes.length > 0)
             return (
                 <div>
                     <h1>Cours selectionne</h1>
-                    {classes.map((cour) => {
-                        return <div key={cour._id}>{cour.name}</div>;
+                    {classes.map((cours) => {
+                        return <div key={cours._id}>{cours.name}</div>;
                     })}
                 </div>
             );

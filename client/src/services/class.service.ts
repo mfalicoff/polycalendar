@@ -1,6 +1,7 @@
 import axios from "axios";
 import store from "../redux/store";
 import { classesPushClass } from "@redux/actions";
+import { Class } from "@interfaces/class.interface";
 
 export const fetchFormClasses = async (classesAcr: string[]): Promise<void> => {
     try {
@@ -10,7 +11,9 @@ export const fetchFormClasses = async (classesAcr: string[]): Promise<void> => {
                 classes: classesAcr,
             },
         );
-        store.dispatch(classesPushClass(result.data.data));
+        result.data.data.map((singleClass: Class) =>
+            store.dispatch(classesPushClass(singleClass)),
+        );
     } catch (e) {
         console.log(e);
     }
