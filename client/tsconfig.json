@@ -44,7 +44,8 @@
         "src/redux"
       ],
       "@interfaces/*": [
-        "../common/interfaces/*"
+        "../common/interfaces/*",
+        "src/interfaces/*"
       ]
     },
     "incremental": true

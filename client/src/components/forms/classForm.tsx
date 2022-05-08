@@ -1,14 +1,7 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Button } from "@components";
 import { fetchFormClasses } from "../../services/class.service";
-
-/*eslint-disable */ // use for any in interface
-interface classForm extends Record<string, any> {
-    classAcr: string;
-    theoryGroup: number;
-    labGroup?: number;
-}
-/*eslint-enable */
+import { classForm } from "@interfaces/classes.interface";
 
 export const ClassForm: React.FC = () => {
     const [classFields, setClassFields] = useState<classForm[]>([
@@ -46,10 +39,7 @@ export const ClassForm: React.FC = () => {
 
     const submit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        const classesAcr = classFields.map((clas) => {
-            return clas.classAcr;
-        });
-        await fetchFormClasses(classesAcr);
+        await fetchFormClasses(classFields);
     };
 
     return (
