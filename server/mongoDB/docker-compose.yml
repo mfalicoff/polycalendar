@@ -4,7 +4,7 @@ services:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: mfalicoff
-      MONGO_INITDB_ROOT_PASSWORD: 
+      MONGO_INITDB_ROOT_PASSWORD:
       MONGO_INITDB_DATABASE: polyCalendarDev
     ports:
       - 27017:27017

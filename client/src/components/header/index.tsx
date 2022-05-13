@@ -1,13 +1,22 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 
 import { Button, Logo } from "@components";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/reducers";
+import { logoutUser } from "../../services/login.service";
 
 export const Header: React.FC = () => {
     const router = useRouter();
+    const user = useSelector((state: RootState) => state.storeUser);
 
-    const handleClick = async () => {
+    const handleLogin = async () => {
         await router.push("/login");
+    };
+
+    const handleLogout = async (event: SyntheticEvent) => {
+        event.preventDefault();
+        logoutUser();
     };
 
     const handleClickMain = async () => {
@@ -28,9 +37,15 @@ export const Header: React.FC = () => {
                 </h1>
             </div>
             <div>
-                <Button type="button" onClick={handleClick}>
-                    Login
-                </Button>
+                {!user.loggedIn ? (
+                    <Button type="button" onClick={handleLogin}>
+                        Login
+                    </Button>
+                ) : (
+                    <Button type="button" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                )}
             </div>
         </div>
     );

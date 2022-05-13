@@ -1,8 +1,9 @@
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Container, Footer, Header } from "@components";
 import { useRouter } from "next/router";
-import { login } from "../src/services/login";
+import { loginService, loginUser } from "../src/services/login.service";
 import { Response } from "node-fetch";
+import { User } from "@interfaces/users.interface";
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -12,14 +13,16 @@ const Login: React.FC = () => {
 
     const handleLogin = async (event: SyntheticEvent) => {
         event.preventDefault();
-        console.log("logging in with", username, password);
-        const ok: Response = await login({
+        const res: Response = await loginService({
             email: username,
             password: password,
         });
-        if (ok.status === 200) {
-            console.log("ok", ok);
-            await router.push("/dashboard");
+        if (res.status === 200) {
+            const data = await res.json();
+            const user: User = data.data;
+            loginUser(user.email);
+            if (process.env.ADMIN_ID === user._id) await router.push("/admin");
+            else await router.push("/");
         }
     };
 
