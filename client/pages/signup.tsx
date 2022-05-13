@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Container, Footer, Header } from "@components";
 import { useRouter } from "next/router";
-import { signUp } from "../src/services/login";
+import { signUp } from "../src/services/login.service";
 
 const SignUpPage: React.FC = () => {
     const [username, setUsername] = useState("");
