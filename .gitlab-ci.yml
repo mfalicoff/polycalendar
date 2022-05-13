@@ -100,17 +100,27 @@ stages:
 #         paths:
 #             - server/dist/
 
-tauri:install:
-    stage: tauri
-    <<: *only-client
-    script:
-        - cd client
-        - apt-get update
-        - apt-get install libwebkit2gtk-4.0-dev \
-            build-essential \
-            curl \
-            wget \
-            libssl-dev \
-            libgtk-3-dev \
-            libappindicator3-dev \
-            librsvg2-dev
+tauri:build:
+  stage: tauri
+  image: "rust:bullseye"
+  stage: tauri:build
+  cache:
+  - key: pnpm
+    paths:
+      - .pnpm-store
+  - key: cargo
+    paths:
+      - client/src-tauri/target
+  - key: bundle
+    paths:
+      - client/src-tauri/target/release/bundle
+  script:
+    - cd client
+    - apt update -yqq && apt install -yqq --no-install-recommends nodejs libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev patchelf librsvg2-dev
+    - curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6    
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install
+    - pnpm run build
+    - pnpm run tauri build
+    - cp src-tauri/target/release/polyCalendar polyCalendar
+
