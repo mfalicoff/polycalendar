@@ -185,41 +185,47 @@ export const ClassesTable: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {classes.map((cours: Class, index: number) => {
-                                        let theoryGroup;
-                                        let labGroup;
-                                        if (
-                                            instanceOfTheory(
-                                                cours.schedule[0][0],
+                                    {classes.map(
+                                        (cours: Class, index: number) => {
+                                            let theoryGroup;
+                                            let labGroup;
+                                            if (
+                                                instanceOfTheory(
+                                                    cours.schedule[0][0],
+                                                )
                                             )
-                                        )
-                                            theoryGroup =
-                                                cours.schedule[0][0]
-                                                    .theoryClassGroup;
-                                        if (instanceOfLab(cours.schedule[1][0]))
-                                            labGroup =
-                                                cours.schedule[1][0]
-                                                    .labClassGroup;
-                                        return (
-                                            <tr
-                                                key={cours._id}
-                                                className="border-b"
-                                            >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                    {index + 1}
-                                                </td>
-                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {cours.name}
-                                                </td>
-                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {theoryGroup}
-                                                </td>
-                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                    {labGroup}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                                                theoryGroup =
+                                                    cours.schedule[0][0]
+                                                        .theoryClassGroup;
+                                            if (
+                                                instanceOfLab(
+                                                    cours.schedule[1][0],
+                                                )
+                                            )
+                                                labGroup =
+                                                    cours.schedule[1][0]
+                                                        .labClassGroup;
+                                            return (
+                                                <tr
+                                                    key={cours._id}
+                                                    className="border-b"
+                                                >
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                        {index + 1}
+                                                    </td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {cours.name}
+                                                    </td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {theoryGroup}
+                                                    </td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {labGroup}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        },
+                                    )}
                                 </tbody>
                             </table>
                         </div>
