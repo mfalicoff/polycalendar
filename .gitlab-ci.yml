@@ -34,92 +34,98 @@ cache:
         policy: pull
 
 stages:
-    - tauri
-    # - install
-    # - lint
-    # - build
+    - install
+    - lint
+    - build
+    # - tauri
 
+install:client:
+    stage: install
+    <<: *only-client
+    script:
+        - cd client
+        - npm ci --cache .npm --prefer-offline
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-client'
+        paths:
+            - client/node_modules/
+            - client/.npm/
+        policy: pull-push
 
-# install:client:
-#     stage: install
-#     <<: *only-client
-#     script:
-#         - cd client
-#         - npm ci --cache .npm --prefer-offline
-#     cache:
-#         key: '${CI_COMMIT_REF_SLUG}-client'
-#         paths:
-#             - client/node_modules/
-#             - client/.npm/
-#         policy: pull-push
+install:server:
+    stage: install
+    <<: *only-server
+    script:
+        - cd server
+        - npm ci --cache .npm --prefer-offline --legacy-peer-deps
+    cache:
+        key: '${CI_COMMIT_REF_SLUG}-server'
+        paths:
+            - server/node_modules/
+            - server/.npm/
+        policy: pull-push
 
-# install:server:
-#     stage: install
-#     <<: *only-server
-#     script:
-#         - cd server
-#         - npm ci --cache .npm --prefer-offline --legacy-peer-deps
-#     cache:
-#         key: '${CI_COMMIT_REF_SLUG}-server'
-#         paths:
-#             - server/node_modules/
-#             - server/.npm/
-#         policy: pull-push
+lint:client:
+    stage: lint
+    <<: *only-client
+    script:
+        - cd client
+        - npm run lint
 
-# lint:client:
-#     stage: lint
-#     <<: *only-client
-#     script:
-#         - cd client
-#         - npm run lint
+lint:server:
+    stage: lint
+    <<: *only-server
+    script:
+        - cd server
+        - npm run lint
 
-# lint:server:
-#     stage: lint
-#     <<: *only-server
-#     script:
-#         - cd server
-#         - npm run lint
+build:client:
+    stage: build
+    <<: *only-client
+    script:
+        - cd client
+        - npm run build
+    artifacts:
+        paths:
+            - client/.next/
 
-# build:client:
-#     stage: build
-#     <<: *only-client
-#     script:
-#         - cd client
-#         - npm run build
-#     artifacts:
-#         paths:
-#             - client/.next/
-
-# build:server:
-#     stage: build
-#     <<: *only-server
-#     script:
-#         - cd server
-#         - npm run build:swc
-#     artifacts:
-#         paths:
-#             - server/dist/
+build:server:
+    stage: build
+    <<: *only-server
+    script:
+        - cd server
+        - npm run build:swc
+    artifacts:
+        paths:
+            - server/dist/
 
 tauri:build:
-  stage: tauri
-  image: "rust:bullseye"
-  cache:
-  - key: pnpm
-    paths:
-      - .pnpm-store
-  - key: cargo
-    paths:
-      - client/src-tauri/target
-  - key: bundle
-    paths:
-      - client/src-tauri/target/release/bundle
-  script:
-    - cd client
-    - apt update -yqq && apt install -yqq --no-install-recommends nodejs libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev patchelf librsvg2-dev
-    - curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6    
-    - pnpm config set store-dir .pnpm-store
-    - pnpm install
-    - pnpm run build
-    - pnpm run tauri build
-    - cp src-tauri/target/release/polyCalendar polyCalendar
+    when: manual
+    stage: tauri
+    image: "rust:bullseye"
+    <<: *only-client
+    cache:
+        - key: pnpm
+          paths:
+          - .pnpm-store
+        - key: cargo
+          paths:
+            - client/src-tauri/target
+        - key: bundle
+          paths:
+            - client/src-tauri/target/release/bundle
+    script:
+        - cd client
+        - apt update -yqq && apt install -yqq --no-install-recommends nodejs libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev patchelf librsvg2-dev
+        - curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6    
+        - pnpm config set store-dir .pnpm-store
+        - pnpm install
+        - pnpm run build
+        - pnpm run tauri build
+        - cp src-tauri/target/release/polyCalendar polyCalendar
+
+    artifacts:
+        paths:
+            - polyCalendar
+
 
