@@ -103,7 +103,6 @@ stages:
 tauri:build:
   stage: tauri
   image: "rust:bullseye"
-  stage: tauri:build
   cache:
   - key: pnpm
     paths:
