@@ -37,7 +37,7 @@ stages:
     - install
     - lint
     - build
-    # - tauri
+    - tauri
 
 install:client:
     stage: install
