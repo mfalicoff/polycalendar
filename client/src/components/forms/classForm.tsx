@@ -8,6 +8,7 @@ import {
 import { classForm } from "@interfaces/classes.interface";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/reducers";
+import { Class } from "@interfaces/class.interface";
 
 export const ClassForm: React.FC = () => {
     const [classFields, setClassFields] = useState<classForm[]>([
@@ -184,7 +185,7 @@ export const ClassesTable: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {classes.map((cours, index) => {
+                                    {classes.map((cours: Class, index) => {
                                         let theoryGroup;
                                         let labGroup;
                                         if (
