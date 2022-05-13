@@ -185,7 +185,7 @@ export const ClassesTable: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {classes.map((cours: Class, index) => {
+                                    {classes.map((cours: Class, index: number) => {
                                         let theoryGroup;
                                         let labGroup;
                                         if (

@@ -100,7 +100,6 @@ build:server:
             - server/dist/
 
 tauri:build:
-    when: manual
     stage: tauri
     image: "rust:bullseye"
     <<: *only-client
