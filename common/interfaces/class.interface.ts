@@ -1,6 +1,7 @@
 export interface Class {
   _id?: string;
   name: string;
+  credits: number;
   schedule: Array<TheorySection[] | LabSection[]>;
 }
 

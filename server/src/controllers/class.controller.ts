@@ -117,6 +117,7 @@ class ClassController {
       classes.map(async (singleClass: Class) => {
         const classDto: CreateClassDto = {} as CreateClassDto;
         classDto.name = singleClass.name;
+        classDto.credits = singleClass.credits;
         classDto.schedule = singleClass.schedule;
         const returnClass = await this.createClassPrivate(classDto, next);
         createdClasses.push(returnClass);

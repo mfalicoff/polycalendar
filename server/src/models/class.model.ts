@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 import { Class } from '@interfaces/class.interface';
 
 const classSchema: Schema = new Schema({
@@ -6,6 +6,10 @@ const classSchema: Schema = new Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  credits: {
+    type: Number,
+    required: true,
   },
   schedule: {
     type: Array,

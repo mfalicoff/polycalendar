@@ -18,8 +18,10 @@ const crawler = async (studyLevel: string, saveToDisk?: boolean): Promise<Class[
     .find('h2')
     .each((i: number, elem: any) => {
       const className: string = elem.children[0].children[0].data;
+      const credits: number = elem.children[1].data.match(/(\d+)/)[0];
       classesRepertoire.push({
         name: className,
+        credits: credits,
         schedule: [],
       });
     });
