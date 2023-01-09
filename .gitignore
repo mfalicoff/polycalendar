@@ -2,3 +2,5 @@
 .idea/
 
 server/mongoDB/DB/
+
+.DS_Store
