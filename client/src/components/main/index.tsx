@@ -6,8 +6,7 @@ export const Main: React.FC = () => {
             <div className="container mx-auto">
                 <h1 className="text-white text-8xl mb-2">PolyCalendar</h1>
                 <p className="py-4 text-lg text-white mb-3">
-                    Bienvenue a PolyCalendar! Un couteau suisse pour votre
-                    parcours a Poly
+                    Bienvenue a PolyCalendar! Un couteau suisse pour votre parcours a Poly
                 </p>
             </div>
         </div>

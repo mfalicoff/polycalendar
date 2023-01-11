@@ -11,8 +11,13 @@ const classFormState = createSlice({
             const content = action.payload;
             state.push(content);
         },
+        resetClassesStore: (state) => {
+            while (state.length > 0) {
+                state.pop();
+            }
+        },
     },
 });
-export const { classesPushClass } = classFormState.actions;
+export const { classesPushClass, resetClassesStore } = classFormState.actions;
 
 export default classFormState.reducer;

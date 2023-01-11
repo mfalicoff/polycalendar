@@ -3,26 +3,19 @@ import store from "../redux/store";
 import { classesPushClass } from "@redux/actions";
 import { Class, LabSection, TheorySection } from "@interfaces/class.interface";
 import { classForm } from "@interfaces/classes.interface";
+import { resetClassesStore } from "@redux/slices/classes";
 
-export function instanceOfTheory(
-    object: TheorySection | LabSection,
-): object is TheorySection {
+export function instanceOfTheory(object: TheorySection | LabSection): object is TheorySection {
     return "theoryClassGroup" in object;
 }
 
-export function instanceOfLab(
-    object: TheorySection | LabSection,
-): object is LabSection {
+export function instanceOfLab(object: TheorySection | LabSection): object is LabSection {
     return "labClassGroup" in object;
 }
 
-export const fetchFormClasses = async (
-    classesFromForm: classForm[],
-): Promise<void> => {
+export const fetchFormClasses = async (classesFromForm: classForm[]): Promise<void> => {
     try {
-        const classesAcr = classesFromForm.map(
-            (classForm) => classForm.classAcr,
-        );
+        const classesAcr = classesFromForm.map((classForm) => classForm.classAcr);
         const result = await axios.post(`${process.env.ROUTE}/class/manyName`, {
             classes: classesAcr,
         });
@@ -54,5 +47,11 @@ export const fetchFormClasses = async (
         });
     } catch (e) {
         console.log(e);
+    }
+};
+
+export const resetClasses = (classes: Class[]): void => {
+    if (classes.length > 0) {
+        store.dispatch(resetClassesStore());
     }
 };

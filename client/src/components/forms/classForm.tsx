@@ -4,6 +4,7 @@ import {
     fetchFormClasses,
     instanceOfLab,
     instanceOfTheory,
+    resetClasses,
 } from "../../services/class.service";
 import { classForm } from "@interfaces/classes.interface";
 import { useSelector } from "react-redux";
@@ -11,14 +12,12 @@ import { RootState } from "@redux/reducers";
 import { Class } from "@interfaces/class.interface";
 
 export const ClassForm: React.FC = () => {
-    const [classFields, setClassFields] = useState<classForm[]>([
-        { classAcr: "", theoryGroup: 0, labGroup: 0 },
-    ]);
+    const initialClassForm = [{ classAcr: "", theoryGroup: 0, labGroup: 0 }];
+    const classes = useSelector((state: RootState) => state.classesForm);
 
-    const handleFormChange = (
-        index: number,
-        event: ChangeEvent<HTMLInputElement>,
-    ) => {
+    const [classFields, setClassFields] = useState<classForm[]>(initialClassForm);
+
+    const handleFormChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
         const data = [...classFields];
         data[index][event.target.name] = event.target.value;
         setClassFields(data);
@@ -34,10 +33,7 @@ export const ClassForm: React.FC = () => {
         setClassFields([...classFields, newField]);
     };
 
-    const removeFields = (
-        index: number,
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
+    const removeFields = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const data = [...classFields];
         data.splice(index, 1);
@@ -46,6 +42,8 @@ export const ClassForm: React.FC = () => {
 
     const submit = async (event: SyntheticEvent) => {
         event.preventDefault();
+        setClassFields(initialClassForm);
+        resetClasses(classes);
         await fetchFormClasses(classFields);
     };
 
@@ -94,21 +92,12 @@ export const ClassForm: React.FC = () => {
                                 onChange={handleFormChange}
                                 index={index}
                             />
-                            <Button
-                                onClick={(event) => removeFields(index, event)}
-                            >
-                                Remove
-                            </Button>
+                            <Button onClick={(event) => removeFields(index, event)}>Remove</Button>
                         </div>
                     );
                 })}
-                <Button onClick={(event) => addFields(event)}>
-                    Add More..
-                </Button>
-                <Button
-                    onClick={(event) => submit(event)}
-                    disabled={classFields.length < 1}
-                >
+                <Button onClick={(event) => addFields(event)}>Add More..</Button>
+                <Button onClick={(event) => submit(event)} disabled={classFields.length < 1}>
                     Submit
                 </Button>
             </form>
@@ -123,15 +112,10 @@ interface InputProps {
     onChange: any;
     index: number;
 }
+
 /*eslint-enable */
 
-const ClassFormInput: React.FC<InputProps> = ({
-    name,
-    placeholder,
-    value,
-    onChange,
-    index,
-}) => {
+const ClassFormInput: React.FC<InputProps> = ({ name, placeholder, value, onChange, index }) => {
     return (
         <input
             className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -149,9 +133,7 @@ export const ClassesTable: React.FC = () => {
     if (classes.length > 0) {
         return (
             <div className="py-10 flex flex-col">
-                <h3 className="underline text-gray-500">
-                    Cours selectionne(s)
-                </h3>
+                <h3 className="underline text-gray-500">Cours selectionne(s)</h3>
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                         <div className="overflow-hidden">
@@ -185,47 +167,30 @@ export const ClassesTable: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {classes.map(
-                                        (cours: Class, index: number) => {
-                                            let theoryGroup;
-                                            let labGroup;
-                                            if (
-                                                instanceOfTheory(
-                                                    cours.schedule[0][0],
-                                                )
-                                            )
-                                                theoryGroup =
-                                                    cours.schedule[0][0]
-                                                        .theoryClassGroup;
-                                            if (
-                                                instanceOfLab(
-                                                    cours.schedule[1][0],
-                                                )
-                                            )
-                                                labGroup =
-                                                    cours.schedule[1][0]
-                                                        .labClassGroup;
-                                            return (
-                                                <tr
-                                                    key={cours._id}
-                                                    className="border-b"
-                                                >
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                        {index + 1}
-                                                    </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                        {cours.name}
-                                                    </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                        {theoryGroup}
-                                                    </td>
-                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                        {labGroup}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        },
-                                    )}
+                                    {classes.map((cours: Class, index: number) => {
+                                        let theoryGroup;
+                                        let labGroup;
+                                        if (instanceOfTheory(cours.schedule[0][0]))
+                                            theoryGroup = cours.schedule[0][0].theoryClassGroup;
+                                        if (instanceOfLab(cours.schedule[1][0]))
+                                            labGroup = cours.schedule[1][0].labClassGroup;
+                                        return (
+                                            <tr key={cours._id} className="border-b">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    {cours.name}
+                                                </td>
+                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    {theoryGroup}
+                                                </td>
+                                                <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                    {labGroup}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>

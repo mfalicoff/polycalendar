@@ -42,9 +42,7 @@ const SignUpPage: React.FC = () => {
                                                 className="px-4 py-1 border-b-2 border-gray-400 outline-none  focus:border-gray-400"
                                                 name="name"
                                                 value={username}
-                                                onChange={({ target }) =>
-                                                    setUsername(target.value)
-                                                }
+                                                onChange={({ target }) => setUsername(target.value)}
                                             />
                                         </label>
                                     </div>
@@ -56,9 +54,7 @@ const SignUpPage: React.FC = () => {
                                                 className="px-4 py-1 border-b-2 border-gray-400 outline-none  focus:border-gray-400"
                                                 name="name"
                                                 value={password}
-                                                onChange={({ target }) =>
-                                                    setPassword(target.value)
-                                                }
+                                                onChange={({ target }) => setPassword(target.value)}
                                             />
                                         </label>
                                     </div>
