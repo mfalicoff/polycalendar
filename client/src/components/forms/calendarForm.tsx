@@ -18,7 +18,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         alt: [],
         dates: [],
         daysOff: [],
-        vacationWeekStart: new Date(),
+        vacationWeekStart: new Date(0),
     };
 
     const [semesterForm, setSemesterForm] = useState<SemesterFormInterface>(initialSemesterForm);
@@ -61,18 +61,21 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         if (originalIndex <= 6) {
             return semesterForm.alt[index % 6];
         }
-
+        console.log(day, currentCalendar, index, originalIndex);
         const elemLastWeek = currentCalendar[index - 1];
-        if (elemLastWeek.value === day.value) {
-            if (elemLastWeek.alt === "B1") {
-                return "B2";
-            } else if (elemLastWeek.alt === "B2") {
-                return "B1";
-            } else {
-                return getLastAlt(day, currentCalendar, index - 1, originalIndex);
+        if (elemLastWeek) {
+            if (elemLastWeek.value === day.value) {
+                if (elemLastWeek.alt === "B1") {
+                    return "B2";
+                } else if (elemLastWeek.alt === "B2") {
+                    return "B1";
+                } else {
+                    return getLastAlt(day, currentCalendar, index - 1, originalIndex);
+                }
             }
+            return getLastAlt(day, currentCalendar, index - 1, originalIndex);
         }
-        return getLastAlt(day, currentCalendar, index - 1, originalIndex);
+        return "";
     };
 
     const submit = (event: SyntheticEvent) => {
@@ -206,7 +209,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
     };
 
     return (
-        <form>
+        <form onChange={(e) => (semesterForm.dates[1] === undefined ? void 0 : submit(e))}>
             <Center>
                 <div className="flex">
                     <div className="w-1/2">
@@ -327,8 +330,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                     })}
                 </div>
                 <div className="m-5">
-                    <Button onClick={(e) => submit(e)}>Submit</Button>
-                    <Button onClick={(e) => sendCalendar(e)}>Submit1</Button>
+                    <Button onClick={(e) => sendCalendar(e)}>Submit</Button>
                 </div>
             </Center>
         </form>
