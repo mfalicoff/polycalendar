@@ -7,7 +7,7 @@ const Home: React.FC = () => {
         <Container>
             <Header />
             <Main />
-            <MainContent>
+            <MainContent className="max-w-screen-lg">
                 <ClassForm />
                 <ClassesTable />
             </MainContent>

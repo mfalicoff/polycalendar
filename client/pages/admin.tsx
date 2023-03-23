@@ -15,13 +15,13 @@ const Home: React.FC = () => {
             <MainContent>
                 <div className="App">
                     <div className="flex mx-auto mt-8">
-                        <div className="w-1/2">
+                        <div className="w-2/3 pl-40">
                             <CalendarForm
                                 calendar={calendar}
                                 setCalendar={setCalendar}
                             ></CalendarForm>
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-1/3 pr-40">
                             <Center>
                                 <CalendarTable data={calendar} pageSize={7} />
                             </Center>

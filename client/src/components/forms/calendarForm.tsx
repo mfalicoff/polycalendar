@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useState } from "react";
-import { Button, Center } from "@components";
+import { Button, Center, Input } from "@components";
 import {
     DayInterface,
     ExchangeDayInterface,
@@ -22,7 +22,6 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
     };
 
     const [semesterForm, setSemesterForm] = useState<SemesterFormInterface>(initialSemesterForm);
-    // const [calendar, setCalendar] = useState<DayInterface[]>([]);
     const [daysOff, setDaysOff] = useState<Date[]>([]);
     const [daysToChangeValue, setDaysToChangeValue] = useState<ExchangeDayInterface[]>([]);
 
@@ -61,7 +60,6 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         if (originalIndex <= 6) {
             return semesterForm.alt[index % 6];
         }
-        console.log(day, currentCalendar, index, originalIndex);
         const elemLastWeek = currentCalendar[index - 1];
         if (elemLastWeek) {
             if (elemLastWeek.value === day.value) {
@@ -100,7 +98,6 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
             singleDay.alt = getLastAlt(singleDay, allDaysFormatted, index, index);
 
             if (elem.getTime() === semesterForm.vacationWeekStart.getTime()) {
-                console.log("vacation");
                 counter = 7;
             }
 
@@ -112,13 +109,11 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
 
             allDaysFormatted.push(singleDay);
         });
-        console.log(allDaysFormatted);
         setCalendar(allDaysFormatted);
     };
 
     const sendCalendar = async (event: SyntheticEvent) => {
         event.preventDefault();
-        console.log(event);
         await postCalendar(calendar);
     };
 
@@ -127,7 +122,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         setDaysOff([...daysOff, new Date()]);
     };
 
-    const addFieldsDay = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const addFieldsDayExchange = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setDaysToChangeValue([
             ...daysToChangeValue,
@@ -153,18 +148,15 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         setSemesterForm(currentForm);
     };
 
-    const removeFieldsDay = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    const removeFieldsDayExchange = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-
         const data = [...daysToChangeValue];
         data.splice(index, 1);
         setDaysToChangeValue(data);
     };
 
     const handleDateChange = (val = 0, date: string) => {
-        console.log(val, date);
         const currentSemester = semesterForm;
-        console.log(val, date);
         if (semesterForm.dates[val]) {
             semesterForm.dates[val] = new Date(date);
         } else {
@@ -174,9 +166,8 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
     };
 
     const handleAltChange = (day: number, val: string) => {
-        console.log(day, val);
         const currentForm = semesterForm;
-        currentForm.alt[day - 1] = val;
+        currentForm.alt[day - 1] = val.toUpperCase();
         setSemesterForm(currentForm);
     };
 
@@ -208,30 +199,117 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
         setDaysToChangeValue(currentDays);
     };
 
+    const changeSemesterName = (val: string) => {
+        const currentForm = semesterForm;
+        currentForm.name = val;
+        setSemesterForm(currentForm);
+    };
+
     return (
         <form onChange={(e) => (semesterForm.dates[1] === undefined ? void 0 : submit(e))}>
-            <Center>
-                <div className="flex">
-                    <div className="w-1/2">
-                        Start Date
-                        <Input onChange={handleDateChange} typeInput={"date"} index={0} />
+            <Center className="flex max-w-full">
+                <div className="w-1/3 p-4">
+                    <label>Semester Name</label>
+                    <Input className="ml-5" onChange={changeSemesterName} typeInput={"text"} />
+                    <div className="flex mt-5">
+                        <div className="w-1/2">
+                            Start Date
+                            <Input onChange={handleDateChange} typeInput={"date"} index={0} />
+                        </div>
+                        <div className="w-1/2">
+                            End Date
+                            <Input onChange={handleDateChange} typeInput={"date"} index={1} />
+                        </div>
                     </div>
-                    <div className="w-1/2">
-                        End Date
-                        <Input onChange={handleDateChange} typeInput={"date"} index={1} />
+                    <div className="max-w-md mx-auto pt-5">
+                        <label>Vacation week</label>
+                        <Input
+                            className="ml-5"
+                            onChange={handleVacationWeekChange}
+                            typeInput={"date"}
+                        />
                     </div>
-                </div>
-                <div className="max-w-md mx-auto">
-                    <label>Vacation week</label>
-                    <Input onChange={handleVacationWeekChange} typeInput={"date"} />
-                </div>
-                <div>
                     <Center>
+                        <div>
+                            Additional days off
+                            <Button onClick={(event) => addFields(event)}>Add More..</Button>
+                        </div>
+                        {daysOff.map((input, index) => {
+                            return (
+                                <div>
+                                    <Input
+                                        onChange={handleDaysOffChange}
+                                        typeInput={"date"}
+                                        index={index}
+                                        className="mt-5"
+                                    />
+                                    <Button onClick={(event) => removeFields(index, event)}>
+                                        Remove
+                                    </Button>
+                                </div>
+                            );
+                        })}
+                    </Center>
+                    <div>
+                        <Center>
+                            Exchange days
+                            <Button
+                                className="ml-9"
+                                onClick={(event) => addFieldsDayExchange(event)}
+                            >
+                                Add More..
+                            </Button>
+                        </Center>
+                        {daysToChangeValue.map((input, index) => {
+                            return (
+                                <div className="flex">
+                                    <div className="w-1/2">
+                                        <Input
+                                            onChange={handleDayExchange}
+                                            typeInput={"date"}
+                                            index={index}
+                                            className="mt-5"
+                                        />
+                                    </div>
+                                    <div className="w-1/2">
+                                        <Input
+                                            onChange={handleDayExchangeVal}
+                                            typeInput={"date"}
+                                            index={index}
+                                            className="mt-5"
+                                        />
+                                    </div>
+                                    <datalist id="days">
+                                        <option value={1} />
+                                        <option value={2} />
+                                        <option value={3} />
+                                        <option value={4} />
+                                        <option value={5} />
+                                    </datalist>
+                                    <Button
+                                        className="mt-5"
+                                        onClick={(event) => removeFieldsDayExchange(index, event)}
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="w-1/3 p-4">
+                    <Center className="mt-0">
                         <h3>First week labs</h3>
                         <div>
                             <div>
                                 <label className="px-3">Monday</label>
-                                <Input onChange={handleAltChange} typeInput={"list"} index={1} />
+                                <Input
+                                    onChange={handleAltChange}
+                                    typeInput={"list"}
+                                    index={1}
+                                    className="ml-12"
+                                />
                             </div>
                             <div>
                                 <label className="px-3">Tuesday</label>
@@ -239,6 +317,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                                     onChange={handleAltChange}
                                     typeInput={"datalist"}
                                     index={2}
+                                    className="ml-11"
                                 />
                             </div>
                             <div>
@@ -247,6 +326,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                                     onChange={handleAltChange}
                                     typeInput={"datalist"}
                                     index={3}
+                                    className="ml-4"
                                 />
                             </div>
                             <div>
@@ -255,6 +335,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                                     onChange={handleAltChange}
                                     typeInput={"datalist"}
                                     index={4}
+                                    className="ml-8"
                                 />
                             </div>
                             <div>
@@ -263,6 +344,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                                     onChange={handleAltChange}
                                     typeInput={"datalist"}
                                     index={5}
+                                    className="ml-14"
                                 />
                             </div>
 
@@ -273,88 +355,15 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                         </div>
                     </Center>
                 </div>
-                <Center>
-                    <div>
-                        Additional days off
-                        <Button onClick={(event) => addFields(event)}>Add More..</Button>
-                    </div>
-                    {daysOff.map((input, index) => {
-                        return (
-                            <div>
-                                <Input
-                                    onChange={handleDaysOffChange}
-                                    typeInput={"date"}
-                                    index={index}
-                                />
-                                <Button onClick={(event) => removeFields(index, event)}>
-                                    Remove
-                                </Button>
-                            </div>
-                        );
-                    })}
-                </Center>
-                <div>
-                    <Center>
-                        Exchange days
-                        <Button onClick={(event) => addFieldsDay(event)}>Add More..</Button>
-                    </Center>
-                    {daysToChangeValue.map((input, index) => {
-                        return (
-                            <div className="flex">
-                                <div className="w-1/2">
-                                    <Input
-                                        onChange={handleDayExchange}
-                                        typeInput={"date"}
-                                        index={index}
-                                    />
-                                </div>
-                                <div className="w-1/2">
-                                    <Input
-                                        onChange={handleDayExchangeVal}
-                                        typeInput={"date"}
-                                        index={index}
-                                    />
-                                </div>
-                                <datalist id="days">
-                                    <option value={1} />
-                                    <option value={2} />
-                                    <option value={3} />
-                                    <option value={4} />
-                                    <option value={5} />
-                                </datalist>
-                                <Button onClick={(event) => removeFieldsDay(index, event)}>
-                                    Remove
-                                </Button>
-                            </div>
-                        );
-                    })}
-                </div>
                 <div className="m-5">
-                    <Button onClick={(e) => sendCalendar(e)}>Submit</Button>
+                    <Button
+                        disabled={semesterForm.dates[1] === undefined}
+                        onClick={(e) => sendCalendar(e)}
+                    >
+                        Submit
+                    </Button>
                 </div>
             </Center>
         </form>
-    );
-};
-
-/*eslint-disable */ // use for any in interface
-interface InputProps {
-    className?: string;
-    onChange: any;
-    typeInput: string;
-    index?: number;
-}
-
-/*eslint-enable */ // use for any in interface
-
-const Input: React.FC<InputProps> = ({ className = "", typeInput = "", onChange, index }) => {
-    return (
-        <input
-            className={`m-1 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${className}`}
-            type={typeInput}
-            onChange={(e) =>
-                index !== undefined ? onChange(index, e.target.value) : onChange(e.target.value)
-            }
-        />
     );
 };
