@@ -9,7 +9,6 @@ export interface Day {
 
 export interface Calendar {
   _id?: string;
-  startDate: Date;
-  endDate: Date;
+  name: string;
   days: Schema.Types.ObjectId;
 }

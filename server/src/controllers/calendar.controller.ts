@@ -6,9 +6,9 @@ class CalendarController {
 
   public createCalendar = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const calendar = await this.calendarService.createCalendar(req.body.calendar);
-      console.log(calendar);
-      res.status(200).json({ data: calendar, message: 'create calendar' });
+      const semesterCalendar = await this.calendarService.createCalendar(req.body);
+      console.log(semesterCalendar);
+      res.status(200).json({ data: semesterCalendar, message: 'create calendar' });
     } catch (error) {
       next(error);
     }

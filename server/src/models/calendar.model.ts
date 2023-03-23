@@ -17,6 +17,11 @@ const daySchema: Schema = new Schema({
 });
 
 const calendarSchema: Schema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+
   days: [
     {
       type: Schema.Types.ObjectId,

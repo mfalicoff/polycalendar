@@ -114,7 +114,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
 
     const sendCalendar = async (event: SyntheticEvent) => {
         event.preventDefault();
-        await postCalendar(calendar);
+        await postCalendar(calendar, semesterForm.name);
     };
 
     const addFields = (event: React.MouseEvent<HTMLButtonElement>) => {
