@@ -15,11 +15,17 @@ export function instanceOfLab(object: TheorySection | LabSection): object is Lab
 
 export const fetchFormClasses = async (classesFromForm: classForm[]): Promise<void> => {
     try {
+        classesFromForm = classesFromForm.sort((a, b) => a.classAcr.localeCompare(b.classAcr));
         const classesAcr = classesFromForm.map((classForm) => classForm.classAcr);
         const result = await axios.post(`${process.env.ROUTE}/class/manyName`, {
             classes: classesAcr,
         });
-        result.data.data.map((singleClass: Class, index: number) => {
+
+        const resultOrdered = result.data.data.sort((a: Class, b: Class) =>
+            a.name.localeCompare(b.name),
+        );
+
+        resultOrdered.map((singleClass: Class, index: number) => {
             const schedulesT: TheorySection[] = [];
             const schedulesL: LabSection[] = [];
             singleClass.schedule.map((schedule) => {

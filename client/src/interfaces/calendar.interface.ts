@@ -22,3 +22,11 @@ export interface ExchangeDayInterface extends Record<string, any> {
     dayToExchange: Date;
     valueReplace: number;
 }
+
+export interface IcsEvent {
+    start: number[];
+    end: number[];
+    title: string;
+    location: string;
+    description: string;
+}

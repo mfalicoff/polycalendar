@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { DayInterface } from "@interfaces/calendar.interface";
+import { DayInterface, IcsEvent } from "@interfaces/calendar.interface";
 import { Button } from "@components";
 
 interface TableProps {
     data: DayInterface[];
     pageSize: number;
+    events?: IcsEvent[];
 }
 
-export const CalendarTable: React.FC<TableProps> = ({ data, pageSize }) => {
+export const CalendarTable: React.FC<TableProps> = ({ data, pageSize, events }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const pagesCount = Math.ceil(data.length / pageSize);
@@ -18,6 +19,29 @@ export const CalendarTable: React.FC<TableProps> = ({ data, pageSize }) => {
     };
 
     const tableData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    const eventsIsSameDay = (event: IcsEvent, day: DayInterface) => {
+        return (
+            day.date.getFullYear() === event.start[0] &&
+            day.date.getMonth() === event.start[1] - 1 &&
+            day.date.getDate() === event.start[2]
+        );
+    };
+
+    const formatTime = (event: IcsEvent) => {
+        return `${event.start[3]}h:${event.start[4]} - ${event.end[3]}h:${event.end[4]}`;
+    };
+
+    let sortedEvents: IcsEvent[] = [];
+
+    if (events) {
+        sortedEvents = events.sort((a, b) => {
+            const dateA = new Date(a.start[0], a.start[1], a.start[2], a.start[3]);
+            const dateB = new Date(b.start[0], b.start[1], b.start[2], b.start[3]);
+
+            return dateA.getTime() - dateB.getTime();
+        });
+    }
 
     return (
         <>
@@ -42,6 +66,20 @@ export const CalendarTable: React.FC<TableProps> = ({ data, pageSize }) => {
                             <tr key={index}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {item.date.toDateString()}
+                                    {sortedEvents.map((event) => {
+                                        if (eventsIsSameDay(event, item)) {
+                                            return (
+                                                <div>
+                                                    <h6 key={1} className="text-sm">
+                                                        {event.title}
+                                                    </h6>
+                                                    <h6 className="pl-2 text-xs">
+                                                        {formatTime(event)}
+                                                    </h6>
+                                                </div>
+                                            );
+                                        }
+                                    })}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">{item.alt}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{item.value}</td>
