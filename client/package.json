@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^1.6.0",
     "@tauri-apps/api": "^1.0.0-rc.1",
     "axios": "^0.26.0",
+    "ics": "^3.1.0",
     "next": "^12.1.5",
     "next-compose-plugins": "^2.2.1",
     "node-fetch": "^2.6.1",

@@ -6,3 +6,5 @@ export { MainContent } from "./mainContent";
 export { Footer } from "./footer";
 export { Container } from "./container";
 export { ClassForm } from "./forms/classForm";
+export { Center } from "./center/index";
+export { Input } from "./input/input";

@@ -1,13 +1,13 @@
-import { Document, Schema, model } from 'mongoose';
-import { Day, Week, Calendar } from '@interfaces/calendar.interface';
+import { Document, model, Schema } from 'mongoose';
+import { Calendar, Day } from '@interfaces/calendar.interface';
 
 const daySchema: Schema = new Schema({
   date: {
     type: Date,
     required: true,
   },
-  isThereSchool: {
-    type: Boolean,
+  dayValue: {
+    type: Number,
     required: true,
   },
   alternation: {
@@ -16,41 +16,19 @@ const daySchema: Schema = new Schema({
   },
 });
 
-const weekSchema: Schema = new Schema({
-  weekdays: [
+const calendarSchema: Schema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+
+  days: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Day',
     },
   ],
-  weekNumber: {
-    type: Number,
-    required: true,
-  },
-});
-
-const calendarSchema: Schema = new Schema({
-  weeks: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Week',
-    },
-  ],
-  startDate: {
-    type: Date,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    required: true,
-  },
-  vacationWeek: {
-    type: Schema.Types.ObjectId,
-    ref: 'Week',
-    required: true,
-  },
 });
 
 export const dayModel = model<Day & Document>('Day', daySchema);
-export const weekModel = model<Week & Document>('Week', weekSchema);
 export const calendarModel = model<Calendar & Document>('Calendar', calendarSchema);

@@ -69,7 +69,8 @@ class ClassService {
 
     if (classData.name) {
       const findClass: Class = await this.classes.findOne({ name: classData.name });
-      if (findClass && findClass._id != classId) throw new HttpException(409, `The class ${classData.name} already exists`);
+      if (findClass && findClass._id != classId)
+        throw new HttpException(409, `The class ${classData.name} already exists`);
     }
 
     const updateClassById: Class = await this.classes.findByIdAndUpdate(classId, { classData });

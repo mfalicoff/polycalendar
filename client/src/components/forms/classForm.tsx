@@ -42,9 +42,8 @@ export const ClassForm: React.FC = () => {
 
     const submit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        setClassFields(initialClassForm);
-        resetClasses(classes);
         await fetchFormClasses(classFields);
+        resetClasses(classes);
     };
 
     return (
@@ -172,7 +171,10 @@ export const ClassesTable: React.FC = () => {
                                         let labGroup;
                                         if (instanceOfTheory(cours.schedule[0][0]))
                                             theoryGroup = cours.schedule[0][0].theoryClassGroup;
-                                        if (instanceOfLab(cours.schedule[1][0]))
+                                        if (
+                                            cours.schedule[1][0] != undefined &&
+                                            instanceOfLab(cours.schedule[1][0])
+                                        )
                                             labGroup = cours.schedule[1][0].labClassGroup;
                                         return (
                                             <tr key={cours._id} className="border-b">
