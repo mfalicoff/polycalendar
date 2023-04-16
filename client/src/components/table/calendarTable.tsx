@@ -45,6 +45,26 @@ export const CalendarTable: React.FC<TableProps> = ({ data, pageSize, events }) 
 
     return (
         <>
+            {tableData.length > 0 ? (
+                <div className="flex justify-center items-center mt-4">
+                    <Button
+                        className={`mx-2 px-3 py-1 rounded-lg bg-gray-300 text-gray-700"}`}
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageClick(currentPage - 1)}
+                    >
+                        &larr;
+                    </Button>
+                    <Button
+                        className={`mx-2 px-3 py-1 rounded-lg bg-gray-300 text-gray-700"}`}
+                        disabled={currentPage === pages[pages.length - 1]}
+                        onClick={() => handlePageClick(currentPage + 1)}
+                    >
+                        &rarr;
+                    </Button>
+                </div>
+            ) : (
+                <></>
+            )}
             <div className="w-full overflow-x-auto">
                 <h1>{}</h1>
                 <table className="w-full whitespace-nowrap">
@@ -88,26 +108,6 @@ export const CalendarTable: React.FC<TableProps> = ({ data, pageSize, events }) 
                     </tbody>
                 </table>
             </div>
-            {tableData.length > 0 ? (
-                <div className="flex justify-center items-center mt-4">
-                    <Button
-                        className={`mx-2 px-3 py-1 rounded-lg bg-gray-300 text-gray-700"}`}
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageClick(currentPage - 1)}
-                    >
-                        &larr;
-                    </Button>
-                    <Button
-                        className={`mx-2 px-3 py-1 rounded-lg bg-gray-300 text-gray-700"}`}
-                        disabled={currentPage === pages[pages.length - 1]}
-                        onClick={() => handlePageClick(currentPage + 1)}
-                    >
-                        &rarr;
-                    </Button>
-                </div>
-            ) : (
-                <></>
-            )}
         </>
     );
 };

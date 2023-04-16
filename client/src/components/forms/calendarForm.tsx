@@ -97,6 +97,10 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
             }
             singleDay.alt = getLastAlt(singleDay, allDaysFormatted, index, index);
 
+            if (singleDay.alt === "") {
+                singleDay.value = 0;
+            }
+
             if (elem.getTime() === semesterForm.vacationWeekStart.getTime()) {
                 counter = 7;
             }
@@ -195,7 +199,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
 
     const handleDayExchangeVal = (index: number, val: number) => {
         const currentDays = daysToChangeValue;
-        daysToChangeValue[index].valueReplace = val;
+        daysToChangeValue[index].valueReplace = new Date(val).getDay() + (1 % 6);
         setDaysToChangeValue(currentDays);
     };
 

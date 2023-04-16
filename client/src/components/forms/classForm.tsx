@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Button } from "@components";
 import {
     fetchFormClasses,
@@ -10,12 +10,29 @@ import { classForm } from "@interfaces/classes.interface";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/reducers";
 import { Class } from "@interfaces/class.interface";
+import axios from "axios";
+import * as process from "process";
 
 export const ClassForm: React.FC = () => {
     const initialClassForm = [{ classAcr: "", theoryGroup: 0, labGroup: 0 }];
     const classes = useSelector((state: RootState) => state.classesForm);
 
     const [classFields, setClassFields] = useState<classForm[]>(initialClassForm);
+    const [, setData] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(`${process.env.ROUTE}class`);
+                const responseData = response.data.data;
+                setData(responseData);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     const handleFormChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
         const data = [...classFields];

@@ -90,7 +90,7 @@ export const CreateEvents = async (
                 }
                 for (let j = 0; j < labSchedule.length; j++) {
                     const labClass: LabSection = labSchedule[j] as LabSection;
-                    if (dateMapper(labClass.labClassDate) === new Date(day.date).getDay()) {
+                    if (dateMapper(labClass.labClassDate) === day.value) {
                         const dayOfLab = new Date(day.date);
                         if (labClass.labClassTime.indexOf("(") === -1) {
                             const startTime = labClass.labClassTime.substring(
