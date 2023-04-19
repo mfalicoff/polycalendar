@@ -53,6 +53,10 @@ class ClassService {
     return findClasses;
   }
 
+  public async deleteAllClasses(): Promise<void> {
+    await this.classes.deleteMany({});
+  }
+
   public async createClass(classData: CreateClassDto): Promise<Class> {
     if (isEmpty(classData)) throw new HttpException(400, "You're not userData");
 

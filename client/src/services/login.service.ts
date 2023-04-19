@@ -41,9 +41,5 @@ export const logoutUser = (): void => {
             loggedIn: false,
         }),
     );
-    document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-            .replace(/^ +/, "")
-            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
+    localStorage.clear();
 };

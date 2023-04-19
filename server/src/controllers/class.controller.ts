@@ -75,10 +75,7 @@ class ClassController {
 
   private createClassPrivate = async (classToCreate: CreateClassDto, next: NextFunction) => {
     try {
-      const classData: CreateClassDto = classToCreate;
-      const createClassData: Class = await this.classService.createClass(classData);
-
-      return createClassData;
+      return await this.classService.createClass(classToCreate);
     } catch (error) {
       next(error);
     }
@@ -109,6 +106,8 @@ class ClassController {
 
   public scrapeClasses = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      await this.classService.deleteAllClasses();
+
       let classes: Class[] = await this.classService.scrapeClasses('BA', false);
       classes = classes.concat(await this.classService.scrapeClasses('ES', false));
 

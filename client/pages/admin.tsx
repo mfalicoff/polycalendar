@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-import { Container, Footer, Header, MainContent } from "@components";
+import { Container, Footer, Header, MainContent, withAuth } from "@components";
 import { DayInterface } from "@interfaces/calendar.interface";
 import { Center } from "@components/center";
 import { CalendarForm } from "@components/forms/calendarForm";
 import { CalendarTable } from "@components/table/calendarTable";
 
-const Home: React.FC = () => {
+const AdminPage: React.FC = () => {
     const [calendar, setCalendar] = useState<DayInterface[]>([]);
 
     return (
@@ -34,4 +34,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default withAuth(AdminPage);

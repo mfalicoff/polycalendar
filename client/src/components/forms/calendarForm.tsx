@@ -5,7 +5,7 @@ import {
     ExchangeDayInterface,
     SemesterFormInterface,
 } from "@interfaces/calendar.interface";
-import { postCalendar } from "../../services/calendar.service";
+import { postCalendar, ScrapeClasses } from "../../services/calendar.service";
 
 interface CalendarProps {
     calendar: DayInterface[];
@@ -366,6 +366,7 @@ export const CalendarForm: React.FC<CalendarProps> = ({ calendar, setCalendar })
                     >
                         Submit
                     </Button>
+                    <Button onClick={(e) => ScrapeClasses(e)}>Scrape Classes</Button>
                 </div>
             </Center>
         </form>

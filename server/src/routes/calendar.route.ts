@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import CalendarController from '@controllers/calendar.controller';
+import authMiddleware from '@middlewares/auth.middleware';
 
 class CalendarRoute implements Routes {
   public path = '/calendar';
@@ -12,7 +13,7 @@ class CalendarRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/create`, this.calendarController.createCalendar);
+    this.router.post(`${this.path}/create`, authMiddleware, this.calendarController.createCalendar);
     this.router.get(`${this.path}`, this.calendarController.getCalendar);
   }
 }

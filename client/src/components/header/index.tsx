@@ -17,6 +17,7 @@ export const Header: React.FC = () => {
     const handleLogout = async (event: SyntheticEvent) => {
         event.preventDefault();
         logoutUser();
+        await router.push("/");
     };
 
     const handleClickMain = async () => {
@@ -42,9 +43,14 @@ export const Header: React.FC = () => {
                         Login
                     </Button>
                 ) : (
-                    <Button type="button" onClick={handleLogout}>
-                        Logout
-                    </Button>
+                    <>
+                        <Button type="button" onClick={() => router.push("/admin")}>
+                            Admin
+                        </Button>
+                        <Button type="button" onClick={handleLogout}>
+                            Logout
+                        </Button>
+                    </>
                 )}
             </div>
         </div>

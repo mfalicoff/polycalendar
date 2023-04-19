@@ -3,6 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import classController from '@controllers/class.controller';
 import { CreateClassDto } from '@dtos/class.dto';
+import authMiddleware from '@middlewares/auth.middleware';
 
 class ClassRoute implements Routes {
   public path = '/class';
@@ -20,7 +21,7 @@ class ClassRoute implements Routes {
     this.router.get(`${this.path}/many`, this.classController.getManyClass);
     this.router.get(`${this.path}/:id`, this.classController.getClassById);
     this.router.post(`${this.path}`, validationMiddleware(CreateClassDto, 'body'), this.classController.createClass);
-    this.router.post(`${this.path}/scrape`, this.classController.scrapeClasses);
+    this.router.post(`${this.path}/scrape`, authMiddleware, this.classController.scrapeClasses);
     this.router.put(
       `${this.path}/:id`,
       validationMiddleware(CreateClassDto, 'body', true),

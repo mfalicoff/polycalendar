@@ -20,9 +20,9 @@ const Login: React.FC = () => {
         if (res.status === 200) {
             const data = await res.json();
             const user: User = data.data;
+            localStorage.setItem("user", JSON.stringify(user.cookie));
             loginUser(user.email);
-            if (process.env.ADMIN_ID === user._id) await router.push("/admin");
-            else await router.push("/");
+            await router.push("/");
         }
     };
 

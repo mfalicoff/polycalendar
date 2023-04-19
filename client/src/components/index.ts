@@ -8,3 +8,4 @@ export { Container } from "./container";
 export { ClassForm } from "./forms/classForm";
 export { Center } from "./center/index";
 export { Input } from "./input/input";
+export { withAuth } from "./withAuth/withAuth";

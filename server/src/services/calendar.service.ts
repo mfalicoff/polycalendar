@@ -12,6 +12,7 @@ class calendarService {
     const objectIds: number[] = [];
     const promises: Promise<any>[] = [];
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [_, day1] of Object.entries(calendar)) {
       const createPromise = this.day.create({ date: day1.date, dayValue: day1.value, alternation: day1.alt });
       promises.push(createPromise);

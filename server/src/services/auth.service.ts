@@ -21,7 +21,7 @@ class AuthService {
     return await this.users.create({ ...userData, password: hashedPassword });
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: CreateUserDto): Promise<User> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await this.users.findOne({ email: userData.email });
@@ -33,7 +33,12 @@ class AuthService {
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
+    return {
+      _id: findUser._id,
+      email: findUser.email,
+      password: findUser.password,
+      cookie: cookie,
+    };
   }
 
   public async logout(userData: User): Promise<User> {
