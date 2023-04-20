@@ -16,7 +16,7 @@ export const withAuth = <P extends Record<string, unknown>>(
 
         useEffect(() => {
             if (!isAuthenticated()) {
-                router.replace("/login");
+                router.replace("/");
             }
         }, []);
 

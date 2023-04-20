@@ -1,18 +1,15 @@
 import React, { SyntheticEvent } from "react";
 
-import { Button, Logo } from "@components";
+import { Button } from "@components";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/reducers";
 import { logoutUser } from "../../services/login.service";
+import DropdownLoginForm from "@components/header/loginForm";
 
 export const Header: React.FC = () => {
     const router = useRouter();
     const user = useSelector((state: RootState) => state.storeUser);
-
-    const handleLogin = async () => {
-        await router.push("/login");
-    };
 
     const handleLogout = async (event: SyntheticEvent) => {
         event.preventDefault();
@@ -27,21 +24,10 @@ export const Header: React.FC = () => {
     return (
         <div className="flex justify-between bg-gray-800 place-items-center">
             <div className="basis-1/4">
-                <Logo />
-            </div>
-            <div className="basis-1/2">
-                <h1
-                    onClick={handleClickMain}
-                    className="text-red-800 font-bold font text-lg cursor-pointer"
-                >
-                    PolyCalendar
-                </h1>
-            </div>
-            <div>
                 {!user.loggedIn ? (
-                    <Button type="button" onClick={handleLogin}>
-                        Login
-                    </Button>
+                    <>
+                        <DropdownLoginForm />
+                    </>
                 ) : (
                     <>
                         <Button type="button" onClick={() => router.push("/admin")}>
@@ -53,6 +39,15 @@ export const Header: React.FC = () => {
                     </>
                 )}
             </div>
+            <div className="basis-1/2">
+                <h1
+                    onClick={handleClickMain}
+                    className="text-red-800 font-bold font text-lg cursor-pointer"
+                >
+                    PolyCalendar
+                </h1>
+            </div>
+            <div>{!user.loggedIn ? <></> : <p className="text-white mr-5">{user.email}</p>}</div>
         </div>
     );
 };
