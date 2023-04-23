@@ -41,10 +41,10 @@ const DropdownLoginForm: React.FC = () => {
             localStorage.setItem("user", JSON.stringify(user.cookie));
             loginUser(user.email);
             toggleDropdown();
-            showNotification("Logged in successfully!");
+            showNotification("Logged in successfully!", false, 3000);
         } else {
             const error = await res.json();
-            showNotification(`Login failed!, ${error.message}`);
+            showNotification(`Login failed! ${error.message}`, true, 3000);
         }
     };
 
