@@ -13,7 +13,7 @@ export const ScrapeClasses = async (e: SyntheticEvent): Promise<void> => {
             },
         },
     );
-    console.log(await result.data.json());
+    console.log(result.data);
 };
 export const postCalendar = async (
     calendar: DayInterface[],

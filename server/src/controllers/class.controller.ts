@@ -111,16 +111,15 @@ class ClassController {
       let classes: Class[] = await this.classService.scrapeClasses('BA', false);
       classes = classes.concat(await this.classService.scrapeClasses('ES', false));
 
-      const createdClasses: Class[] = [];
-
-      classes.map(async (singleClass: Class) => {
-        const classDto: CreateClassDto = {} as CreateClassDto;
-        classDto.name = singleClass.name;
-        classDto.credits = singleClass.credits;
-        classDto.schedule = singleClass.schedule;
-        const returnClass = await this.createClassPrivate(classDto, next);
-        createdClasses.push(returnClass);
-      });
+      const createdClasses: Class[] = await Promise.all(
+        classes.map(async (singleClass: Class) => {
+          const classDto: CreateClassDto = {} as CreateClassDto;
+          classDto.name = singleClass.name;
+          classDto.credits = singleClass.credits;
+          classDto.schedule = singleClass.schedule;
+          return await this.createClassPrivate(classDto, next);
+        }),
+      );
 
       res.status(200).json({ data: createdClasses, message: 'scrapedClasses' });
     } catch (error) {

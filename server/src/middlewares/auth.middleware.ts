@@ -10,7 +10,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
     console.log(req.cookies['Authorization']);
     console.log(req.header('Authorization'));
     let Authorization = req.header('Authorization').split('Bearer ')[1];
-    Authorization = Authorization.replace(/^"(.*)"$/, '$1');
+    Authorization = Authorization.replace(/^"(.*)"$/, '$1').match(/Authorization=([^;]+)/)[1];
 
     if (Authorization) {
       const secretKey: string = SECRET_KEY;
