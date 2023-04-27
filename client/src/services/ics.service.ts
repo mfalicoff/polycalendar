@@ -191,10 +191,14 @@ const createLabDates = (
     };
 };
 
-export const downloadIcsFile = async (e: SyntheticEvent, events: IcsEvent[]): Promise<void> => {
+export const downloadIcsFile = async (
+    e: SyntheticEvent,
+    events: IcsEvent[],
+    semesterName: string,
+): Promise<void> => {
     e.preventDefault();
 
-    const filename = "ExampleEvent.ics";
+    const filename = `${semesterName}.ics`;
     const file = await new Promise((resolve, reject) => {
         createEvents(events as EventAttributes[], (error, value) => {
             if (error) {

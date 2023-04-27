@@ -23,8 +23,8 @@ class calendarService {
     return await this.calendar.create({ name: semesterName, days: dateObjects });
   };
 
-  public async getCalendar(): Promise<any> {
-    return this.calendar.find({}).populate('days');
+  public async getCalendar(shouldPopulate: boolean): Promise<any> {
+    return shouldPopulate ? this.calendar.find({}).populate('days') : this.calendar.find({});
   }
 }
 

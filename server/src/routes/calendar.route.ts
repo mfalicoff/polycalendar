@@ -15,6 +15,7 @@ class CalendarRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}/create`, authMiddleware, this.calendarController.createCalendar);
     this.router.get(`${this.path}`, this.calendarController.getCalendar);
+    this.router.get(`${this.path}/name`, this.calendarController.getCalendarName);
   }
 }
 
