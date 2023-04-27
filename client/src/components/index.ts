@@ -1,0 +1,11 @@
+export { Header } from "./header";
+export { Logo } from "./logo";
+export { Main } from "./main";
+export { Button } from "./button";
+export { MainContent } from "./mainContent";
+export { Footer } from "./footer";
+export { Container } from "./container";
+export { ClassForm } from "./forms/classForm";
+export { Center } from "./center/index";
+export { Input } from "./input/input";
+export { withAuth } from "./withAuth/withAuth";
