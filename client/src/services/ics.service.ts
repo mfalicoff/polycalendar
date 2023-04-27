@@ -144,7 +144,6 @@ export const CreateEvents = async (
             }
         }
     }
-    console.log(events);
     setEvents(events);
 };
 

@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, ClassForm, Container, Footer, Header, Main, MainContent } from "@components";
+import {
+    Button,
+    Center,
+    ClassForm,
+    Container,
+    Footer,
+    Header,
+    Main,
+    MainContent,
+} from "@components";
 import { ClassesTable } from "@components/forms/classForm";
 import { CalendarTable } from "@components/table/calendarTable";
 import { DayInterface, IcsEvent } from "@interfaces/calendar.interface";
@@ -19,7 +28,6 @@ const Home: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             const result = await axios.get(`${process.env.ROUTE}/calendar/name`);
-            console.log(result.data);
             setSemesterName(result.data.data[0].name);
         };
 
@@ -35,7 +43,9 @@ const Home: React.FC = () => {
             <Header />
             <Main />
             <MainContent className="max-w-screen-lg">
-                Session {semesterName}
+                <Center>
+                    <h1 className="py-4 text-lg mb-3"> Session {semesterName}</h1>
+                </Center>
                 <ClassForm />
                 <ClassesTable />
                 <Button
@@ -91,9 +101,9 @@ const Home: React.FC = () => {
                                             <path
                                                 d="M20 14V17.5C20 20.5577 16 20.5 12 20.5C8 20.5 4 20.5577 4 17.5V14M12 15L12 3M12 15L8 11M12 15L16 11"
                                                 stroke="white"
-                                                stroke-width="1.5"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
                                             />
                                         </svg>
                                         Download ICS

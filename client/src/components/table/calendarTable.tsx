@@ -83,13 +83,13 @@ export const CalendarTable: React.FC<TableProps> = ({ data, pageSize, events }) 
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {tableData.map((item, index: number) => (
-                            <tr key={index}>
+                            <tr key={index + Math.random()}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {item.date.toDateString()}
-                                    {sortedEvents.map((event) => {
+                                    {sortedEvents.map((event, secondIndex) => {
                                         if (eventsIsSameDay(event, item)) {
                                             return (
-                                                <div>
+                                                <div key={secondIndex + Math.random()}>
                                                     <h6 key={1} className="text-sm">
                                                         {event.title}
                                                     </h6>
