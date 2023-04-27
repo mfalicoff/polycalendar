@@ -4,7 +4,7 @@ import store from "@redux/store";
 import { changeUser } from "@redux/slices/user";
 
 export const loginService = async (data: User): Promise<Response> => {
-    return await fetch("http://localhost:3001/login", {
+    return await fetch(`${process.env.ROUTE}/login`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -14,7 +14,7 @@ export const loginService = async (data: User): Promise<Response> => {
 };
 
 export const signUp = async (data: User): Promise<Response> => {
-    return await fetch("http://localhost:3001/users", {
+    return await fetch(`${process.env.ROUTE}/users`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
