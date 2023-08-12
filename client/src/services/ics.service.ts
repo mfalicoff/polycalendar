@@ -38,18 +38,18 @@ export const CreateEvents = async (
             for (let i = 0; i < classes.length; i++) {
                 const theorySchedule = classes[i].schedule[0];
                 const labSchedule = classes[i].schedule[1];
-
                 for (let j = 0; j < theorySchedule.length; j++) {
                     const classTH: TheorySection = theorySchedule[j] as TheorySection;
                     if (dateMapper(classTH.theoryClassDate) === day.value) {
                         const dayOfClass = new Date(day.date);
-
                         let startTime = classTH.theoryClassTime.substring(
                             0,
                             classTH.theoryClassTime.indexOf(","),
                         );
-
-                        if (classTH.theoryClassTime.length === 5)
+                        if (
+                            classTH.theoryClassTime.length === 5 ||
+                            classTH.theoryClassTime.length === 4
+                        )
                             startTime = classTH.theoryClassTime;
 
                         const startTimes = getStartTimes(startTime);
@@ -62,13 +62,19 @@ export const CreateEvents = async (
                             parseInt(startTimes[1]),
                         );
                         let endTimes = ["", ""];
-                        if (classTH.theoryClassTime.length !== 5) {
+                        if (
+                            classTH.theoryClassTime.length !== 5 &&
+                            classTH.theoryClassTime.length !== 4
+                        ) {
                             const endTime = classTH.theoryClassTime.substring(
                                 classTH.theoryClassTime.lastIndexOf(",") + 2,
                                 classTH.theoryClassTime.length,
                             );
                             endTimes = getEndTimes(endTime);
+                        } else {
+                            endTimes = getEndTimes(classTH.theoryClassTime);
                         }
+                        console.log(endTimes);
                         const dateEnd = new Date(
                             dayOfClass.getFullYear(),
                             dayOfClass.getMonth(),
