@@ -186,7 +186,10 @@ export const ClassesTable: React.FC = () => {
                                     {classes.map((cours: Class, index: number) => {
                                         let theoryGroup;
                                         let labGroup;
-                                        if (instanceOfTheory(cours.schedule[0][0]))
+                                        if (
+                                            cours.schedule[0][0] != undefined &&
+                                            instanceOfTheory(cours.schedule[0][0])
+                                        )
                                             theoryGroup = cours.schedule[0][0].theoryClassGroup;
                                         if (
                                             cours.schedule[1][0] != undefined &&
