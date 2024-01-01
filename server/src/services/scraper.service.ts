@@ -26,9 +26,9 @@ const parseTheoryClass = elem => {
   return theorySections;
 };
 
-const parseLabClass = elem => {
+const parseLabClass = (elem, isClass) => {
   const labSections: LabSection[] = [];
-  const LabHtmlTable = elem.children[3].children[1].children[3];
+  const LabHtmlTable = isClass ? elem.children[3].children[1].children[3] : elem.children[1].children[1].children[3];
 
   for (let j = 3; j < LabHtmlTable.children.length; j = j + 2) {
     const currentClass: LabSection = {} as LabSection;
@@ -56,10 +56,10 @@ const parseClass = (elem, classesRepertoire, i) => {
     classesRepertoire[i].schedule.push(classesOnlyTheory);
   } else if (isClass) {
     const theorySections = parseTheoryClass(elem);
-    const labSections = parseLabClass(elem);
+    const labSections = parseLabClass(elem, isClass);
     classesRepertoire[i].schedule.push(theorySections, labSections);
   } else {
-    const classesOnlyLab = parseLabClass(elem);
+    const classesOnlyLab = parseLabClass(elem, isClass);
     classesRepertoire[i].schedule.push(classesOnlyLab);
   }
 };
